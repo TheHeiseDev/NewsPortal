@@ -1,0 +1,51 @@
+.subscribe {
+  margin: 50px 0;
+}
+.subscribeWrapper {
+  padding: 0 50px;
+}
+.containerMini {
+  max-width: 1020px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+
+  & .inputContainer {
+    display: flex;
+    width: 450px;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+
+    @media (max-width: 500px) {
+      width: 320px;
+    }
+
+    & input {
+      height: 43px;
+      width: 100%;
+      padding: 0 10px;
+      background-color: black;
+      border-color: rgb(53, 167, 112);
+      border-style: solid;
+      border-width: 1px;
+      color: white;
+      font-family: "Montserrat", sans-serif;
+    }
+
+    & button {
+      padding: 14px 30px;
+
+      @media (max-width: 500px) {
+        margin: 0;
+      }
+    }
+  }
+}

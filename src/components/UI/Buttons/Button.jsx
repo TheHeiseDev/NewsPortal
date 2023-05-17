@@ -1,8 +1,8 @@
 import styles from "./Button.module.scss";
 
-export const Button = ({ children, callback }) => {
+export const Button = ({ children, callback, type }) => {
   return (
-    <button className={styles.buttonStyle} onClick={callback}>
+    <button type={type} className={styles.buttonStyle} onClick={callback}>
       {children}
     </button>
   );

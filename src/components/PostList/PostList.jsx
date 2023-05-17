@@ -8,6 +8,8 @@ export const PostList = () => {
       <div className={styles.containerMini}>
         <div className={styles.postsWrapper}>
           <Post />
+          <Post />
+          <Post />
         </div>
       </div>
     </div>
