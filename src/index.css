@@ -82,3 +82,7 @@ h6 {
   /* font-weight: 400; */
 }
 
+.Mui-selected {
+  border: 1px solid rgb(53, 167, 112) !important;
+  background-color: rgba(53, 167, 112, 0.225) !important;
+}

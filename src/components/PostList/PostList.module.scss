@@ -11,4 +11,19 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding-bottom: 100px;
+}
+.catalogPagination {
+  margin-top: 50px;
+}
+.catalogPagination button .Mui-selected {
+  background-color: rgb(53, 167, 112);
+  color: white !important;
+}
+.catalogPagination button {
+  // border: 1px solid rgb(53, 167, 112);
+}
+.catalogPagination button {
+  // background-color: gray;
+  color: white !important;
 }

@@ -10,7 +10,6 @@ function App() {
       <Header />
       <Intro />
       <PostList />
-  
       <Footer />
     </>
   );
