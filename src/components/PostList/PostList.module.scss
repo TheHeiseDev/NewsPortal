@@ -1,0 +1,14 @@
+.posts {
+  margin-top: 150px;
+}
+
+.containerMini {
+  max-width: 1020px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+.postsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

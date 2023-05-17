@@ -1,0 +1,99 @@
+.posts {
+}
+.postWrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+}
+.postImage {
+  & img {
+    width: 455px;
+    height: 341.25px;
+  }
+}
+.postArticle {
+  display: grid;
+  padding: 20px;
+}
+.postDate {
+  margin-bottom: 30px;
+  font-size: 12px;
+
+  & span {
+    margin-left: 20px;
+  }
+}
+
+.postBody {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    color: rgb(57, 241, 152);
+  }
+
+  .postTitle {
+    font-size: 28px;
+  }
+  .descroptionContainer {
+    min-height: 150px;
+  }
+  .postDescription {
+    font-size: 16px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    word-break: break-word;
+    overflow: hidden;
+    line-height: 1.5;
+  }
+}
+
+.postDataContainer {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 12px;
+  align-self: flex-end;
+  border-top: 1px solid gray;
+
+  & .postData {
+    display: flex;
+    gap: 20px;
+    & .views {
+      font-weight: 300;
+      & span {
+        font-weight: 600;
+      }
+    }
+    & .commnets {
+      font-weight: 300;
+      & span {
+        font-weight: 600;
+      }
+    }
+  }
+
+  & .dataActions {
+    transition: all 0.3s ease;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.7;
+    }
+    &:focus {
+      opacity: 0.7;
+    }
+    &:active {
+      transform: scale(0.9);
+    }
+
+    & svg {
+      fill: red;
+    }
+  }
+}
