@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 // import { RootState } from "../../store";
 import { PostsSliceType, StatusEnum } from "./postsTypes";
 import { fetchPosts } from "./postsThunk";
-import { RootState } from "store/store";
+import { RootState } from "../../store";
 
 const initialState: PostsSliceType = {
   items: {

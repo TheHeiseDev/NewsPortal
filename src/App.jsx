@@ -1,17 +1,14 @@
-import { Header } from "components/Header/Header";
 import "./scss/app.scss";
+import { MainLayout } from "./layout/MainLayout";
 import { Intro } from "components/Intro/Intro";
-import { Footer } from "components/Footer/Footer";
 import { PostList } from "components/PostList/PostList";
 
 function App() {
   return (
-    <>
-      <Header />
+    <MainLayout>
       <Intro />
       <PostList />
-      <Footer />
-    </>
+    </MainLayout>
   );
 }
 

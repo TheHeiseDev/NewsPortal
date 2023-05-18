@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { apiService } from "api/apiService";
+import { apiService } from "../../../api/apiService";
 import { PostsType } from "./postsTypes";
 
 type ParamsType = {
