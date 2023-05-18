@@ -10,9 +10,8 @@ import { StatusEnum } from "../../store/slice/postsSlice/postsTypes";
 
 export const PostList = () => {
   const dispatch = useAppDispatch();
-  const { data, status } = useSelector(selectPosts);
-  console.log(status);
   const [page, setPage] = useState(1);
+  const { data, status } = useSelector(selectPosts);
 
   useEffect(() => {
     const params = {
@@ -22,11 +21,10 @@ export const PostList = () => {
     dispatch(fetchPosts(params));
   }, [page]);
 
-  const handleSetPage = (number) => {
-    // smoothScroll(100);
-    // dispatch(setCurrentPage(page));
+  const setPageHandle = (number) => {
     window.scrollTo(0, 700);
     setPage(number);
+    // dispatch(setCurrentPage(page));
   };
 
   return (
@@ -52,7 +50,7 @@ export const PostList = () => {
               page={page}
               count={5}
               className={styles.catalogPagination}
-              onChange={(_, num) => handleSetPage(num)}
+              onChange={(_, num) => setPageHandle(num)}
             />
           )}
         </div>
