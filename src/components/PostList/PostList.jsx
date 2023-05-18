@@ -2,33 +2,22 @@ import React, { useEffect, useState } from "react";
 import styles from "./PostList.module.scss";
 import { Post } from "components/Post/Post";
 import { Pagination } from "@mui/material";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "store/store";
+import { fetchPosts } from "store/slice/postsSlice/postsThunk";
+import { selectPosts } from "store/slice/postsSlice/postsSlice";
 
 export const PostList = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [posts, setPosts] = useState([]);
+  const dispatch = useAppDispatch();
+  const { data, status } = useSelector(selectPosts);
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    const url = new URL(
-      `https://6440faa3792fe886a89abbd7.mockapi.io/posts?page=${page}&limit=5`
-    );
-
-    fetch(url, {
-      method: "GET",
-      headers: { "content-type": "application/json" },
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        // handle error
-      })
-      .then((posts) => {
-        setPosts(posts);
-      })
-      .catch((error) => {
-        alert(error);
-      });
+    const params = {
+      page: page,
+      limit: 5,
+    };
+    dispatch(fetchPosts(params));
   }, [page]);
 
   const handleSetPage = (number) => {
@@ -36,15 +25,18 @@ export const PostList = () => {
     // dispatch(setCurrentPage(page));
     window.scrollTo(0, 700);
     setPage(number);
-    setCurrentPage(number);
   };
+
+  if (!data) {
+    return <h1>Нет постов</h1>;
+  }
 
   return (
     <div className={styles.posts}>
       <div className={styles.containerMini}>
         <h1>Лента новостей</h1>
         <div className={styles.postsWrapper}>
-          {posts.map((post) => (
+          {data.map((post) => (
             <Post key={post.id} post={post} />
           ))}
           <Pagination
