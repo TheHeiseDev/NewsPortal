@@ -1,10 +1,17 @@
-import React from "react";
 import styles from "./Post.module.scss";
-
+import { useMemo } from "react";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 
+import { useFormatDate } from "components/hooks/useFormatDate";
+import { calculateTimeElapsed } from "utils/calculateTimeElapsed";
+
 export const Post = ({ post }) => {
+  const postTime = useMemo(() => {
+    return calculateTimeElapsed(new Date(post.date));
+  }, []);
+  const postData = useFormatDate(post.date);
+
   return (
     <div className={styles.post}>
       <div className={styles.postWrapper}>
@@ -13,8 +20,8 @@ export const Post = ({ post }) => {
         </div>
         <article className={styles.postArticle}>
           <div className={styles.postDate}>
-            Опубликовано: {post.date}г.
-            <span>1 мин.</span>
+            Опубликовано: {postData}
+            <span>{postTime}</span>
           </div>
           <div className={styles.postBody}>
             <h3 className={styles.postTitle}>{post.title}</h3>

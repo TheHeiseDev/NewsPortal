@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
 import styles from "./PostList.module.scss";
-import { Post } from "components/Post/Post";
-import { Pagination } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "store/store";
 import { fetchPosts } from "store/slice/postsSlice/postsThunk";
 import { selectPosts } from "store/slice/postsSlice/postsSlice";
+import { Post } from "components/Post/Post";
+import { Pagination } from "@mui/material";
 
 export const PostList = () => {
   const dispatch = useAppDispatch();
@@ -35,6 +35,7 @@ export const PostList = () => {
     <div className={styles.posts}>
       <div className={styles.containerMini}>
         <h1>Лента новостей</h1>
+
         <div className={styles.postsWrapper}>
           {data.map((post) => (
             <Post key={post.id} post={post} />
