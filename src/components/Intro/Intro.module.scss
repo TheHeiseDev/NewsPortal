@@ -22,12 +22,54 @@
   & .introItem:nth-child(1) {
     background: url("../../assets/bg-images/18.jpeg") center / cover no-repeat;
     background-size: cover;
+    transition: all 0.9s ease;
+
+    @media (any-hover: hover) {
+      &:hover {
+        background-position: -100px;
+      }
+    }
+
+    @media (max-width: 767px) {
+      @media (any-hover: hover) {
+        &:hover {
+          background-position: 0;
+        }
+      }
+    }
   }
   & .introItem:nth-child(2) {
     background: url("../../assets/bg-images/15.jpeg") center / cover no-repeat;
+    transition: all 0.9s ease;
+    @media (any-hover: hover) {
+      &:hover {
+        background-position: -100px;
+      }
+    }
+    @media (max-width: 767px) {
+      @media (any-hover: hover) {
+        &:hover {
+          background-position: 0;
+        }
+      }
+    }
   }
   & .introItem:nth-child(3) {
     background: url("../../assets/bg-images/14.jpeg") center / cover no-repeat;
+
+    transition: all 0.9s ease;
+    @media (any-hover: hover) {
+      &:hover {
+        background-position: -100px;
+      }
+    }
+    @media (max-width: 767px) {
+      @media (any-hover: hover) {
+        &:hover {
+          background-position: 0;
+        }
+      }
+    }
   }
 }
 

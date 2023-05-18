@@ -17,8 +17,8 @@
 }
 .postImage {
   & img {
-    width: 455px;
-    height: 341.25px;
+    width: 450px;
+    height: 320px;
 
     @media (max-width: 767px) {
       width: 100%;
@@ -31,7 +31,7 @@
   padding: 20px;
 }
 .postDate {
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   font-size: 12px;
 
   & span {
@@ -54,7 +54,7 @@
     font-size: 28px;
   }
   .descroptionContainer {
-    min-height: 150px;
+    // min-height: 150px;
   }
   .postDescription {
     font-size: 16px;
@@ -75,6 +75,7 @@
   align-self: flex-end;
   border-top: 1px solid gray;
   align-items: center;
+      margin-top: 5px;
 
   & .postData {
     display: flex;
