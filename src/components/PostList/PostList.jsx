@@ -5,11 +5,13 @@ import { useAppDispatch } from "store/store";
 import { fetchPosts } from "store/slice/postsSlice/postsThunk";
 import { selectPosts } from "store/slice/postsSlice/postsSlice";
 import { Post } from "components/Post/Post";
-import { Pagination } from "@mui/material";
+import { CircularProgress, Pagination } from "@mui/material";
+import { StatusEnum } from "../../store/slice/postsSlice/postsTypes";
 
 export const PostList = () => {
   const dispatch = useAppDispatch();
   const { data, status } = useSelector(selectPosts);
+  console.log(status);
   const [page, setPage] = useState(1);
 
   useEffect(() => {
@@ -27,19 +29,20 @@ export const PostList = () => {
     setPage(number);
   };
 
-  if (!data) {
-    return <h1>Нет постов</h1>;
-  }
-
   return (
     <div className={styles.posts}>
       <div className={styles.containerMini}>
         <h1>Лента новостей</h1>
 
         <div className={styles.postsWrapper}>
-          {data.map((post) => (
-            <Post key={post.id} post={post} />
-          ))}
+          {status === StatusEnum.loading ? (
+            <div className={styles.loadingContainer}><CircularProgress /></div>
+          ) : status === StatusEnum.error ? (
+            <h2>Произошла ошибка при получении данных из сервера</h2>
+          ) : (
+            data.map((post) => <Post key={post.id} post={post} />)
+          )}
+
           <Pagination
             color="secondary"
             variant="outlined"

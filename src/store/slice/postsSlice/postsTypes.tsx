@@ -1,7 +1,7 @@
 export enum StatusEnum {
   loading = "loading",
   success = "success",
-  error = "erorr",
+  error = "error",
 }
 
 export type PostsSliceType = {
