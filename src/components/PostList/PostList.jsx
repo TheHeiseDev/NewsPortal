@@ -36,21 +36,25 @@ export const PostList = () => {
 
         <div className={styles.postsWrapper}>
           {status === StatusEnum.loading ? (
-            <div className={styles.loadingContainer}><CircularProgress /></div>
+            <div className={styles.loadingContainer}>
+              <CircularProgress />
+            </div>
           ) : status === StatusEnum.error ? (
             <h2>Произошла ошибка при получении данных из сервера</h2>
           ) : (
             data.map((post) => <Post key={post.id} post={post} />)
           )}
 
-          <Pagination
-            color="secondary"
-            variant="outlined"
-            page={page}
-            count={5}
-            className={styles.catalogPagination}
-            onChange={(_, num) => handleSetPage(num)}
-          />
+          {status === StatusEnum.success && data.length > 0 && (
+            <Pagination
+              color="secondary"
+              variant="outlined"
+              page={page}
+              count={5}
+              className={styles.catalogPagination}
+              onChange={(_, num) => handleSetPage(num)}
+            />
+          )}
         </div>
       </div>
     </div>
