@@ -8,6 +8,8 @@ import { ShareFacebook } from "../../components/UI/Buttons/ShareFacebook";
 import { ShareTwitter } from "../../components/UI/Buttons/ShareTwitter";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { Comment } from "../../components/Comment/Comment";
+
 const post = {
   id: "1",
   title: "Revue — сервис для создания красивой новостной рассылки",
@@ -20,6 +22,21 @@ const post = {
   category: "useful_services",
   link: "https://www.getrevue.co",
 };
+const comments = [
+  {
+    id: 1,
+    date: "2023-05-18T11:40:00",
+    userName: "Edgar",
+    text: "Интересная статья, недавно только об этом общались с коллегами."
+  },
+  {
+    id: 2,
+    date: "2023-05-18T15:40:00",
+    userName: "Anna",
+    text: "Что люди только не делают ради хайпа дурного. Поделюсь статьей, может кому интересно будет"
+  }
+]
+
 export const PostPage = () => {
   const [currentUrl, setCurrentUrl] = useState("");
   const postTime = useMemo(() => {
@@ -71,7 +88,14 @@ export const PostPage = () => {
                 </div>
               </div>
             </article>
-            <div className={styles.commentsContainer}>Комментарии</div>
+            <section className={styles.commentsContainer}>
+              <h2>Комментарии</h2>
+             {
+              comments.length > 0 && comments.map(comment => (
+              <Comment key={comment.id} comment={comment}/>
+              ))
+             }
+            </section>
           </div>
         </div>
       </div>

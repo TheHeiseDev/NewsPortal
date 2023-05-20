@@ -1,0 +1,32 @@
+.commentWrapper {
+}
+
+.commentUser {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+
+  & svg {
+    font-size: 46px;
+    fill: rgb(57, 241, 152);
+  }
+
+  & div {
+    display: flex;
+    align-items: left;
+    flex-direction: column;
+    gap: 5px;
+
+    & time {
+      font-size: 13px;
+    }
+  }
+}
+.commentDate {
+}
+.commenText {
+  padding-left: 55px;
+  line-height: 1;
+  font-weight: 200;
+}
