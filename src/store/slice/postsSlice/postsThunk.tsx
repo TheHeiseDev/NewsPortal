@@ -35,3 +35,23 @@ export const fetchPostById = createAsyncThunk(
     return data;
   }
 );
+export const fetchUpViewCounts = createAsyncThunk(
+  "posts/fetchUpViewCounts",
+  async (id: string) => {
+    try {
+      const { data } = await axios.get(
+        `https://6440faa3792fe886a89abbd7.mockapi.io/posts/${id}`
+      );
+      const updatePost = {
+        ...data,
+        views: data.views + 1,
+      };
+      await axios.put(
+        `https://6440faa3792fe886a89abbd7.mockapi.io/posts/${id}`,
+        updatePost
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);

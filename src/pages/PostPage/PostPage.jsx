@@ -10,7 +10,10 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Comment } from "../../components/Comment/Comment";
 import { useAppDispatch } from "../../store/store";
-import { fetchPostById } from "../../store/slice/postsSlice/postsThunk";
+import {
+  fetchPostById,
+  fetchUpViewCounts,
+} from "../../store/slice/postsSlice/postsThunk";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
@@ -25,13 +28,20 @@ import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import { useTitle } from "../../hooks/use-title";
 
 export const PostPage = () => {
-
   const dispatch = useAppDispatch();
   const { id } = useParams();
   const post = useSelector(selectPost);
   const status = useSelector(selectPostStatus);
   const [currentUrl, setCurrentUrl] = useState("");
-  useTitle(post ? post.title : "")
+
+  useTitle(post ? post.title : "");
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchUpViewCounts(id));
+    }
+  }, [id]);
+
   const postTime = useMemo(() => {
     const date = post ? new Date(post.date) : "";
     return calculateTimeElapsed(date);
@@ -55,8 +65,6 @@ export const PostPage = () => {
   useEffect(() => {
     dispatch(fetchPostById(String(id)));
   }, [id]);
-
-
 
   return (
     <MainLayout>
