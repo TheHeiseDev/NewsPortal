@@ -22,14 +22,16 @@ import { CircularProgress } from "@mui/material";
 import { StatusEnum } from "../../store/slice/postsSlice/postsTypes";
 import { ImageModal } from "../../components/UI/Buttons/Modal/ImageModal";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
+import { useTitle } from "../../hooks/use-title";
 
 export const PostPage = () => {
+
   const dispatch = useAppDispatch();
   const { id } = useParams();
   const post = useSelector(selectPost);
   const status = useSelector(selectPostStatus);
   const [currentUrl, setCurrentUrl] = useState("");
-
+  useTitle(post ? post.title : "")
   const postTime = useMemo(() => {
     const date = post ? new Date(post.date) : "";
     return calculateTimeElapsed(date);
@@ -53,6 +55,8 @@ export const PostPage = () => {
   useEffect(() => {
     dispatch(fetchPostById(String(id)));
   }, [id]);
+
+
 
   return (
     <MainLayout>

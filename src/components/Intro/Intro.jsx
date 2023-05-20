@@ -1,7 +1,10 @@
 import React from "react";
 import styles from "./Intro.module.scss";
+import { useTitle } from "../../hooks/use-title";
 
 export const Intro = () => {
+  useTitle("Главная");
+
   return (
     <div className={styles.intro}>
       <div className={styles.introWrapper}>
