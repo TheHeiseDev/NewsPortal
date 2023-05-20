@@ -21,35 +21,34 @@ export const Post = ({ post }) => {
           </div>
         </Link>
 
-        <Link to={`/posts/${post.id}`}>
-          <article className={styles.postArticle}>
-            <div className={styles.postDate}>
-              Опубликовано: {postData}
-              <span>{postTime}</span>
-            </div>
+        <article className={styles.postArticle}>
+          <div className={styles.postDate}>
+            Опубликовано: {postData}
+            <span>{postTime}</span>
+          </div>
+          <Link to={`/posts/${post.id}`}>
             <div className={styles.postBody}>
               <h3 className={styles.postTitle}>{post.title}</h3>
               <div className={styles.descroptionContainer}>
                 <p className={styles.postDescription}>{post.description}</p>
               </div>
             </div>
-
-            <div className={styles.postDataContainer}>
-              <div className={styles.postData}>
-                <div className={styles.views}>
-                  {post.views} <span>просмотров</span>
-                </div>
-                <div className={styles.commnets}>
-                  {post.comments.length} <span>комментариев</span>
-                </div>
+          </Link>
+          <div className={styles.postDataContainer}>
+            <div className={styles.postData}>
+              <div className={styles.views}>
+                {post.views} <span>просмотров</span>
               </div>
-              <div className={styles.dataActions}>
-                <FavoriteBorderIcon />
-                {/* <FavoriteIcon /> */}
+              <div className={styles.commnets}>
+                {post.comments.length} <span>комментариев</span>
               </div>
             </div>
-          </article>
-        </Link>
+            <div className={styles.dataActions}>
+              <FavoriteBorderIcon />
+              {/* <FavoriteIcon /> */}
+            </div>
+          </div>
+        </article>
       </div>
     </div>
   );

@@ -86,7 +86,9 @@ export const PostPage = () => {
                 {/* Ссылка на ресурс */}
                 <div className={styles.postLink}>
                   <LinkIcon />
-                  <a href={post.link}>Ссылка на ресурс</a>
+                  <a target="_blank" href={post.link}>
+                    Ссылка на ресурс
+                  </a>
                 </div>
 
                 {/* Описание поста */}

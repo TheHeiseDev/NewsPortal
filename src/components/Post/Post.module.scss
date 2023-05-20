@@ -1,22 +1,27 @@
 .posts {
 }
-.postWrapper {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: 1fr;
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
+// .postWrapper {
+//   display: grid;
+//   grid-template-columns: repeat(2, 1fr);
+//   grid-template-rows: 1fr;
+//   grid-column-gap: 0px;
+//   grid-row-gap: 0px;
 
-  @media (max-width: 767px) {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(2, 1fr);
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
-  }
+//   @media (max-width: 767px) {
+//     display: grid;
+//     grid-template-columns: 1fr;
+//     grid-template-rows: repeat(2, 1fr);
+//     grid-column-gap: 0px;
+//     grid-row-gap: 0px;
+//   }
+// }
+.postWrapper {
+  display: flex;
+  flex-wrap: wrap;
 }
 .postImage {
-  min-height: 320px;
+  flex: 1 1 50%;
+  // min-height: 320px;
   & img {
     width: 450px;
     height: 320px;
@@ -28,6 +33,7 @@
   }
 }
 .postArticle {
+  flex: 1 1 50%;
   display: grid;
   padding: 20px;
 }
@@ -53,6 +59,10 @@
 
   .postTitle {
     font-size: 28px;
+
+    @media (max-width: 500px) {
+      font-size: 22px;
+    }
   }
   .descroptionContainer {
     // min-height: 150px;
@@ -76,7 +86,7 @@
   align-self: flex-end;
   border-top: 1px solid gray;
   align-items: center;
-      margin-top: 5px;
+  margin-top: 5px;
 
   & .postData {
     display: flex;
