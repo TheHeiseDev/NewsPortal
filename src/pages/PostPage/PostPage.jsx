@@ -25,6 +25,7 @@ import { CircularProgress } from "@mui/material";
 import { StatusEnum } from "../../store/slice/postsSlice/postsTypes";
 import { ImageModal } from "../../components/UI/Buttons/Modal/ImageModal";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import { useTitle } from "../../hooks/use-title";
 
 export const PostPage = () => {
@@ -97,10 +98,16 @@ export const PostPage = () => {
                 </div>
                 {/* Ссылка на ресурс */}
                 <div className={styles.postLink}>
-                  <LinkIcon />
-                  <a target="_blank" href={post.link}>
-                    Ссылка на ресурс
-                  </a>
+                  <div className={styles.linkContainer}>
+                    <LinkIcon />
+                    <a target="_blank" href={post.link}>
+                      Ссылка на ресурс
+                    </a>
+                  </div>
+                  <div className={styles.viewContainer}>
+                    <RemoveRedEyeIcon />
+                    {post.views}
+                  </div>
                 </div>
 
                 {/* Описание поста */}

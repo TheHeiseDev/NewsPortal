@@ -57,18 +57,38 @@
 
 .postLink {
   display: flex;
+  justify-content: space-between;
+
   gap: 10px;
   align-items: center;
   color: gray;
   font-size: 12px;
   margin-bottom: 50px;
   transition: color 0.3s ease 0s;
+
+  & .linkContainer {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    transition: color 0.3s ease 0s;
+    &:hover {
+      color: white;
+    }
+  }
+
+  & .viewContainer {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+    & svg {
+      font-size: 18px;
+    }
+  }
+
   & a {
     color: inherit;
     font-style: oblique;
-  }
-  &:hover {
-    color: white;
   }
 }
 .descriptionContainer {
@@ -106,24 +126,30 @@
   color: white;
   font-style: oblique;
   opacity: 0.6;
-
-  &:hover {
-    opacity: 1;
-  }
-  &:active {
-    transform: scale(0.8);
-  }
 }
 .postShared {
   display: flex;
   gap: 10px;
   align-items: center;
+
+  & svg:hover {
+    opacity: 1;
+  }
+  & svg:active {
+    transform: scale(0.8);
+  }
 }
 .postActions {
   cursor: pointer;
 
   & svg {
     fill: red;
+  }
+  & svg:hover {
+    opacity: 1;
+  }
+  & svg:active {
+    transform: scale(0.8);
   }
 }
 
