@@ -9,6 +9,10 @@ export type PostsSliceType = {
     data: PostsType[] | null;
     status: StatusEnum;
   };
+  item: {
+    data: PostsType | null;
+    status: StatusEnum;
+  };
 };
 export type PostsType = {
   id: string;

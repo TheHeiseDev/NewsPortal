@@ -1,15 +1,16 @@
 import { useMemo } from "react";
+import { PostsType } from "../store/slice/postsSlice/postsTypes";
 
-export const useFormatDate = (date: string | undefined): string => {
+export const useFormatDate = (post: any | undefined | null): string => {
   const formattedDate = useMemo(() => {
-    if (!date) return "";
+    if (!post) return "";
 
-    const year = date.slice(0, 4);
-    const month = date.slice(5, 7);
-    const day = date.slice(8, 10);
+    const year = post.date.slice(0, 4);
+    const month = post.date.slice(5, 7);
+    const day = post.date.slice(8, 10);
 
     return `${day} ${formatMonthInString(month)} ${year}`;
-  }, [date]);
+  }, [post]);
 
   return formattedDate;
 };

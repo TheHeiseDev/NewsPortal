@@ -25,13 +25,13 @@ export const fetchPosts = createAsyncThunk(
     return data;
   }
 );
-// export const fetchFurnitureById = createAsyncThunk(
-//   "furniture/fetchFurnitureById",
-//   async (id: string) => {
-//     const { data } = await axios<FurnitureType>({
-//       method: "GET",
-//       url: `${apiService.getFurnitureById}${id}`,
-//     });
-//     return data;
-//   }
-// );
+export const fetchPostById = createAsyncThunk(
+  "posts/fetchPostById",
+  async (id: string) => {
+    const { data } = await axios<PostsType>({
+      method: "GET",
+      url: `${apiService.baseUrl}/${id}`,
+    });
+    return data;
+  }
+);

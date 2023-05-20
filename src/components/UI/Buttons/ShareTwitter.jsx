@@ -7,7 +7,7 @@ export function ShareTwitter({ currentUrl }) {
     }, []);
   
     return (
-      <a className="" href={`https://twitter.com/intent/tweet?url=${currentUrl}`}>
+      <a  target="_blank" href={`https://twitter.com/intent/tweet?url=${currentUrl}`}>
         <TwitterIcon />
       </a>
     );

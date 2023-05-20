@@ -17,9 +17,11 @@ header {
   line-height: 1;
   color: white;
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
 
-  &:hover {
+  & a {
+    transition: all 0.3s ease-in-out;
+  }
+  & a:hover {
     color: rgb(57, 241, 152);
   }
 

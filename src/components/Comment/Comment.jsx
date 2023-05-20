@@ -1,6 +1,5 @@
-import { useMemo } from "react";
-import { useFormatDate } from "../../hooks/useFormatDate";
 import styles from "./Comment.module.scss";
+import { useMemo } from "react";
 import PersonPinIcon from "@mui/icons-material/PersonPin";
 import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
 
@@ -17,7 +16,7 @@ export const Comment = ({ comment }) => {
           <PersonPinIcon />
           <div>
             <h3>{userName}</h3>
-            <time className={styles.commentDate} datetime={commentTime}>
+            <time className={styles.commentDate} dateTime={commentTime}>
               {commentTime} назад
             </time>
           </div>

@@ -3,6 +3,7 @@ import styles from "./Header.module.scss";
 import instagram from "../../assets/instagram.webp";
 import facebook from "../../assets/facebook.webp";
 import { Button } from "../UI/Buttons/Button";
+import { Link } from "react-router-dom";
 
 export const Header = () => {
   return (
@@ -10,7 +11,7 @@ export const Header = () => {
       <div className="container">
         <div className={styles.headerWrapper}>
           <div className={styles.headerLogo}>
-            WOK BLOG
+            <Link to="/">WOK BLOG</Link>
             <span>/ Way of Knowledge</span>
           </div>
           <div className={styles.headerActions}>

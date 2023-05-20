@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 // import { RootState } from "../../store";
 import { PostsSliceType, StatusEnum } from "./postsTypes";
-import { fetchPosts } from "./postsThunk";
+import { fetchPostById, fetchPosts } from "./postsThunk";
 import { RootState } from "../../store";
 
 const initialState: PostsSliceType = {
@@ -9,11 +9,20 @@ const initialState: PostsSliceType = {
     data: null,
     status: StatusEnum.loading,
   },
+  item: {
+    data: null,
+    status: StatusEnum.loading,
+  },
 };
 export const postsSlice = createSlice({
   name: "posts",
   initialState,
-  reducers: {},
+  reducers: {
+    removeItem(state, action) {
+      state.item.data = null;
+      state.item.status = StatusEnum.loading;
+    },
+  },
 
   extraReducers: (builder) => {
     builder
@@ -28,9 +37,24 @@ export const postsSlice = createSlice({
       .addCase(fetchPosts.rejected, (state) => {
         state.items.status = StatusEnum.error;
         state.items.data = null;
+      })
+
+      .addCase(fetchPostById.pending, (state) => {
+        state.items.status = StatusEnum.loading;
+        state.items.data = null;
+      })
+      .addCase(fetchPostById.fulfilled, (state, action) => {
+        state.item.status = StatusEnum.success;
+        state.item.data = action.payload;
+      })
+      .addCase(fetchPostById.rejected, (state) => {
+        state.item.status = StatusEnum.error;
+        state.item.data = null;
       });
   },
 });
-// export const {} = furnitureSlice.actions;
+export const { removeItem } = postsSlice.actions;
 export const selectPosts = (state: RootState) => state.posts.items;
+export const selectPost = (state: RootState) => state.posts.item.data;
+export const selectPostStatus = (state: RootState) => state.posts.item.status;
 export default postsSlice.reducer;

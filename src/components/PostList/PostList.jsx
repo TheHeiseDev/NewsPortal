@@ -41,7 +41,7 @@ export const PostList = () => {
           ) : status === StatusEnum.error ? (
             <h2>Произошла ошибка при получении данных из сервера</h2>
           ) : (
-            data.map((post) => <Post key={post.id} post={post} />)
+            data.map((post) => <Post  key={post.id} post={post} />)
           )}
 
           {status === StatusEnum.success && data.length > 0 && (

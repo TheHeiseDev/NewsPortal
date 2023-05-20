@@ -38,4 +38,8 @@
 
 .loadingContainer {
   text-align: center;
+
+  & svg {
+    color: rgb(57, 241, 152) !important;
+  }
 }

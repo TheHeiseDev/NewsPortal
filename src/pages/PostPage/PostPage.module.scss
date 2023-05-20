@@ -6,7 +6,7 @@
   margin: 0 auto;
 }
 .postPageWrapper {
-  padding-bottom: 50px;
+  padding-bottom: 20px;
 }
 .postArticle {
   margin-bottom: 50px;
@@ -25,6 +25,7 @@
 }
 .postImage {
   margin-bottom: 10px;
+  min-height: 228px;
 }
 .postLink {
   display: flex;
@@ -72,7 +73,7 @@
     font-style: oblique;
   }
 }
-svg {
+.postPage svg {
   fill: white;
   color: white;
   font-style: oblique;
@@ -108,4 +109,13 @@ svg {
   display: flex;
   flex-direction: column;
   gap: 40px;
+}
+
+.postLoadingContainer {
+  text-align: center;
+  padding: 20px;
+
+  & svg {
+    color: rgb(57, 241, 152) !important;
+  }
 }
