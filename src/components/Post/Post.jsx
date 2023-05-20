@@ -2,9 +2,8 @@ import styles from "./Post.module.scss";
 import { useMemo } from "react";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-
-import { useFormatDate } from "components/hooks/useFormatDate";
-import { calculateTimeElapsed } from "utils/calculateTimeElapsed";
+import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
+import { useFormatDate } from "../../hooks/useFormatDate";
 
 export const Post = ({ post }) => {
   const postTime = useMemo(() => {

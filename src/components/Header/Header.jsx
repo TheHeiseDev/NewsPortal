@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./Header.module.scss";
 import instagram from "../../assets/instagram.webp";
 import facebook from "../../assets/facebook.webp";
-import { Button } from "components/UI/Buttons/Button";
+import { Button } from "../UI/Buttons/Button";
 
 export const Header = () => {
   return (

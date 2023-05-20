@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Footer.module.scss";
-import { Subscribe } from "components/Subscribe/Subscribe";
+import { Subscribe } from "../Subscribe/Subscribe";
 
 export const Footer = () => {
   return (

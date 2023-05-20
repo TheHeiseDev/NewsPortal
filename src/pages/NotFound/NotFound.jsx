@@ -1,9 +1,8 @@
-import React from 'react'
+import React from "react";
+import styles from "./NotFound.module.scss";
 
 const NotFound = () => {
-  return (
-    <div>404 Страница не найдена</div>
-  )
-}
+  return <div>404 Страница не найдена</div>;
+};
 
-export default NotFound
+export default NotFound;

@@ -1,12 +1,13 @@
 import styles from "./PostList.module.scss";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useAppDispatch } from "store/store";
-import { fetchPosts } from "store/slice/postsSlice/postsThunk";
-import { selectPosts } from "store/slice/postsSlice/postsSlice";
-import { Post } from "components/Post/Post";
+
 import { CircularProgress, Pagination } from "@mui/material";
 import { StatusEnum } from "../../store/slice/postsSlice/postsTypes";
+import { selectPosts } from "../../store/slice/postsSlice/postsSlice";
+import { fetchPosts } from "../../store/slice/postsSlice/postsThunk";
+import { useAppDispatch } from "../../store/store";
+import { Post } from "../Post/Post";
 
 export const PostList = () => {
   const dispatch = useAppDispatch();

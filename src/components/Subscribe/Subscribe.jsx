@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Subscribe.module.scss";
-import { Button } from "components/UI/Buttons/Button";
+import { Button } from "../UI/Buttons/Button";
 
 export const Subscribe = () => {
   const subscribeHandle = (event) => {

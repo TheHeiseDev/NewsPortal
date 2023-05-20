@@ -1,11 +1,12 @@
 import "./scss/app.scss";
 import { MainLayout } from "./layout/MainLayout";
-import { Intro } from "components/Intro/Intro";
-import { PostList } from "components/PostList/PostList";
+import { Intro } from "./components/Intro/Intro";
+import { PostList } from "./components/PostList/PostList";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Suspense } from "react";
 import { CircularProgress } from "@mui/material";
 import NotFound from "./pages/NotFound/NotFound";
+import { PostPage } from "./pages/PostPage/PostPage";
 
 function App() {
   return (
@@ -31,7 +32,7 @@ function App() {
         path="/posts/:id"
         element={
           <Suspense fallback={<CircularProgress />}>
-            <h1>POSTS ID</h1>
+            <PostPage />
           </Suspense>
         }
       />

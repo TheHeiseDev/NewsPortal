@@ -30,13 +30,12 @@ export const Intro = () => {
         <div className={styles.introItem}>
           <div className={styles.introItemBackground}></div>
           <div className={styles.introItemText}>
-          <div className={styles.introItemTextBody}>
-          <span className={styles.itemNumber}>03</span>
-          <span className={styles.divider}></span>
-            <span className={styles.itemTitle}>Полезные сервисы</span>
+            <div className={styles.introItemTextBody}>
+              <span className={styles.itemNumber}>03</span>
+              <span className={styles.divider}></span>
+              <span className={styles.itemTitle}>Полезные сервисы</span>
             </div>
           </div>
-
         </div>
       </div>
     </div>
