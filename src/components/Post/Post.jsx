@@ -1,5 +1,5 @@
 import styles from "./Post.module.scss";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
@@ -15,9 +15,12 @@ export const Post = ({ post }) => {
   return (
     <div className={styles.post}>
       <div className={styles.postWrapper}>
-        <div className={styles.postImage}>
-          <img src={post.imageUrl} alt="post image" />
-        </div>
+        <Link to={`/posts/${post.id}`}>
+          <div className={styles.postImage}>
+            <img src={post.imageUrl} alt="post image" />
+          </div>
+        </Link>
+
         <Link to={`/posts/${post.id}`}>
           <article className={styles.postArticle}>
             <div className={styles.postDate}>

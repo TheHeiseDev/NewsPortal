@@ -20,6 +20,8 @@ import {
 } from "../../store/slice/postsSlice/postsSlice";
 import { CircularProgress } from "@mui/material";
 import { StatusEnum } from "../../store/slice/postsSlice/postsTypes";
+import { ImageModal } from "../../components/UI/Buttons/Modal/ImageModal";
+import ZoomInIcon from "@mui/icons-material/ZoomIn";
 
 export const PostPage = () => {
   const dispatch = useAppDispatch();
@@ -76,7 +78,10 @@ export const PostPage = () => {
                 <h3 className={styles.postTitle}>{post.title}</h3>
                 {/* Картинка поста */}
                 <div className={styles.postImage}>
-                  <img src={post.imageUrl} alt="post image" />
+                  <span className={styles.zoomIcon}>
+                    <ZoomInIcon />
+                  </span>
+                  <ImageModal imageUrl={post.imageUrl} />
                 </div>
                 {/* Ссылка на ресурс */}
                 <div className={styles.postLink}>
