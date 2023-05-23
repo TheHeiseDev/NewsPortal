@@ -13,14 +13,18 @@ interface IFormAddComment {
 
 export const FormAddComment: FC<IFormAddComment> = ({ post }) => {
   const dispatch = useAppDispatch();
+
   const [userName, setUserName] = useState("");
   const [commentValue, setCommentValue] = useState("");
+
   const [sendStatus, setSendStatus] = useState(false);
+  const [nameError, setNameError] = useState(false);
+  const [textError, setTextError] = useState(false);
 
   const onSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSendStatus(true);
-
+    setNameError(false);
+    setTextError(false);
     const newComment: CommentsType = {
       id: String(Date.now()),
       userName: userName,
@@ -31,12 +35,20 @@ export const FormAddComment: FC<IFormAddComment> = ({ post }) => {
       ...post,
       comments: [...post.comments, newComment],
     };
-
-    await dispatch(addCommentById({ id: post.id, post: updatedPost }))
-      .then(() => dispatch(addComment(newComment)))
-      .finally(() => setSendStatus(false));
-    setUserName("");
-    setCommentValue("");
+    if (userName.length >= 2) {
+      if (commentValue.length > 9) {
+        setSendStatus(true);
+        await dispatch(addCommentById({ id: post.id, post: updatedPost }))
+          .then(() => dispatch(addComment(newComment)))
+          .finally(() => setSendStatus(false));
+        setUserName("");
+        setCommentValue("");
+      } else {
+        setTextError(true);
+      }
+    } else {
+      setNameError(true);
+    }
   };
 
   return (
@@ -51,6 +63,7 @@ export const FormAddComment: FC<IFormAddComment> = ({ post }) => {
               placeholder="Введите имя"
               required
             />
+            {nameError && <label>Минимальная длина имени 2 символа</label>}
             <textarea
               value={commentValue}
               onChange={(event) => setCommentValue(event.target.value)}
@@ -58,7 +71,10 @@ export const FormAddComment: FC<IFormAddComment> = ({ post }) => {
               placeholder="Комментарий..."
               required
             />
-            <Button loading={sendStatus} type="submit">Добавить</Button>
+            {textError && <label>Минимальная длина комментария 10 символов</label>}
+            <Button loading={sendStatus} type="submit">
+              Добавить
+            </Button>
           </form>
         </div>
       </div>

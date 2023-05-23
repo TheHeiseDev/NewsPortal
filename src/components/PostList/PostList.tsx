@@ -49,7 +49,7 @@ export const PostList = () => {
               color="secondary"
               variant="outlined"
               page={page}
-              count={5}
+              count={4}
               className={styles.catalogPagination}
               onChange={(_, num) => setPageHandle(num)}
             />
