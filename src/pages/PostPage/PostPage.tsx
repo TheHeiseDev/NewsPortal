@@ -30,6 +30,7 @@ import { Comment } from "../../components/Comment/Comment";
 import { useTitle } from "../../hooks/use-title";
 import { useFormatDate } from "../../hooks/useFormatDate";
 import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
+import { FormAddComment } from "../../components/FormAddComment/FormAddComment";
 
 export const PostPage = () => {
   const dispatch = useAppDispatch();
@@ -145,6 +146,9 @@ export const PostPage = () => {
                 </div>
               </article>
               <section className={styles.commentsContainer}>
+                <h2>Добавить комментарий</h2>
+                <FormAddComment />
+
                 <h2>Комментарии</h2>
                 {post.comments.length > 0 ? (
                   post.comments.map((comment) => (

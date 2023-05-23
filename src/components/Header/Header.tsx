@@ -26,7 +26,7 @@ export const Header = () => {
   }, []);
 
   return (
-    <header className={isSticky ? styles.headerSticky : ""}>
+    <header className={isSticky ? styles.headerSticky : styles.header}>
       <div className="container">
         <div className={styles.headerWrapper}>
           <div className={styles.headerLogo}>
