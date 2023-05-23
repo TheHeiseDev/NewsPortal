@@ -6,15 +6,15 @@ export enum StatusEnum {
 
 export type PostsSliceType = {
   items: {
-    data: PostsType[] | null;
+    data: PostType[] | null;
     status: StatusEnum;
   };
   item: {
-    data: PostsType | null;
+    data: PostType | null;
     status: StatusEnum;
   };
 };
-export type PostsType = {
+export type PostType = {
   id: string;
   title: string;
   description: string;

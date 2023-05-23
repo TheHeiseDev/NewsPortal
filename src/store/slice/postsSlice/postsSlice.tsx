@@ -18,7 +18,7 @@ export const postsSlice = createSlice({
   name: "posts",
   initialState,
   reducers: {
-    removeItem(state, action) {
+    removeItem(state) {
       state.item.data = null;
       state.item.status = StatusEnum.loading;
     },

@@ -1,12 +1,17 @@
 import styles from "./Post.module.scss";
-import { useMemo } from "react";
+import { FC, useMemo } from "react";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
 import { useFormatDate } from "../../hooks/useFormatDate";
 import { Link } from "react-router-dom";
+import { PostType } from "../../store/slice/postsSlice/postsTypes";
 
-export const Post = ({ post }) => {
+interface IPost {
+  post: PostType
+}
+
+export const Post: FC<IPost> = ({ post }) => {
   const postTime = useMemo(() => {
     return calculateTimeElapsed(new Date(post.date));
   }, []);

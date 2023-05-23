@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { apiService } from "../../../api/apiService";
-import { PostsType } from "./postsTypes";
+import { PostType } from "./postsTypes";
 
 type ParamsType = {
   page: number;
@@ -13,7 +13,7 @@ export const fetchPosts = createAsyncThunk(
   async (params: ParamsType) => {
     const { page, limit } = params;
 
-    const { data } = await axios<PostsType[]>({
+    const { data } = await axios<PostType[]>({
       method: "GET",
       url: apiService.baseUrl,
       params: {
@@ -28,7 +28,7 @@ export const fetchPosts = createAsyncThunk(
 export const fetchPostById = createAsyncThunk(
   "posts/fetchPostById",
   async (id: string) => {
-    const { data } = await axios<PostsType>({
+    const { data } = await axios<PostType>({
       method: "GET",
       url: `${apiService.baseUrl}/${id}`,
     });

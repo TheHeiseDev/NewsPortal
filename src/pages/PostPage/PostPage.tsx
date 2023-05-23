@@ -1,32 +1,35 @@
-import React, { useEffect, useMemo, useState } from "react";
 import styles from "./PostPage.module.scss";
-import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
-import { useFormatDate } from "../../hooks/useFormatDate";
-import { MainLayout } from "../../layout/MainLayout";
-import LinkIcon from "@mui/icons-material/Link";
-import { ShareFacebook } from "../../components/UI/Buttons/ShareFacebook";
-import { ShareTwitter } from "../../components/UI/Buttons/ShareTwitter";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import { Comment } from "../../components/Comment/Comment";
+import React, { useEffect, useMemo, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../store/store";
 import {
   fetchPostById,
   fetchUpViewCounts,
 } from "../../store/slice/postsSlice/postsThunk";
-import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { StatusEnum } from "../../store/slice/postsSlice/postsTypes";
 import {
   removeItem,
   selectPost,
   selectPostStatus,
 } from "../../store/slice/postsSlice/postsSlice";
+
 import { CircularProgress } from "@mui/material";
-import { StatusEnum } from "../../store/slice/postsSlice/postsTypes";
-import { ImageModal } from "../../components/UI/Buttons/Modal/ImageModal";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import LinkIcon from "@mui/icons-material/Link";
+
+import { MainLayout } from "../../layout/MainLayout";
+import { ImageModal } from "../../components/UI/Buttons/Modal/ImageModal";
+import { ShareFacebook } from "../../components/UI/Buttons/ShareFacebook";
+import { ShareTwitter } from "../../components/UI/Buttons/ShareTwitter";
+import { Comment } from "../../components/Comment/Comment";
+
 import { useTitle } from "../../hooks/use-title";
+import { useFormatDate } from "../../hooks/useFormatDate";
+import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
 
 export const PostPage = () => {
   const dispatch = useAppDispatch();
@@ -35,14 +38,6 @@ export const PostPage = () => {
   const status = useSelector(selectPostStatus);
   const [currentUrl, setCurrentUrl] = useState("");
 
-  useTitle(post ? post.title : "");
-
-  useEffect(() => {
-    if (id) {
-      dispatch(fetchUpViewCounts(id));
-    }
-  }, [id]);
-
   const postTime = useMemo(() => {
     const date = post ? new Date(post.date) : "";
     return calculateTimeElapsed(date);
@@ -50,6 +45,15 @@ export const PostPage = () => {
 
   let postData = useFormatDate(post);
 
+  // set the current page title
+  useTitle(post ? post.title : "");
+
+  // fetch post by ID
+  useEffect(() => {
+    dispatch(fetchPostById(String(id)));
+  }, [id]);
+
+  // Actions when mounting and unmounting a component
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -58,14 +62,18 @@ export const PostPage = () => {
     };
   }, []);
 
+  // The logic of counting post views
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchUpViewCounts(id));
+    }
+  }, [id]);
+
+  // Get the current url address. We need the facebook and twitter share buttons to work correctly
   useEffect(() => {
     const url = window.document.location.href;
     setCurrentUrl((prev) => (prev = url));
   }, []);
-
-  useEffect(() => {
-    dispatch(fetchPostById(String(id)));
-  }, [id]);
 
   return (
     <MainLayout>

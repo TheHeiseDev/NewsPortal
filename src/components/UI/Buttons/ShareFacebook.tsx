@@ -1,7 +1,18 @@
 import FacebookIcon from "@mui/icons-material/Facebook";
-import { useEffect } from "react";
+import { FC, useEffect } from "react";
 
-export function ShareFacebook({ currentUrl }) {
+
+declare global {
+  interface Window {
+    FB: any;
+  }
+}
+
+interface IShareFacebook {
+  currentUrl: string;
+}
+
+export const ShareFacebook: FC<IShareFacebook> = ({ currentUrl }) => {
   useEffect(() => {
     window.FB && window.FB.XFBML.parse();
   }, []);
@@ -17,4 +28,4 @@ export function ShareFacebook({ currentUrl }) {
       </a>
     </div>
   );
-}
+};

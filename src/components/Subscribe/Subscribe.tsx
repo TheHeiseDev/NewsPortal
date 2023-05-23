@@ -3,7 +3,7 @@ import styles from "./Subscribe.module.scss";
 import { Button } from "../UI/Buttons/Button";
 
 export const Subscribe = () => {
-  const subscribeHandle = (event) => {
+  const subscribeHandle = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
   return (

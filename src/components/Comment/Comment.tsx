@@ -1,9 +1,18 @@
 import styles from "./Comment.module.scss";
-import { useMemo } from "react";
+import { FC, useMemo } from "react";
 import PersonPinIcon from "@mui/icons-material/PersonPin";
 import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
 
-export const Comment = ({ comment }) => {
+interface IComment {
+  comment: {
+    id: string;
+    date: string;
+    text: string;
+    userName: string;
+  };
+}
+
+export const Comment: FC<IComment> = ({ comment }) => {
   const { id, date, text, userName } = comment;
 
   const commentTime = useMemo(() => {
