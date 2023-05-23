@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./Header.module.scss";
 import instagram from "../../assets/instagram.webp";
 import facebook from "../../assets/facebook.webp";
@@ -6,8 +6,27 @@ import { Button } from "../UI/Buttons/Button";
 import { Link } from "react-router-dom";
 
 export const Header = () => {
+  const [isSticky, setIsSticky] = useState(false);
+
+  console.log(isSticky);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.pageYOffset > 100) {
+        setIsSticky(true);
+      } else {
+        setIsSticky(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <header>
+    <header className={isSticky ? styles.headerSticky : ""}>
       <div className="container">
         <div className={styles.headerWrapper}>
           <div className={styles.headerLogo}>

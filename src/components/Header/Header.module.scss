@@ -1,10 +1,17 @@
 header {
+  background: black;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
 }
 .headerWrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 40px 10px;
+  transition: all 0.3s ease;
 }
 
 .headerLogo {
@@ -57,5 +64,14 @@ header {
         display: none;
       }
     }
+  }
+}
+
+//
+.headerSticky {
+  background: rgba(0, 0, 0, 0.954);
+
+  & .headerWrapper {
+    padding: 20px 10px;
   }
 }
