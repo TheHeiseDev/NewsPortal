@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 export const Header = () => {
   const [isSticky, setIsSticky] = useState(false);
 
-  console.log(isSticky);
   useEffect(() => {
     const handleScroll = () => {
       if (window.pageYOffset > 100) {

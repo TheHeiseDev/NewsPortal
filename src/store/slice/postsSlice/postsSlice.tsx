@@ -1,6 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 // import { RootState } from "../../store";
-import { PostsSliceType, StatusEnum } from "./postsTypes";
+import { CommentsType, PostsSliceType, StatusEnum } from "./postsTypes";
 import { fetchPostById, fetchPosts } from "./postsThunk";
 import { RootState } from "../../store";
 
@@ -21,6 +21,12 @@ export const postsSlice = createSlice({
     removeItem(state) {
       state.item.data = null;
       state.item.status = StatusEnum.loading;
+    },
+    addComment(state, action: PayloadAction<CommentsType>) {
+      if (state.item.data) {
+        //@ts-ignore
+        state.item.data.comments.push(action.payload);
+      }
     },
   },
 
@@ -53,7 +59,7 @@ export const postsSlice = createSlice({
       });
   },
 });
-export const { removeItem } = postsSlice.actions;
+export const { removeItem, addComment } = postsSlice.actions;
 export const selectPosts = (state: RootState) => state.posts.items;
 export const selectPost = (state: RootState) => state.posts.item.data;
 export const selectPostStatus = (state: RootState) => state.posts.item.status;

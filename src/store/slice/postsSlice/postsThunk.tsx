@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { apiService } from "../../../api/apiService";
-import { PostType } from "./postsTypes";
+import { CommentsType, PostType } from "./postsTypes";
 
 type ParamsType = {
   page: number;
@@ -53,5 +53,17 @@ export const fetchUpViewCounts = createAsyncThunk(
     } catch (error) {
       console.error(error);
     }
+  }
+);
+
+export const addCommentById = createAsyncThunk(
+  "posts/addCommentById",
+  async ({ id, post }: { id: string; post: PostType }) => {
+    const { data } = await axios<PostType>({
+      method: "PUT",
+      url: `${apiService.baseUrl}/${id}`,
+      data: post,
+    });
+    return data;
   }
 );

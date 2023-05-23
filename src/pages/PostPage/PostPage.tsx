@@ -147,7 +147,7 @@ export const PostPage = () => {
               </article>
               <section className={styles.commentsContainer}>
                 <h2>Добавить комментарий</h2>
-                <FormAddComment />
+                <FormAddComment post={post} />
 
                 <h2>Комментарии</h2>
                 {post.comments.length > 0 ? (
