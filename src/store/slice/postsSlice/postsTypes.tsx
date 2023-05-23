@@ -28,7 +28,7 @@ export type PostType = {
 
 export type CommentsType = {
   id: string;
-  user: string;
+  userName: string;
   text: string;
   date: string;
 };

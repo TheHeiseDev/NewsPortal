@@ -2,14 +2,10 @@ import styles from "./Comment.module.scss";
 import { FC, useMemo } from "react";
 import PersonPinIcon from "@mui/icons-material/PersonPin";
 import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
+import { CommentsType } from "../../store/slice/postsSlice/postsTypes";
 
 interface IComment {
-  comment: {
-    id: string;
-    date: string;
-    text: string;
-    userName: string;
-  };
+  comment: CommentsType;
 }
 
 export const Comment: FC<IComment> = ({ comment }) => {

@@ -75,6 +75,16 @@ export const PostPage = () => {
     setCurrentUrl((prev) => (prev = url));
   }, []);
 
+  if (!post) {
+    return (
+      <MainLayout>
+        <div className={styles.postLoadingContainer}>
+          <CircularProgress />
+        </div>
+      </MainLayout>
+    );
+  }
+
   return (
     <MainLayout>
       {status === StatusEnum.loading ? (

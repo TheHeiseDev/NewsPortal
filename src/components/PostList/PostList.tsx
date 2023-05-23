@@ -28,10 +28,6 @@ export const PostList = () => {
     // dispatch(setCurrentPage(page));
   };
 
-  if (!data) {
-    return <h1>Произошла ошибка, попробуйте обновить старницу</h1>;
-  }
-
   return (
     <div className={styles.posts}>
       <div className={styles.containerMini}>
@@ -45,10 +41,10 @@ export const PostList = () => {
           ) : status === StatusEnum.error ? (
             <h2>Произошла ошибка при получении данных из сервера</h2>
           ) : (
-            data.map((post) => <Post key={post.id} post={post} />)
+            data?.map((post) => <Post key={post.id} post={post} />)
           )}
 
-          {status === StatusEnum.success && data.length > 0 && (
+          {status === StatusEnum.success && data && data.length > 0 && (
             <Pagination
               color="secondary"
               variant="outlined"
