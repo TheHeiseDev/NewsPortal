@@ -4,8 +4,8 @@ import { apiService } from "../../../api/apiService";
 import { CommentsType, PostType } from "./postsTypes";
 
 type ParamsType = {
-  page: number;
-  limit: number;
+  page?: number;
+  limit?: number;
 };
 
 export const fetchPosts = createAsyncThunk(

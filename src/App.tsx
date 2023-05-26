@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import { CircularProgress } from "@mui/material";
 import NotFound from "./pages/NotFound/NotFound";
 import { PostPage } from "./pages/PostPage/PostPage";
+import { Newsfeed } from "./pages/Newsfeed/Newsfeed";
 
 function App() {
   return (
@@ -21,13 +22,22 @@ function App() {
         }
       />
       <Route
-        path="/posts"
+        path="/newsfeed"
         element={
           <Suspense fallback={<CircularProgress />}>
-            <h1>POSTS LIST</h1>
+            <Newsfeed/>
           </Suspense>
         }
       />
+      <Route
+        path="/newsfeed/:category"
+        element={
+          <Suspense fallback={<CircularProgress />}>
+            <h1>POSTS LIST Category</h1>
+          </Suspense>
+        }
+      />
+
       <Route
         path="/posts/:id"
         element={

@@ -7,8 +7,10 @@
   height: 100%;
   color: black;
 
-  &:hover {
-    background: white;
+  @media only screen and (min-width: 768px) {
+    &:hover {
+      background: white;
+    }
   }
 }
 .buttonContainer {

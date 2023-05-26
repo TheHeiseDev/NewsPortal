@@ -1,0 +1,38 @@
+.newsfeed {
+  margin: 160px 0 0 0;
+}
+.container {
+  max-width: 1020px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+.newsfeedWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 0 50px 0;
+}
+
+.filtersContainer {
+}
+.postsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.postLoadingContainer {
+  margin-top: 120px;
+  text-align: center;
+  padding: 20px;
+
+  & svg {
+    color: rgb(57, 241, 152) !important;
+  }
+}
+.observerLoadingContainer {
+  text-align: center;
+
+  & img {
+    height: 100px;
+  }
+}

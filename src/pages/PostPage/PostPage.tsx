@@ -27,7 +27,7 @@ import { ShareFacebook } from "../../components/UI/Buttons/ShareFacebook";
 import { ShareTwitter } from "../../components/UI/Buttons/ShareTwitter";
 import { Comment } from "../../components/Comment/Comment";
 
-import { useTitle } from "../../hooks/use-title";
+import { useTitle } from "../../hooks/useTitle";
 import { useFormatDate } from "../../hooks/useFormatDate";
 import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
 import { FormAddComment } from "../../components/FormAddComment/FormAddComment";

@@ -3,10 +3,11 @@ import styles from "./Header.module.scss";
 import instagram from "../../assets/instagram.webp";
 import facebook from "../../assets/facebook.webp";
 import { Button } from "../UI/Buttons/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Header = () => {
   const [isSticky, setIsSticky] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,7 +44,7 @@ export const Header = () => {
                 <img src={facebook} alt="instagram" />
               </div>
             </div>
-            <Button>Лента</Button>
+            <Button callback={() => navigate("/newsfeed")}>Лента</Button>
           </div>
         </div>
       </div>
