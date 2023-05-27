@@ -12,4 +12,5 @@ export type ParamsType = {
   page?: number;
   limit?: number;
   category?: string;
+  search?: string;
 };

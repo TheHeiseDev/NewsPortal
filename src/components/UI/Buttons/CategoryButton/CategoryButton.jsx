@@ -3,7 +3,6 @@ import styles from "./CategoryButton.module.scss";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 
 export const CategoryButton = ({ title, Image, bgColor, callback }) => {
-  console.log(bgColor);
   return (
     <button
       onClick={callback}

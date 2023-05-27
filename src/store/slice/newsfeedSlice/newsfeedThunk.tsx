@@ -7,7 +7,7 @@ import { ParamsType } from "./newsfeedTypes";
 export const fetchFeedPosts = createAsyncThunk(
   "newsfeed/fetchFeedPosts",
   async (params: ParamsType) => {
-    const { page, limit, category } = params;
+    const { page, limit, category, search } = params;
 
     const { data } = await axios<PostType[]>({
       method: "GET",
@@ -16,6 +16,7 @@ export const fetchFeedPosts = createAsyncThunk(
         limit: limit,
         page: page,
         category: category,
+        search: search,
       },
     });
 
