@@ -1,0 +1,43 @@
+.CategoryButton {
+  border-radius: 10px;
+  transition: opacity 0.3s ease;
+  @media (any-hover: hover) {
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+.CategoryButtonWrapper {
+  position: relative;
+  padding: 40px 0px;
+  text-align: center;
+  //   background: #050505;
+  border-radius: 10px;
+  color: white;
+
+  & h6 {
+    font-size: 22px;
+    font-weight: 500;
+  }
+}
+
+.CategoryButtonImage {
+  border-radius: 10px;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  transition: all 0.2s ease;
+
+  @media (max-width: 767px) {
+    width: 20px;
+    height: 20px;
+    bottom: 5px;
+    right: 10px;
+  }
+
+  & svg {
+    fill: white;
+  }
+}

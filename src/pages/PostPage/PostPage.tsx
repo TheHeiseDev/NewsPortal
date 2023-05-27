@@ -22,7 +22,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import LinkIcon from "@mui/icons-material/Link";
 
 import { MainLayout } from "../../layout/MainLayout";
-import { ImageModal } from "../../components/UI/Buttons/Modal/ImageModal";
+import { ImageModal } from "../../components/UI/Modal/ImageModal";
 import { ShareFacebook } from "../../components/UI/Buttons/ShareFacebook";
 import { ShareTwitter } from "../../components/UI/Buttons/ShareTwitter";
 import { Comment } from "../../components/Comment/Comment";
