@@ -1,8 +1,26 @@
 import React from "react";
 import styles from "./NotFound.module.scss";
+import { MainLayout } from "../../layout/MainLayout";
+import notFound from "../../assets/404.png";
+import { Link } from "react-router-dom";
 
 const NotFound = () => {
-  return <div>404 Страница не найдена</div>;
+  return (
+    <MainLayout>
+      <div className={styles.notFound}>
+        <div className={styles.container}>
+          <div className={styles.notFoundWrapper}>
+            <div className={styles.image}>
+              <img src={notFound} alt="" />
+            </div>
+            <div className={styles.action}>
+              <Link to="/">Главная</Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </MainLayout>
+  );
 };
 
 export default NotFound;

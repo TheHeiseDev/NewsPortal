@@ -30,8 +30,8 @@ export const Header = () => {
       <div className="container">
         <div className={styles.headerWrapper}>
           <div className={styles.headerLogo}>
-            <Link to="/">WOK BLOG</Link>
-            <span>/ Way of Knowledge</span>
+            <Link to="/">AI Chronicles</Link>
+            <span>/ Хроники AI</span>
           </div>
           <div className={styles.headerActions}>
             <div className={styles.headerAuthor}>

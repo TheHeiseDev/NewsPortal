@@ -66,6 +66,7 @@ export const PostPage = () => {
   // The logic of counting post views
   useEffect(() => {
     if (id) {
+      // TODO change name
       dispatch(fetchUpViewCounts(id));
     }
   }, [id]);
