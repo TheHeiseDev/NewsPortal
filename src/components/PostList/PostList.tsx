@@ -1,5 +1,5 @@
 import styles from "./PostList.module.scss";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import { CircularProgress, Pagination } from "@mui/material";
@@ -18,6 +18,8 @@ export const PostList = () => {
     const params = {
       page: page,
       limit: 5,
+      sortBy: "date",
+      order: "desc",
     };
     dispatch(fetchPosts(params));
   }, [page]);
