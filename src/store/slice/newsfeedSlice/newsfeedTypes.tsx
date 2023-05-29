@@ -13,4 +13,6 @@ export type ParamsType = {
   limit?: number;
   category?: string;
   search?: string;
+  sortBy?: string;
+  order?: string;
 };

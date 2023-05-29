@@ -19,8 +19,8 @@ export const fetchPosts = createAsyncThunk(
       method: "GET",
       url: apiService.baseUrl,
       params: {
-        limit: limit,
         page: page,
+        limit: limit,
         sortBy: sortBy,
         order: order,
       },

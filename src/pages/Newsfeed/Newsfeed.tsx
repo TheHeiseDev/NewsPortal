@@ -44,14 +44,27 @@ export const Newsfeed = () => {
     dispatch(fetchFeedMaxPage(categoryValue));
   }, [dispatch, categoryValue]);
 
+  // fetchData
   useEffect(() => {
     if (categoryValue === "") {
-      const params = { page: page, limit: 5, category: categoryValue };
+      const params = {
+        page: page,
+        limit: 5,
+        category: categoryValue,
+        sortBy: "date",
+        order: "desc",
+      };
       dispatch(fetchFeedPosts(params));
     }
 
     if (categoryValue !== "") {
-      const params = { page: page, limit: 5, category: categoryValue };
+      const params = {
+        page: page,
+        limit: 5,
+        category: categoryValue,
+        sortBy: "date",
+        order: "desc",
+      };
       dispatch(fetchFeedPosts(params));
     }
   }, [categoryValue, page]);
@@ -86,7 +99,7 @@ export const Newsfeed = () => {
     <MainLayout>
       <div className={styles.newsfeed}>
         <div className={styles.container}>
-          <Search/>
+          <Search />
           <div className={styles.filtersContainer}>
             {categoryItem.map((element) => (
               <CategoryButton
