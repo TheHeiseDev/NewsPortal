@@ -82,18 +82,20 @@
   & .postData {
     display: flex;
     gap: 20px;
-    & .views {
+
+    & .commnets,
+    .category,
+    .views {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       font-weight: 300;
-      & span {
-        font-weight: 500;
+
+      & svg {
+        fill: gray;
       }
     }
-    & .commnets {
-      font-weight: 300;
-      & span {
-        font-weight: 500;
-      }
-    }
+
   }
 
   & .dataActions {

@@ -14,7 +14,7 @@ const NotFound = () => {
               <img src={notFound} alt="" />
             </div>
             <div className={styles.action}>
-              <Link to="/">Главная</Link>
+              <Link to="/">ГЛАВНАЯ</Link>
             </div>
           </div>
         </div>

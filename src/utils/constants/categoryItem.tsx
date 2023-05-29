@@ -74,3 +74,9 @@ export const categoryItem: ICategoryItem[] = [
     category: "useful_services",
   },
 ];
+
+export enum CategoryEnum {
+it_news = "it_news",
+ai = "ai",
+useful_services = 'useful_services'
+}
