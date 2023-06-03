@@ -27,6 +27,14 @@ export const ImageModal: FC<IImageModal> = ({ imageUrl }) => {
   };
 
   useEffect(() => {
+    if (isFullScreen) {
+      window.document.body.style.overflow = "hidden";
+    } else {
+      window.document.body.style.overflow = "";
+    }
+  }, [isFullScreen]);
+
+  useEffect(() => {
     window.addEventListener("click", modalViewCloseHandle);
     window.addEventListener("keydown", modalViewCloseHandle);
 

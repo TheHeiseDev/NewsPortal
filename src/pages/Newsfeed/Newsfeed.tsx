@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { MainLayout } from "../../layout/MainLayout";
 import styles from "./Newsfeed.module.scss";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "../../store/store";
 import { Post } from "../../components/Post/Post";
 import { CategoryButton } from "../../components/UI/Buttons/CategoryButton/CategoryButton";

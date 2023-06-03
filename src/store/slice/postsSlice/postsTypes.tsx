@@ -22,6 +22,8 @@ export type PostType = {
   views: number;
   comments: CommentsType[];
   date: number;
+  // TODO - типизирова likes
+  likes: any[];
   category: string;
   link: string;
 };

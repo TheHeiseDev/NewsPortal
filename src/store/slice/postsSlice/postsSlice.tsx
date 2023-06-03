@@ -18,6 +18,18 @@ export const postsSlice = createSlice({
   name: "posts",
   initialState,
   reducers: {
+    likedPost(state, action) {
+      if (state.item.data) {
+        state.item.data.likes.push(action.payload);
+      }
+    },
+    deleteLikePost(state, action) {
+      if (state.item.data) {
+        state.item.data.likes = state.item.data.likes.filter(
+          (like) => like.ip !== action.payload
+        );
+      }
+    },
     removeItem(state) {
       state.item.data = null;
       state.item.status = StatusEnum.loading;
@@ -59,7 +71,7 @@ export const postsSlice = createSlice({
       });
   },
 });
-export const { removeItem, addComment } = postsSlice.actions;
+export const { removeItem, addComment, likedPost, deleteLikePost } = postsSlice.actions;
 export const selectPosts = (state: RootState) => state.posts.items;
 export const selectPost = (state: RootState) => state.posts.item.data;
 export const selectPostStatus = (state: RootState) => state.posts.item.status;

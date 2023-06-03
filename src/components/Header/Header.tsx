@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Header.module.scss";
 import instagram from "../../assets/instagram.webp";
 import facebook from "../../assets/facebook.webp";
 import { Button } from "../UI/Buttons/Button";
 import { Link, useNavigate } from "react-router-dom";
 
-export const Header = () => {
+export const Header = React.memo(() => {
   const [isSticky, setIsSticky] = useState(false);
   const navigate = useNavigate();
 
@@ -50,4 +50,4 @@ export const Header = () => {
       </div>
     </header>
   );
-};
+});

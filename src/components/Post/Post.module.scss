@@ -83,6 +83,10 @@
     display: flex;
     gap: 20px;
 
+    & .category {
+      margin-right: 10px;
+    }
+
     & .commnets,
     .category,
     .views {
@@ -95,20 +99,22 @@
         fill: gray;
       }
     }
-
   }
 
   & .dataActions {
-    transition: all 0.3s ease;
-    cursor: pointer;
-    &:hover {
-      opacity: 0.7;
+    display: flex;
+    color: white;
+    align-items: center;
+    gap: 10px;
+    cursor: auto;
+
+    & .likedCount {
+      font-size: 16px;
+      color: gray;
     }
-    &:focus {
-      opacity: 0.7;
-    }
-    &:active {
-      transform: scale(0.9);
+    & span {
+      width: 24px !important;
+      height: 24px !important;
     }
 
     & svg {

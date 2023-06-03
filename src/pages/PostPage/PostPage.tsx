@@ -4,11 +4,15 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../store/store";
 import {
+  fetchDeleteLike,
+  fetchLikedPost,
   fetchPostById,
   fetchUpViewCounts,
 } from "../../store/slice/postsSlice/postsThunk";
-import { StatusEnum } from "../../store/slice/postsSlice/postsTypes";
+import { PostType, StatusEnum } from "../../store/slice/postsSlice/postsTypes";
 import {
+  deleteLikePost,
+  likedPost,
   removeItem,
   selectPost,
   selectPostStatus,
@@ -31,6 +35,7 @@ import { useTitle } from "../../hooks/useTitle";
 import { useFormatDate } from "../../hooks/useFormatDate";
 import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
 import { FormAddComment } from "../../components/FormAddComment/FormAddComment";
+import { useIPInfo } from "../../utils/getIpAdress";
 
 export const PostPage = () => {
   const dispatch = useAppDispatch();
@@ -38,6 +43,77 @@ export const PostPage = () => {
   const post = useSelector(selectPost);
   const status = useSelector(selectPostStatus);
   const [currentUrl, setCurrentUrl] = useState("");
+
+  // ! LIKE
+  const { ipAddress, country } = useIPInfo();
+  const [liked, setLiked] = useState(false);
+  const [likedLoadingStatus, setLikedLoadingStatus] = useState(false);
+
+  const likedPostHandle = async (post: PostType) => {
+    setLikedLoadingStatus(true);
+    try {
+      const liked = {
+        ip: ipAddress,
+        country: country || "",
+      };
+
+      const updatePost = {
+        ...post,
+        likes: [...post.likes, liked],
+      };
+      dispatch(fetchLikedPost({ id: post.id, post: updatePost })).then(
+        (response: any) => {
+          if (response.meta.requestStatus === "fulfilled") {
+            dispatch(likedPost(liked));
+            setLikedLoadingStatus(false);
+          }
+        }
+      );
+    } catch (error) {
+      console.error("Ошибка", error);
+    }
+  };
+
+  const deleteLikeHandle = async (post: any) => {
+    setLikedLoadingStatus(true);
+    try {
+      const updatePost = {
+        ...post,
+        likes: post.likes.filter((like: any) => like.ip !== ipAddress),
+      };
+
+      dispatch(fetchDeleteLike({ id: post.id, post: updatePost })).then(
+        (response: any) => {
+          if (response.meta.requestStatus === "fulfilled") {
+            dispatch(deleteLikePost(ipAddress));
+            setLikedLoadingStatus(false);
+          }
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    setLikedLoadingStatus(true);
+
+    const checkLiked = async () => {
+      if (ipAddress) {
+        function checkLikesByIp() {
+          if (post && post.likes.some((like: any) => like.ip === ipAddress)) {
+            return true;
+          }
+          return false;
+        }
+        setLiked((prev) => (prev = checkLikesByIp()));
+        setLikedLoadingStatus(false);
+      }
+    };
+    checkLiked();
+  }, [ipAddress, post, liked]);
+
+  // ! LIKE
 
   const postTime = useMemo(() => {
     const date = post ? new Date(post.date) : "";
@@ -141,8 +217,14 @@ export const PostPage = () => {
                     <ShareTwitter currentUrl={currentUrl} />
                   </div>
                   <div className={styles.postActions}>
-                    <FavoriteBorderIcon />
-                    {/* <FavoriteIcon /> */}
+                    <div className={styles.likedCount}>{post.likes.length}</div>
+                    {likedLoadingStatus ? (
+                      <CircularProgress />
+                    ) : !liked ? (
+                      <FavoriteBorderIcon onClick={() => likedPostHandle(post)} />
+                    ) : (
+                      <FavoriteIcon onClick={() => deleteLikeHandle(post)} />
+                    )}
                   </div>
                 </div>
               </article>

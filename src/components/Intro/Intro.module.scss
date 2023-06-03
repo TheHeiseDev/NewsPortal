@@ -34,7 +34,27 @@
         background-position: -100px;
       }
     }
-
+    @media (max-width: 1800px) {
+      @media (any-hover: hover) {
+        &:hover {
+          background-position: -70px;
+        }
+      }
+    }
+    @media (max-width: 1300px) {
+      @media (any-hover: hover) {
+        &:hover {
+          background-position: -180px;
+        }
+      }
+    }
+    @media (max-width: 900px) {
+      @media (any-hover: hover) {
+        &:hover {
+          background-position: -220px;
+        }
+      }
+    }
     @media (max-width: 767px) {
       @media (any-hover: hover) {
         &:hover {
@@ -51,6 +71,29 @@
         background-position: -100px;
       }
     }
+    @media (max-width: 1800px) {
+      @media (any-hover: hover) {
+        &:hover {
+          background-position: -70px;
+        }
+      }
+    }
+
+    @media (max-width: 1300px) {
+      @media (any-hover: hover) {
+        &:hover {
+          background-position: -180px;
+        }
+      }
+    }
+    @media (max-width: 900px) {
+      @media (any-hover: hover) {
+        &:hover {
+          background-position: -220px;
+        }
+      }
+    }
+
     @media (max-width: 767px) {
       @media (any-hover: hover) {
         &:hover {
@@ -68,6 +111,28 @@
         background-position: -100px;
       }
     }
+    @media (max-width: 1800px) {
+      @media (any-hover: hover) {
+        &:hover {
+          background-position: -70px;
+        }
+      }
+    }
+    @media (max-width: 1300px) {
+      @media (any-hover: hover) {
+        &:hover {
+          background-position: -180px;
+        }
+      }
+    }
+    @media (max-width: 900px) {
+      @media (any-hover: hover) {
+        &:hover {
+          background-position: -220px;
+        }
+      }
+    }
+
     @media (max-width: 767px) {
       @media (any-hover: hover) {
         &:hover {

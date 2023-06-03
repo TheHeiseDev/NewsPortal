@@ -147,7 +147,14 @@
 }
 .postActions {
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 
+  & .likedCount {
+    font-size: 16px;
+    color: gray;
+  }
   & svg {
     fill: red;
   }
@@ -156,6 +163,10 @@
   }
   & svg:active {
     transform: scale(0.8);
+  }
+  & span {
+    width: 24px !important;
+    height: 24px !important;
   }
 }
 

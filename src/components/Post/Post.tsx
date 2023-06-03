@@ -1,5 +1,5 @@
 import styles from "./Post.module.scss";
-import { FC, useMemo } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
@@ -10,16 +10,22 @@ import { useFormatDate } from "../../hooks/useFormatDate";
 import { Link } from "react-router-dom";
 import { PostType } from "../../store/slice/postsSlice/postsTypes";
 import { CategoryEnum } from "../../utils/constants/categoryItem";
+import { getIPAddress, getCountryByIP, useIPInfo } from "../../utils/getIpAdress";
+import { useAppDispatch } from "../../store/store";
+import { fetchDeleteLike, fetchLikedPost } from "../../store/slice/postsSlice/postsThunk";
+import { deleteLikePost, likedPost } from "../../store/slice/postsSlice/postsSlice";
+import { CircularProgress } from "@mui/material";
 
 interface IPost {
   post: PostType;
 }
 
 export const Post: FC<IPost> = ({ post }) => {
+  const postData = useFormatDate(post);
+
   const postTime = useMemo(() => {
     return calculateTimeElapsed(new Date(post.date));
   }, []);
-  const postData = useFormatDate(post);
 
   const setCategoryName = (categoryValue: string) => {
     if (categoryValue === CategoryEnum.it_news) {
@@ -70,10 +76,11 @@ export const Post: FC<IPost> = ({ post }) => {
                 {setCategoryName(post.category)}
               </div>
             </div>
-            <div className={styles.dataActions}>
-              <FavoriteBorderIcon />
-              {/* <FavoriteIcon /> */}
-            </div>
+
+            <button className={styles.dataActions}>
+              <div className={styles.likedCount}>{post.likes.length}</div>
+              <FavoriteIcon />
+            </button>
           </div>
         </article>
       </div>

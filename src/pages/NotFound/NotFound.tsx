@@ -4,7 +4,7 @@ import { MainLayout } from "../../layout/MainLayout";
 import notFound from "../../assets/404.png";
 import { Link } from "react-router-dom";
 
-const NotFound = () => {
+export const NotFound = () => {
   return (
     <MainLayout>
       <div className={styles.notFound}>
@@ -23,4 +23,3 @@ const NotFound = () => {
   );
 };
 
-export default NotFound;

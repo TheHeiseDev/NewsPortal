@@ -71,3 +71,25 @@ export const addCommentById = createAsyncThunk(
     return data;
   }
 );
+export const fetchLikedPost = createAsyncThunk(
+  "posts/addCommentById",
+  async ({ id, post }: { id: string; post: PostType }) => {
+    const { data } = await axios<PostType>({
+      method: "PUT",
+      url: `${apiService.baseUrl}/${id}`,
+      data: post,
+    });
+    return data;
+  }
+);
+export const fetchDeleteLike = createAsyncThunk(
+  "posts/fetchDeleteLike",
+  async ({ id, post }: { id: string; post: PostType }) => {
+    const { data } = await axios<PostType>({
+      method: "PUT",
+      url: `${apiService.baseUrl}/${id}`,
+      data: post,
+    });
+    return data;
+  }
+);
