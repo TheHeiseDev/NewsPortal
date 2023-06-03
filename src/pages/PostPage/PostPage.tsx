@@ -35,7 +35,7 @@ import { useTitle } from "../../hooks/useTitle";
 import { useFormatDate } from "../../hooks/useFormatDate";
 import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
 import { FormAddComment } from "../../components/FormAddComment/FormAddComment";
-import { useIPInfo } from "../../utils/getIpAdress";
+import { useIPInfo } from "../../hooks/useIpInfo";
 
 export const PostPage = () => {
   const dispatch = useAppDispatch();
