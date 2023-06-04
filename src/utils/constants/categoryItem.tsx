@@ -1,4 +1,4 @@
-import {SVGProps} from "react";
+import { SVGProps } from "react";
 
 type ICategoryItem = {
   title: string;
@@ -22,7 +22,7 @@ export const categoryItem: ICategoryItem[] = [
       </svg>
     ),
     bgColor: "rgb(73 184 220 / 95%)",
-    category: "",
+    category: "all",
   },
   {
     title: "Новости ИТ",
@@ -76,7 +76,7 @@ export const categoryItem: ICategoryItem[] = [
 ];
 
 export enum CategoryEnum {
-it_news = "it_news",
-ai = "ai",
-useful_services = 'useful_services'
+  it_news = "it_news",
+  ai = "ai",
+  useful_services = "useful_services",
 }

@@ -116,8 +116,10 @@ export const PostPage = () => {
   // ! LIKE
 
   const postTime = useMemo(() => {
-    const date = post ? new Date(post.date) : "";
-    return calculateTimeElapsed(date);
+    if (post) {
+      const date = new Date(post.date);
+      return calculateTimeElapsed(date);
+    }
   }, [post]);
 
   let postData = useFormatDate(post);

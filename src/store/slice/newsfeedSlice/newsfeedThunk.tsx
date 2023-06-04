@@ -15,7 +15,7 @@ export const fetchFeedPosts = createAsyncThunk(
       params: {
         limit: limit,
         page: page,
-        category: category,
+        category: category === "all" ? "" : category,
         search: search,
         sortBy: sortBy,
         order: order,
@@ -32,7 +32,7 @@ export const fetchFeedMaxPage = createAsyncThunk(
       method: "GET",
       url: apiService.baseUrl,
       params: {
-        category: category,
+        category: category === "all" ? "" : category,
       },
     });
 

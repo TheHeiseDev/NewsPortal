@@ -33,7 +33,9 @@
   position: relative;
   margin-bottom: 10px;
   min-height: 228px;
-
+  & img {
+    width: 100%;
+  }
   &:hover .zoomIcon {
     visibility: visible;
     opacity: 1;

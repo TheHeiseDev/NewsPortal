@@ -4,6 +4,11 @@ export enum StatusEnum {
   error = "error",
 }
 
+export type LikesType = {
+  ip: string;
+  country: string;
+};
+
 export type PostsSliceType = {
   items: {
     data: PostType[] | null;
@@ -22,8 +27,7 @@ export type PostType = {
   views: number;
   comments: CommentsType[];
   date: number;
-  // TODO - типизирова likes
-  likes: any[];
+  likes: LikesType[];
   category: string;
   link: string;
 };

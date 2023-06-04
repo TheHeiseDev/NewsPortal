@@ -1,4 +1,4 @@
-export function calculateTimeElapsed(postDate, currentDate = new Date()) {
+export function calculateTimeElapsed(postDate: Date, currentDate = new Date()) {
   if (postDate) {
     const timeElapsed = currentDate.getTime() - postDate.getTime();
     const seconds = Math.floor(timeElapsed / 1000);
@@ -16,5 +16,5 @@ export function calculateTimeElapsed(postDate, currentDate = new Date()) {
       return `${seconds} сек.`;
     }
   }
-  return ""
+  return "";
 }

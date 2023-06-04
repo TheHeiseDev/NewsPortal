@@ -18,15 +18,30 @@ import {
 import loadinGif from "../../assets/loading3.gif";
 import { categoryItem } from "../../utils/constants/categoryItem";
 import { Search } from "../../components/UI/Search/Search";
+import { useNavigate } from "react-router-dom";
+import qs from "qs";
 
 export const Newsfeed = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { data, status, maxPage } = useSelector(selectFeedPosts);
   //
   const [categoryValue, setCategoryValue] = useState("");
   const [page, setPage] = useState(0);
-
+  const [toogle, setToogle] = useState(false);
   const observer = useRef<IntersectionObserver | null>(null);
+
+  useEffect(() => {
+    const searchParams = qs.parse(window.location.search, { ignoreQueryPrefix: true });
+    console.log(searchParams);
+  }, []);
+
+  useEffect(() => {
+    if (toogle) {
+      navigate(`/newsfeed/category/${categoryValue}`);
+    }
+    setToogle(true);
+  }, [categoryValue]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
