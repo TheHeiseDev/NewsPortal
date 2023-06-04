@@ -30,19 +30,19 @@ function App() {
           </Suspense>
         }
       />
-      <Route
+      {/* <Route
+        path="/newsfeed/category"
+        element={<Navigate to="/newsfeed" replace={true} />}
+      /> */}
+      {/* <Route
         path="/newsfeed/category/:category"
         element={
           <Suspense fallback={<CircularProgress />}>
             <Newsfeed />
           </Suspense>
         }
-      />
-      <Route
-        path="/newsfeed/category"
-        element={<Navigate to="/newsfeed" replace={true} />}
-      />
-
+      /> */}
+    
       <Route
         path="/posts/:id"
         element={

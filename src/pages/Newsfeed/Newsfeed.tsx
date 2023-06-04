@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { MainLayout } from "../../layout/MainLayout";
 import styles from "./Newsfeed.module.scss";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "../../store/store";
 import { Post } from "../../components/Post/Post";
 import { CategoryButton } from "../../components/UI/Buttons/CategoryButton/CategoryButton";
@@ -28,19 +28,14 @@ export const Newsfeed = () => {
   //
   const [categoryValue, setCategoryValue] = useState("");
   const [page, setPage] = useState(0);
-  const [toogle, setToogle] = useState(false);
+  const [isMount, setIsMount] = useState(false);
   const observer = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
-    const searchParams = qs.parse(window.location.search, { ignoreQueryPrefix: true });
-    console.log(searchParams);
-  }, []);
-
-  useEffect(() => {
-    if (toogle) {
-      navigate(`/newsfeed/category/${categoryValue}`);
+    if (isMount) {
+      navigate(`/newsfeed?category=${categoryValue}`);
     }
-    setToogle(true);
+    setIsMount(true);
   }, [categoryValue]);
 
   useEffect(() => {
@@ -61,27 +56,21 @@ export const Newsfeed = () => {
 
   // fetchData
   useEffect(() => {
-    if (categoryValue === "") {
-      const params = {
-        page: page,
-        limit: 5,
-        category: categoryValue,
-        sortBy: "date",
-        order: "desc",
-      };
-      dispatch(fetchFeedPosts(params));
-    }
+    const searchParams = qs.parse(window.location.search, { ignoreQueryPrefix: true });
 
-    if (categoryValue !== "") {
-      const params = {
-        page: page,
-        limit: 5,
-        category: categoryValue,
-        sortBy: "date",
-        order: "desc",
-      };
-      dispatch(fetchFeedPosts(params));
+    if (searchParams.category) {
+      setCategoryValue(String(searchParams.category));
     }
+    console.log(categoryValue);
+
+    const params = {
+      page: page,
+      limit: 5,
+      category: categoryValue,
+      sortBy: "date",
+      order: "desc",
+    };
+    dispatch(fetchFeedPosts(params));
   }, [categoryValue, page]);
 
   //Implementation of the functionality by which the page switching occurs,
