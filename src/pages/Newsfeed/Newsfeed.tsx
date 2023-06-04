@@ -14,6 +14,7 @@ import {
 import {
   removeFeedItems,
   selectFeedPosts,
+  setMaxPage,
 } from "../../store/slice/newsfeedSlice/newsfeedSlice";
 import loadinGif from "../../assets/loading3.gif";
 import { categoryItem } from "../../utils/constants/categoryItem";
@@ -21,6 +22,7 @@ import { Search } from "../../components/UI/Search/Search";
 import { useNavigate } from "react-router-dom";
 import qs from "qs";
 import { useTitle } from "../../hooks/useTitle";
+import { ParamsType } from "../../store/slice/newsfeedSlice/newsfeedTypes";
 
 export const Newsfeed = () => {
   const dispatch = useAppDispatch();
@@ -31,15 +33,22 @@ export const Newsfeed = () => {
   const [page, setPage] = useState(0);
   const [isMount, setIsMount] = useState(false);
   const observer = useRef<IntersectionObserver | null>(null);
+  const [searchValue, setSearchValue] = useState("");
 
   useTitle("Лента новостей");
-
   useEffect(() => {
     if (isMount) {
       navigate(`/newsfeed?category=${categoryValue}`);
     }
     setIsMount(true);
   }, [categoryValue]);
+
+  useEffect(() => {
+    if (isMount) {
+      navigate(`/newsfeed?search=${searchValue}`);
+    }
+    setIsMount(true);
+  }, [searchValue]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -61,17 +70,38 @@ export const Newsfeed = () => {
   useEffect(() => {
     const searchParams = qs.parse(window.location.search, { ignoreQueryPrefix: true });
 
-    if (searchParams.category) {
-      setCategoryValue(String(searchParams.category));
-    }
-    const params = {
+    let paramsUrl: ParamsType = {
       page: page,
       limit: 5,
-      category: categoryValue,
+      search: searchValue,
       sortBy: "date",
       order: "desc",
     };
-    dispatch(fetchFeedPosts(params));
+
+    if (searchParams.category) {
+      setCategoryValue(String(searchParams.category));
+      paramsUrl = {
+        page: page,
+        limit: 5,
+        category: categoryValue,
+        sortBy: "date",
+        order: "desc",
+      };
+    }
+    if (searchParams.search) {
+      setSearchValue(String(searchParams.search));
+      // fixes the bug, best not to touch it, otherwise we stumble on repeated requests
+      dispatch(setMaxPage(1));
+      paramsUrl = {
+        page: page,
+        limit: 5,
+        search: searchValue,
+        sortBy: "date",
+        order: "desc",
+      };
+    }
+
+    dispatch(fetchFeedPosts(paramsUrl));
   }, [categoryValue, page]);
 
   //Implementation of the functionality by which the page switching occurs,
@@ -104,7 +134,7 @@ export const Newsfeed = () => {
     <MainLayout>
       <div className={styles.newsfeed}>
         <div className={styles.container}>
-          <Search />
+          <Search searchValue={searchValue} setSearchValue={setSearchValue} />
           <div className={styles.filtersContainer}>
             {categoryItem.map((element) => (
               <CategoryButton
@@ -137,7 +167,7 @@ export const Newsfeed = () => {
           </div>
         )}
 
-        {status === StatusEnum.loading && data && (
+        {status === StatusEnum.loading && data?.length && (
           <div className={styles.observerLoadingContainer}>
             <img src={loadinGif} alt="loading" />
           </div>

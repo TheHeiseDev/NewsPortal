@@ -18,7 +18,7 @@ export const fetchFeedPosts = createAsyncThunk(
         category: category === "all" ? "" : category,
         search: search,
         sortBy: sortBy,
-        order: order,
+        order: order
       },
     });
 

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 
 import { fetchFeedMaxPage, fetchFeedPosts } from "./newsfeedThunk";
@@ -16,6 +16,9 @@ export const newsfeedSlice = createSlice({
   name: "fetchFeedPosts",
   initialState,
   reducers: {
+    setMaxPage(state, action: PayloadAction<number>) {
+      state.items.maxPage = action.payload;
+    },
     removeFeedItems(state) {
       state.items.data = null;
       state.items.maxPage = 1;
@@ -53,6 +56,6 @@ export const newsfeedSlice = createSlice({
       });
   },
 });
-export const { removeFeedItems } = newsfeedSlice.actions;
+export const { removeFeedItems, setMaxPage } = newsfeedSlice.actions;
 export const selectFeedPosts = (state: RootState) => state.newsfeed.items;
 export default newsfeedSlice.reducer;
