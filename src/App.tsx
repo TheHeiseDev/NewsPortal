@@ -14,15 +14,6 @@ function App() {
   return (
     <Routes>
       <Route
-        path="/"
-        element={
-          <MainLayout>
-            <Intro />
-            <PostList />
-          </MainLayout>
-        }
-      />
-      <Route
         path="/newsfeed"
         element={
           <Suspense fallback={<CircularProgress />}>
@@ -30,25 +21,21 @@ function App() {
           </Suspense>
         }
       />
-      {/* <Route
-        path="/newsfeed/category"
-        element={<Navigate to="/newsfeed" replace={true} />}
-      /> */}
-      {/* <Route
-        path="/newsfeed/category/:category"
-        element={
-          <Suspense fallback={<CircularProgress />}>
-            <Newsfeed />
-          </Suspense>
-        }
-      /> */}
-    
       <Route
         path="/posts/:id"
         element={
           <Suspense fallback={<CircularProgress />}>
             <PostPage />
           </Suspense>
+        }
+      />
+      <Route
+        path="/"
+        element={
+          <MainLayout>
+            <Intro />
+            <PostList />
+          </MainLayout>
         }
       />
       <Route path="*" element={<Navigate to="/404" replace={true} />} />
