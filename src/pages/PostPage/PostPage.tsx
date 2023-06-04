@@ -44,6 +44,8 @@ export const PostPage = () => {
   const status = useSelector(selectPostStatus);
   const [currentUrl, setCurrentUrl] = useState("");
 
+  useTitle(post ? post.title : "Страница");
+
   // ! LIKE
   const { ipAddress, country } = useIPInfo();
   const [liked, setLiked] = useState(false);
@@ -112,7 +114,6 @@ export const PostPage = () => {
     };
     checkLiked();
   }, [ipAddress, post, liked]);
-
   // ! LIKE
 
   const postTime = useMemo(() => {
@@ -123,9 +124,6 @@ export const PostPage = () => {
   }, [post]);
 
   let postData = useFormatDate(post);
-
-  // set the current page title
-  useTitle(post ? post.title : "");
 
   // fetch post by ID
   useEffect(() => {

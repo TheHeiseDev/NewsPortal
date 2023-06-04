@@ -10,7 +10,7 @@ import { useFormatDate } from "../../hooks/useFormatDate";
 import { Link } from "react-router-dom";
 import { PostType } from "../../store/slice/postsSlice/postsTypes";
 import { CategoryEnum } from "../../utils/constants/categoryItem";
-import { getIPAddress, getCountryByIP, useIPInfo } from "../../hooks/useIpInfo";
+import { useIPInfo } from "../../hooks/useIpInfo";
 import { useAppDispatch } from "../../store/store";
 import { fetchDeleteLike, fetchLikedPost } from "../../store/slice/postsSlice/postsThunk";
 import { deleteLikePost, likedPost } from "../../store/slice/postsSlice/postsSlice";

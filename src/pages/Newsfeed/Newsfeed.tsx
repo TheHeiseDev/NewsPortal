@@ -20,6 +20,7 @@ import { categoryItem } from "../../utils/constants/categoryItem";
 import { Search } from "../../components/UI/Search/Search";
 import { useNavigate } from "react-router-dom";
 import qs from "qs";
+import { useTitle } from "../../hooks/useTitle";
 
 export const Newsfeed = () => {
   const dispatch = useAppDispatch();
@@ -30,6 +31,8 @@ export const Newsfeed = () => {
   const [page, setPage] = useState(0);
   const [isMount, setIsMount] = useState(false);
   const observer = useRef<IntersectionObserver | null>(null);
+
+  useTitle("Лента новостей");
 
   useEffect(() => {
     if (isMount) {
@@ -54,15 +57,13 @@ export const Newsfeed = () => {
     dispatch(fetchFeedMaxPage(categoryValue));
   }, [dispatch, categoryValue]);
 
-  // fetchData
+  // fetch data
   useEffect(() => {
     const searchParams = qs.parse(window.location.search, { ignoreQueryPrefix: true });
 
     if (searchParams.category) {
       setCategoryValue(String(searchParams.category));
     }
-    console.log(categoryValue);
-
     const params = {
       page: page,
       limit: 5,
