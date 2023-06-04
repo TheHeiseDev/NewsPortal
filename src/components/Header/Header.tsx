@@ -38,10 +38,14 @@ export const Header = React.memo(() => {
               <span>Автор: </span>
 
               <div>
-                <img src={instagram} alt="instagram" />
+                <a href="https://www.instagram.com/armyan_ed/" target="_blank">
+                  <img src={instagram} alt="instagram" />
+                </a>
               </div>
               <div>
-                <img src={facebook} alt="instagram" />
+                <a href="https://www.facebook.com/varderesan" target="_blank">
+                  <img src={facebook} alt="instagram" />
+                </a>
               </div>
             </div>
             <Button callback={() => navigate("/newsfeed")}>Лента</Button>
