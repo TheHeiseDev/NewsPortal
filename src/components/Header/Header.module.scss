@@ -55,6 +55,11 @@
       &:hover {
         opacity: 0.8;
       }
+
+      & img {
+        width: 20px;
+        height: 20px;
+      }
     }
 
     & span {

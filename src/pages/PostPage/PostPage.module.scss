@@ -37,13 +37,18 @@
 
   @media (max-width: 500px) {
     min-height: 228px;
-    max-height: 400px;
+    max-height: 300px;
   }
 
   & img {
     width: 100%;
     min-height: 400px;
     max-height: 500px;
+
+    @media (max-width: 500px) {
+      min-height: 228px;
+      max-height: 300px;
+    }
   }
   &:hover .zoomIcon {
     visibility: visible;
