@@ -10,8 +10,6 @@ export const Intro = () => {
   return (
     <div className={styles.intro}>
       <div className={styles.introWrapper}>
-        {/* Do not delete this img tag. Needed for the pre-loading of the picture. Used to show animation when chunks are loaded */}
-        <img style={{ display: "none" }} src={loading} alt="" />
         <div className={styles.introItem}>
           <div className={styles.introItemBackground}></div>
           <div className={styles.introItemText}>
