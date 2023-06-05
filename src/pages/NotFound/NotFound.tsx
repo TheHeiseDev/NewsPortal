@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./NotFound.module.scss";
 import { MainLayout } from "../../layout/MainLayout";
-import notFound from "../../assets/404.png";
+import notFound from "../../assets/404.webp";
 import { Link } from "react-router-dom";
 
  const NotFound = () => {

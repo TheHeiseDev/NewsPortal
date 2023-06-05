@@ -44,6 +44,7 @@ function App() {
           </MainLayout>
         }
       />
+      <Route path="/test" element={<ChunkLoading />} />
       <Route path="*" element={<Navigate to="/404" replace={true} />} />
       <Route
         path="/404"
