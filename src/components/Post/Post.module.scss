@@ -3,6 +3,10 @@
 .postWrapper {
   display: flex;
   flex-wrap: wrap;
+
+  @media (max-width: 767px) {
+   flex-direction: column
+  }
 }
 .postImage {
   flex: 1 1 50%;
@@ -16,6 +20,7 @@
       width: 100%;
       height: 100%;
     }
+   
   }
 }
 .postArticle {

@@ -32,9 +32,18 @@
 .postImage {
   position: relative;
   margin-bottom: 10px;
-  min-height: 228px;
+  min-height: 400px;
+  max-height: 500px;
+
+  @media (max-width: 500px) {
+    min-height: 228px;
+    max-height: 400px;
+  }
+
   & img {
     width: 100%;
+    min-height: 400px;
+    max-height: 500px;
   }
   &:hover .zoomIcon {
     visibility: visible;

@@ -42,11 +42,13 @@ export const Post: FC<IPost> = ({ post }) => {
   return (
     <div className={styles.post}>
       <div className={styles.postWrapper}>
-        <Link to={`/posts/${post.id}`}>
+  
           <div className={styles.postImage}>
+          <Link to={`/posts/${post.id}`}>
             <img src={post.imageUrl} alt="post image" />
+            </Link>
           </div>
-        </Link>
+    
 
         <article className={styles.postArticle}>
           <div className={styles.postDate}>
