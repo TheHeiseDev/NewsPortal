@@ -49,8 +49,9 @@
     gap: 10px;
 
     & div {
-      transition: all 0.3s ease;
       cursor: pointer;
+      width: 20px;
+      height: 20px;
       &:hover {
         opacity: 0.8;
       }
