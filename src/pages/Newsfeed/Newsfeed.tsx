@@ -1,12 +1,11 @@
-import { useSelector } from "react-redux";
-import { MainLayout } from "../../layout/MainLayout";
 import styles from "./Newsfeed.module.scss";
 import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
 import { useAppDispatch } from "../../store/store";
-import { Post } from "../../components/Post/Post";
-import { CategoryButton } from "../../components/UI/Buttons/CategoryButton/CategoryButton";
 import { StatusEnum } from "../../store/slice/postsSlice/postsTypes";
-import { CircularProgress } from "@mui/material";
+import { ParamsType } from "../../store/slice/newsfeedSlice/newsfeedTypes";
 import {
   fetchFeedMaxPage,
   fetchFeedPosts,
@@ -16,13 +15,20 @@ import {
   selectFeedPosts,
   setMaxPage,
 } from "../../store/slice/newsfeedSlice/newsfeedSlice";
-import loadinGif from "../../assets/loading3.gif";
-import { categoryItem } from "../../utils/constants/categoryItem";
+
+import { MainLayout } from "../../layout/MainLayout";
+import { Post } from "../../components/Post/Post";
 import { Search } from "../../components/UI/Search/Search";
-import { useNavigate } from "react-router-dom";
-import qs from "qs";
+import { CategoryButton } from "../../components/UI/Buttons/CategoryButton/CategoryButton";
+
+import { CircularProgress } from "@mui/material";
+
+import loadinGif from "../../assets/loading3.gif";
+
 import { useTitle } from "../../hooks/useTitle";
-import { ParamsType } from "../../store/slice/newsfeedSlice/newsfeedTypes";
+
+import qs from "qs";
+import { categoryItem } from "../../utils/constants/categoryItem";
 
 export const Newsfeed = () => {
   const dispatch = useAppDispatch();
