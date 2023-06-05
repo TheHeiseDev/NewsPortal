@@ -1,8 +1,13 @@
 .notFound {
-  margin: 200px 0 50px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 150px 0 50px 0;
 }
 .container {
   max-width: 1200px;
+  padding: 0 10px;
   margin: 0 auto;
 }
 
@@ -17,7 +22,6 @@
 
 .action {
   & a {
-    text-decoration: underline;
     transition: color 0.3s ease;
   }
   & a:hover {

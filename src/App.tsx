@@ -4,8 +4,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { MainLayout } from "./layout/MainLayout";
 import { Intro } from "./components/Intro/Intro";
 import { PostList } from "./components/PostList/PostList";
-
-import { CircularProgress } from "@mui/material";
+import { ChunkLoading } from "./components/ChunkLoading/ChunkLoading";
 
 const Newsfeed = lazy(
   () => import(/* webpachChunkName: "Newsfeed" */ "./pages/Newsfeed/Newsfeed")
@@ -23,7 +22,7 @@ function App() {
       <Route
         path="/newsfeed"
         element={
-          <Suspense fallback={<CircularProgress />}>
+          <Suspense fallback={<ChunkLoading />}>
             <Newsfeed />
           </Suspense>
         }
@@ -31,7 +30,7 @@ function App() {
       <Route
         path="/posts/:id"
         element={
-          <Suspense fallback={<CircularProgress />}>
+          <Suspense fallback={<ChunkLoading />}>
             <PostPage />
           </Suspense>
         }
@@ -49,7 +48,7 @@ function App() {
       <Route
         path="/404"
         element={
-          <Suspense fallback={<CircularProgress />}>
+          <Suspense fallback={<ChunkLoading />}>
             <NotFound />
           </Suspense>
         }
