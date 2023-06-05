@@ -24,6 +24,11 @@ header,
 nav {
   display: block;
 }
+@font-face {
+  font-family: Montserrat;
+  src: url("../../../public/fonts/Montserrat-VariableFont_wght.ttf");
+}
+
 body,
 html {
   height: 100%;
@@ -36,16 +41,21 @@ html {
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: "Montserrat", sans-serif;
+  font-family: Montserrat, sans-serif;
 }
 
 button {
   background: none;
 }
+
 button,
 input,
-textarea {
-  font-family: "Montserrat", sans-serif;
+textarea,
+p,
+div,
+span,
+article {
+  font-family: Montserrat, sans-serif;
 }
 input::-ms-clear {
   display: none;
