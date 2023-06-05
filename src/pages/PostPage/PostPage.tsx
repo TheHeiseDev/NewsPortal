@@ -171,7 +171,7 @@ const PostPage = () => {
         </div>
       ) : status === StatusEnum.error ? (
         <div className={styles.postLoadingContainer}>
-          <h1>Ошибка загрузки данных, попробуйте обновить страницу</h1>
+          <span>Ошибка загрузки данных, попробуйте обновить страницу</span>
         </div>
       ) : (
         <div className={styles.postPage}>
@@ -179,12 +179,12 @@ const PostPage = () => {
             <div className={styles.postPageWrapper}>
               <article className={styles.postArticle}>
                 {/* Дата информация */}
-                <div className={styles.postDate}>
+                <time className={styles.postDate}>
                   <div>Опубликовано: {postData}</div>
                   <span>{postTime}</span>
-                </div>
+                </time>
                 {/* Заголовок поста */}
-                <h3 className={styles.postTitle}>{post.title}</h3>
+                <h1 className={styles.postTitle}>{post.title}</h1>
                 {/* Картинка поста */}
                 <div className={styles.postImage}>
                   <span className={styles.zoomIcon}>

@@ -42,22 +42,20 @@ export const Post: FC<IPost> = ({ post }) => {
   return (
     <div className={styles.post}>
       <div className={styles.postWrapper}>
-  
-          <div className={styles.postImage}>
+        <div className={styles.postImage}>
           <Link to={`/posts/${post.id}`}>
-            <img src={post.imageUrl} alt="post image" />
-            </Link>
-          </div>
-    
+            <img src={post.imageUrl} alt={post.title} />
+          </Link>
+        </div>
 
         <article className={styles.postArticle}>
-          <div className={styles.postDate}>
+          <time className={styles.postDate}>
             Опубликовано: {postData}
             <span>{postTime}</span>
-          </div>
+          </time>
           <Link to={`/posts/${post.id}`}>
             <div className={styles.postBody}>
-              <h3 className={styles.postTitle}>{post.title}</h3>
+              <h2 className={styles.postTitle}>{post.title}</h2>
               <div className={styles.descroptionContainer}>
                 <p className={styles.postDescription}>{post.description}</p>
               </div>
@@ -79,10 +77,10 @@ export const Post: FC<IPost> = ({ post }) => {
               </div>
             </div>
 
-            <button className={styles.dataActions}>
+            <div className={styles.dataActions}>
               <div className={styles.likedCount}>{post.likes.length}</div>
               <FavoriteIcon />
-            </button>
+            </div>
           </div>
         </article>
       </div>
