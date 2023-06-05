@@ -32,10 +32,6 @@
   font-size: 12px;
   display: flex;
   justify-content: space-between;
-  @media (max-width: 920px) {
-    display: flex;
-    justify-content: space-between;
-  }
 
   & span {
     margin-left: 20px;

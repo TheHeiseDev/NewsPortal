@@ -37,7 +37,7 @@ import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
 import { FormAddComment } from "../../components/FormAddComment/FormAddComment";
 import { useIPInfo } from "../../hooks/useIpInfo";
 
-export const PostPage = () => {
+const PostPage = () => {
   const dispatch = useAppDispatch();
   const { id } = useParams();
   const post = useSelector(selectPost);
@@ -248,3 +248,4 @@ export const PostPage = () => {
     </MainLayout>
   );
 };
+export default PostPage;

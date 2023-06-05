@@ -1,14 +1,21 @@
 import "./scss/app.scss";
-import { Suspense } from "react";
+import { Suspense, lazy } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { MainLayout } from "./layout/MainLayout";
 import { Intro } from "./components/Intro/Intro";
 import { PostList } from "./components/PostList/PostList";
-import { NotFound } from "./pages/NotFound/NotFound";
-import { PostPage } from "./pages/PostPage/PostPage";
-import { Newsfeed } from "./pages/Newsfeed/Newsfeed";
 
 import { CircularProgress } from "@mui/material";
+
+const Newsfeed = lazy(
+  () => import(/* webpachChunkName: "Newsfeed" */ "./pages/Newsfeed/Newsfeed")
+);
+const PostPage = lazy(
+  () => import(/* webpachChunkName: "PostPage" */ "./pages/PostPage/PostPage")
+);
+const NotFound = lazy(
+  () => import(/* webpachChunkName: "NotFound" */ "./pages/NotFound/NotFound")
+);
 
 function App() {
   return (
@@ -39,7 +46,14 @@ function App() {
         }
       />
       <Route path="*" element={<Navigate to="/404" replace={true} />} />
-      <Route path="/404" element={<NotFound />} />
+      <Route
+        path="/404"
+        element={
+          <Suspense fallback={<CircularProgress />}>
+            <NotFound />
+          </Suspense>
+        }
+      />
     </Routes>
   );
 }

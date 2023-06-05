@@ -30,7 +30,7 @@ import { useTitle } from "../../hooks/useTitle";
 import qs from "qs";
 import { categoryItem } from "../../utils/constants/categoryItem";
 
-export const Newsfeed = () => {
+ const Newsfeed = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { data, status, maxPage } = useSelector(selectFeedPosts);
@@ -182,3 +182,4 @@ export const Newsfeed = () => {
     </MainLayout>
   );
 };
+export default Newsfeed
