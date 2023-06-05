@@ -1,3 +1,4 @@
+import { useIPInfo } from "../../hooks/useIpInfo";
 import { addComment } from "../../store/slice/postsSlice/postsSlice";
 import { addCommentById } from "../../store/slice/postsSlice/postsThunk";
 import { CommentsType, PostType } from "../../store/slice/postsSlice/postsTypes";
@@ -6,6 +7,7 @@ import { getCurrentDateTime } from "../../utils/getCurrentDateTime";
 import { Button } from "../UI/Buttons/Button";
 import styles from "./FormAddComment.module.scss";
 import React, { FC, useState } from "react";
+import {nanoid} from "nanoid";
 
 interface IFormAddComment {
   post: PostType;
@@ -13,23 +15,28 @@ interface IFormAddComment {
 
 export const FormAddComment: FC<IFormAddComment> = ({ post }) => {
   const dispatch = useAppDispatch();
+  const { country } = useIPInfo();
 
   const [userName, setUserName] = useState("");
   const [commentValue, setCommentValue] = useState("");
 
-  const [sendStatus, setSendStatus] = useState(false);
+  const [sendStatus, setSendStatus] = useState(false);  
   const [nameError, setNameError] = useState(false);
   const [textError, setTextError] = useState(false);
+  // @ts-ignore
+  const uniqueId = nanoid();
 
   const onSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setNameError(false);
     setTextError(false);
+
     const newComment: CommentsType = {
-      id: String(Date.now()),
+      id: uniqueId,
       userName: userName,
       text: commentValue,
       date: getCurrentDateTime(),
+      country: country,
     };
     const updatedPost = {
       ...post,

@@ -37,4 +37,5 @@ export type CommentsType = {
   userName: string;
   text: string;
   date: string;
+  country?: string;
 };
