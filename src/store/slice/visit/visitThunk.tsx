@@ -3,28 +3,40 @@ import axios from "axios";
 import { apiService } from "../../../api/apiService";
 
 type ParamsType = {
-  page?: number;
-  limit?: number;
-  sortBy?: string;
-  order?: string;
+  date: string;
+  ip: string;
+  country: string;
+  device: string;
+  os: string;
 };
 
-// export const fetchVisit = createAsyncThunk(
-//   "posts/fecthPosts",
-//   async (params: ParamsType) => {
-//     const { page, limit, sortBy, order } = params;
+export const fetchVisit = createAsyncThunk(
+  "visit/fetchVisit",
+  async (params: ParamsType) => {
+    const { date, country, device, os,ip } = params;
 
-//     const { data } = await axios({
-//       method: "GET",
-//       url: apiService.baseUrl,
-//       params: {
-//         page: page,
-//         limit: limit,
-//         sortBy: sortBy,
-//         order: order,
-//       },
-//     });
+    const { data } = await axios({
+      method: "POST",
+      url: apiService.visitUrl,
+      params: {},
+      data: params,
+    });
 
-//     return data;
-//   }
-// );
+    return data;
+  }
+);
+export const fetchAllVisitByDate = createAsyncThunk(
+  "visit/fetchAllVisitByDate",
+  async (date: string) => {
+
+    const { data } = await axios({
+      method: "GET",
+      url: apiService.visitUrl,
+      params: {
+        date: date
+      },
+    });
+
+    return data;
+  }
+);

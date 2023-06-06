@@ -5,7 +5,6 @@ import { MainLayout } from "./layout/MainLayout";
 import { Intro } from "./components/Intro/Intro";
 import { PostList } from "./components/PostList/PostList";
 import { ChunkLoading } from "./components/ChunkLoading/ChunkLoading";
-import { useDeviceInfo } from "./hooks/useDeviceInfo";
 
 const Newsfeed = lazy(
   () => import(/* webpachChunkName: "Newsfeed" */ "./pages/Newsfeed/Newsfeed")
@@ -18,8 +17,7 @@ const NotFound = lazy(
 );
 
 function App() {
-  const deviceInfo = useDeviceInfo();
-  console.log(deviceInfo);
+
   return (
     <Routes>
       <Route

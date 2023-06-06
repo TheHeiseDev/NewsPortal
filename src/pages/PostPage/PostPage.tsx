@@ -36,20 +36,33 @@ import { useFormatDate } from "../../hooks/useFormatDate";
 import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
 import { FormAddComment } from "../../components/FormAddComment/FormAddComment";
 import { useIPInfo } from "../../hooks/useIpInfo";
+import { useDeviceInfo } from "../../hooks/useDeviceInfo";
+import { getCurrentDate, getCurrentDateTime } from "../../utils/getCurrentDateTime";
+import { fetchAllVisitByDate, fetchVisit } from "../../store/slice/visit/visitThunk";
+import { selectVisit } from "../../store/slice/visit/visitSlice";
 
 const PostPage = () => {
   const dispatch = useAppDispatch();
   const { id } = useParams();
   const post = useSelector(selectPost);
   const status = useSelector(selectPostStatus);
+  const visit = useSelector(selectVisit);
   const [currentUrl, setCurrentUrl] = useState("");
-
-  useTitle(post ? post.title : "Страница");
-
-  // ! LIKE
-  const { ipAddress, country } = useIPInfo();
   const [liked, setLiked] = useState(false);
   const [likedLoadingStatus, setLikedLoadingStatus] = useState(false);
+  const postTime = useMemo(() => {
+    if (post) {
+      const date = new Date(post.date);
+      return calculateTimeElapsed(date);
+    }
+  }, [post]);
+  const [toogleFetchVisit, setToogleFetchVisit] = useState(false);
+
+  const postData = useFormatDate(post);
+  const { ipAddress, country } = useIPInfo();
+  const deviceInfo = useDeviceInfo();
+
+  useTitle(post ? post.title : "Страница");
 
   const likedPostHandle = async (post: PostType) => {
     setLikedLoadingStatus(true);
@@ -97,6 +110,41 @@ const PostPage = () => {
     }
   };
 
+  function checkData(date: any, ip: any, visit: any) {
+    for (let i = 0; i < visit.length; i++) {
+      if (visit[i].date === date && visit[i].ip === ip) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  useEffect(() => {
+    const date = getCurrentDate();
+    dispatch(fetchAllVisitByDate(date));
+
+    if (visit && ipAddress) {
+      const сheckingForUserVisits = checkData(date, ipAddress, visit);
+      setToogleFetchVisit(сheckingForUserVisits);
+    }
+  }, [country]);
+
+  useEffect(() => {
+    if (toogleFetchVisit) {
+      if (country) {
+        const visitInfo = {
+          date: getCurrentDate(),
+          country: country,
+          ip: ipAddress,
+          device: deviceInfo.device,
+          os: deviceInfo.os,
+        };
+        dispatch(fetchVisit(visitInfo));
+      }
+    }
+  }, [country, toogleFetchVisit]);
+
   useEffect(() => {
     setLikedLoadingStatus(true);
 
@@ -114,16 +162,6 @@ const PostPage = () => {
     };
     checkLiked();
   }, [ipAddress, post, liked]);
-  // ! LIKE
-
-  const postTime = useMemo(() => {
-    if (post) {
-      const date = new Date(post.date);
-      return calculateTimeElapsed(date);
-    }
-  }, [post]);
-
-  let postData = useFormatDate(post);
 
   // fetch post by ID
   useEffect(() => {
