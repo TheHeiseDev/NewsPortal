@@ -114,58 +114,15 @@ const PostPage = () => {
     }
   };
 
-  // Query the log of visits on the current date
+  // Get the current url address. We need the facebook and twitter share buttons to work correctly
   useEffect(() => {
-    const date = getCurrentDate();
-    dispatch(fetchAllVisitByDate(date));
-
-    if (visit && ipAddress) {
-      const сheckingForUserVisits = checkVisitByDate(ipAddress, visit);
-      setToogleFetchVisit(сheckingForUserVisits);
-    }
-  }, [country]);
-
-  // Registering a user visit
-  useEffect(() => {
-    if (toogleFetchVisit && country) {
-      const visitInfo = {
-        date: getCurrentDate(),
-        country: country,
-        ip: ipAddress,
-        device: deviceInfo.device,
-        os: deviceInfo.os,
-      };
-      dispatch(fetchVisit(visitInfo));
-    }
-  }, [country, toogleFetchVisit]);
-
-  useEffect(() => {
-    setLikedLoadingStatus(true);
-
-    const checkLiked = async () => {
-      if (ipAddress) {
-        function checkLikesByIp() {
-          if (post && post.likes.some((like: any) => like.ip === ipAddress)) {
-            return true;
-          }
-          return false;
-        }
-        setLiked((prev) => (prev = checkLikesByIp()));
-        setLikedLoadingStatus(false);
-      }
-    };
-    checkLiked();
-  }, [ipAddress, post, liked]);
-
-  // fetch post by ID
-  useEffect(() => {
-    dispatch(fetchPostById(String(id)));
-  }, [id]);
+    const url = window.document.location.href;
+    setCurrentUrl((prev) => (prev = url));
+  }, []);
 
   // Actions when mounting and unmounting a component
   useEffect(() => {
     window.scrollTo(0, 0);
-
     return () => {
       dispatch(removeItem());
     };
@@ -179,11 +136,53 @@ const PostPage = () => {
     }
   }, [id]);
 
-  // Get the current url address. We need the facebook and twitter share buttons to work correctly
+  // fetch post by ID
   useEffect(() => {
-    const url = window.document.location.href;
-    setCurrentUrl((prev) => (prev = url));
+    dispatch(fetchPostById(String(id)));
+  }, [id]);
+
+  // Query the log of visits on the current date
+  useEffect(() => {
+    const date = getCurrentDate();
+    dispatch(fetchAllVisitByDate(date));
+
+    if (visit && ipAddress) {
+      const сheckingForUserVisits = checkVisitByDate(ipAddress, visit);
+      setToogleFetchVisit(сheckingForUserVisits);
+    }
   }, []);
+
+  // Registering a user visit
+  useEffect(() => {
+    if (toogleFetchVisit && country) {
+      const visitInfo = {
+        date: getCurrentDate(),
+        country: country,
+        ip: ipAddress,
+        device: deviceInfo.device,
+        os: deviceInfo.os,
+      };
+      dispatch(fetchVisit(visitInfo));
+    }
+  }, [toogleFetchVisit]);
+
+  useEffect(() => {
+    setLikedLoadingStatus(true);
+
+    const checkLiked = async () => {
+      if (ipAddress) {
+        function checkLikesByIp() {
+          if (post && post.likes.some((like: any) => like.ip === ipAddress)) {
+            return true;
+          }
+          return false;
+        }
+        setLiked((prev) => checkLikesByIp());
+        setLikedLoadingStatus(false);
+      }
+    };
+    checkLiked();
+  }, [ipAddress, post, liked]);
 
   if (!post) {
     return (
@@ -252,10 +251,10 @@ const PostPage = () => {
                     <div className={styles.likedCount}>{post.likes.length}</div>
                     {likedLoadingStatus ? (
                       <CircularProgress />
-                    ) : !liked ? (
-                      <FavoriteBorderIcon onClick={() => likedPostHandle(post)} />
-                    ) : (
+                    ) : liked ? (
                       <FavoriteIcon onClick={() => deleteLikeHandle(post)} />
+                    ) : (
+                      <FavoriteBorderIcon onClick={() => likedPostHandle(post)} />
                     )}
                   </div>
                 </div>
