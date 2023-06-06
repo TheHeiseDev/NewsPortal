@@ -1,8 +1,10 @@
 import styles from "./PostPage.module.scss";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../store/store";
+import { fetchAllVisitByDate, fetchVisit } from "../../store/slice/visit/visitThunk";
+import { selectVisit } from "../../store/slice/visit/visitSlice";
 import {
   fetchDeleteLike,
   fetchLikedPost,
@@ -30,16 +32,16 @@ import { ImageModal } from "../../components/UI/Modal/ImageModal";
 import { ShareFacebook } from "../../components/UI/Buttons/ShareFacebook";
 import { ShareTwitter } from "../../components/UI/Buttons/ShareTwitter";
 import { Comment } from "../../components/Comment/Comment";
+import { FormAddComment } from "../../components/FormAddComment/FormAddComment";
 
 import { useTitle } from "../../hooks/useTitle";
 import { useFormatDate } from "../../hooks/useFormatDate";
-import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
-import { FormAddComment } from "../../components/FormAddComment/FormAddComment";
 import { useIPInfo } from "../../hooks/useIpInfo";
 import { useDeviceInfo } from "../../hooks/useDeviceInfo";
-import { getCurrentDate, getCurrentDateTime } from "../../utils/getCurrentDateTime";
-import { fetchAllVisitByDate, fetchVisit } from "../../store/slice/visit/visitThunk";
-import { selectVisit } from "../../store/slice/visit/visitSlice";
+
+import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
+import { getCurrentDate } from "../../utils/getCurrentDateTime";
+import { checkVisitByDate } from "../../utils/checkVisitByDate";
 
 const PostPage = () => {
   const dispatch = useAppDispatch();
@@ -47,20 +49,22 @@ const PostPage = () => {
   const post = useSelector(selectPost);
   const status = useSelector(selectPostStatus);
   const visit = useSelector(selectVisit);
-  const [currentUrl, setCurrentUrl] = useState("");
+
   const [liked, setLiked] = useState(false);
+  const [currentUrl, setCurrentUrl] = useState("");
   const [likedLoadingStatus, setLikedLoadingStatus] = useState(false);
+  const [toogleFetchVisit, setToogleFetchVisit] = useState(false);
+
   const postTime = useMemo(() => {
     if (post) {
       const date = new Date(post.date);
       return calculateTimeElapsed(date);
     }
   }, [post]);
-  const [toogleFetchVisit, setToogleFetchVisit] = useState(false);
 
   const postData = useFormatDate(post);
-  const { ipAddress, country } = useIPInfo();
   const deviceInfo = useDeviceInfo();
+  const { ipAddress, country } = useIPInfo();
 
   useTitle(post ? post.title : "Страница");
 
@@ -110,38 +114,28 @@ const PostPage = () => {
     }
   };
 
-  function checkData(date: any, ip: any, visit: any) {
-    for (let i = 0; i < visit.length; i++) {
-      if (visit[i].date === date && visit[i].ip === ip) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
+  // Query the log of visits on the current date
   useEffect(() => {
     const date = getCurrentDate();
     dispatch(fetchAllVisitByDate(date));
 
     if (visit && ipAddress) {
-      const сheckingForUserVisits = checkData(date, ipAddress, visit);
+      const сheckingForUserVisits = checkVisitByDate(ipAddress, visit);
       setToogleFetchVisit(сheckingForUserVisits);
     }
   }, [country]);
 
+  // Registering a user visit
   useEffect(() => {
-    if (toogleFetchVisit) {
-      if (country) {
-        const visitInfo = {
-          date: getCurrentDate(),
-          country: country,
-          ip: ipAddress,
-          device: deviceInfo.device,
-          os: deviceInfo.os,
-        };
-        dispatch(fetchVisit(visitInfo));
-      }
+    if (toogleFetchVisit && country) {
+      const visitInfo = {
+        date: getCurrentDate(),
+        country: country,
+        ip: ipAddress,
+        device: deviceInfo.device,
+        os: deviceInfo.os,
+      };
+      dispatch(fetchVisit(visitInfo));
     }
   }, [country, toogleFetchVisit]);
 
