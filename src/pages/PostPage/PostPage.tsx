@@ -144,13 +144,15 @@ const PostPage = () => {
   // Query the log of visits on the current date
   useEffect(() => {
     const date = getCurrentDate();
-    dispatch(fetchAllVisitByDate(date));
-
-    if (visit && ipAddress) {
-      const сheckingForUserVisits = checkVisitByDate(ipAddress, visit);
-      setToogleFetchVisit(сheckingForUserVisits);
-    }
-  }, []);
+    dispatch(fetchAllVisitByDate(date)).then(({ payload }) => {
+      if (ipAddress) {
+        const сheckingForUserVisits = checkVisitByDate(ipAddress, payload);
+        console.log(сheckingForUserVisits);
+        console.log(ipAddress);
+        setToogleFetchVisit(сheckingForUserVisits);
+      }
+    });
+  }, [ipAddress]);
 
   // Registering a user visit
   useEffect(() => {
@@ -164,7 +166,7 @@ const PostPage = () => {
       };
       dispatch(fetchVisit(visitInfo));
     }
-  }, [toogleFetchVisit]);
+  }, [toogleFetchVisit, country]);
 
   useEffect(() => {
     setLikedLoadingStatus(true);

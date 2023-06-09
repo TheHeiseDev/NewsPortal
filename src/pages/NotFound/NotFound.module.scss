@@ -1,3 +1,5 @@
+
+@import "../../scss/libs/variables";
 .notFound {
   display: flex;
   justify-content: center;
@@ -25,6 +27,6 @@
     transition: color 0.3s ease;
   }
   & a:hover {
-    color: rgb(53, 167, 112);
+    color: $mainColor;
   }
 }

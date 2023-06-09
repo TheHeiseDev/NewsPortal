@@ -1,3 +1,4 @@
+@import "../../scss/libs/variables";
 .posts {
   margin-top: 100px;
 }
@@ -25,7 +26,7 @@
   margin-top: 25px;
 }
 .catalogPagination button .Mui-selected {
-  background-color: rgb(53, 167, 112);
+  background-color: $mainColor;
   color: white !important;
 }
 .catalogPagination button {
@@ -40,6 +41,6 @@
   text-align: center;
 
   & svg {
-    color: rgb(57, 241, 152) !important;
+    color: $mainColor !important;
   }
 }

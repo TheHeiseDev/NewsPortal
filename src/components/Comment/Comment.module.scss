@@ -1,3 +1,4 @@
+@import "../../scss/libs/variables";
 .commentWrapper {
 }
 
@@ -9,7 +10,7 @@
 
   & svg {
     font-size: 46px;
-    fill: rgb(57, 241, 152);
+    fill: $mainColor;
   }
 
   & div {

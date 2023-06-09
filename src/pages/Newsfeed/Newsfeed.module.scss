@@ -1,3 +1,4 @@
+@import "../../scss/libs/variables";
 .newsfeed {
   margin: 160px 0 0 0;
 
@@ -45,7 +46,7 @@
   padding: 20px;
 
   & svg {
-    color: rgb(57, 241, 152) !important;
+    color: $mainColor !important;
   }
 }
 .observerLoadingContainer {
