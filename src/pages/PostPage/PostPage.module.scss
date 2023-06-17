@@ -200,9 +200,12 @@
 }
 
 .postLoadingContainer {
-  margin-top: 120px;
-  text-align: center;
-  padding: 20px;
+
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
 
   & svg {
     color: $mainColor !important;
