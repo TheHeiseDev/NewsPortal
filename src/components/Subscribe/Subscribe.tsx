@@ -1,22 +1,25 @@
-import { useCallback, useRef, useState, memo } from "react";
 import styles from "./Subscribe.module.scss";
-import { Button } from "../UI/Buttons/Button";
+import { useCallback, useRef, useState, memo } from "react";
+import { useSelector } from "react-redux";
+
 import { useAppDispatch } from "../../store/store";
 import { fetchAddSubscriber } from "../../store/slice/email/emailThunk";
 import { EmailWithoutId } from "../../store/slice/email/emailTypes";
+import { selectEmail } from "../../store/slice/email/emailSlice";
+import { StatusEnum } from "../../store/slice/posts/postsTypes";
+
 import { getCurrentDateTime } from "../../utils/getCurrentDateTime";
 import { useIPInfo } from "../../hooks/useIpInfo";
-import { useSelector } from "react-redux";
-import { selectEmail } from "../../store/slice/email/emailSlice";
 import { Alert, CircularProgress } from "@mui/material";
-import { StatusEnum } from "../../store/slice/posts/postsTypes";
+import { Button } from "../UI/Buttons/Button";
 
 export const Subscribe = memo(() => {
   const [isAlert, setIsAlert] = useState(false);
-  const formRef = useRef<HTMLFormElement>(null);
   const { status } = useSelector(selectEmail);
   const { country } = useIPInfo();
   const dispatch = useAppDispatch();
+
+  const formRef = useRef<HTMLFormElement>(null);
 
   const alertHandler = useCallback(() => {
     setIsAlert(true);
@@ -25,7 +28,6 @@ export const Subscribe = memo(() => {
       setIsAlert(false);
     }, 2000);
   }, []);
-  console.log(country);
 
   const subscribeHandle = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
