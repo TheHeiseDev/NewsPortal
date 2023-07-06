@@ -4,17 +4,17 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { useAppDispatch } from "../../store/store";
-import { StatusEnum } from "../../store/slice/postsSlice/postsTypes";
-import { ParamsType } from "../../store/slice/newsfeedSlice/newsfeedTypes";
+import { StatusEnum } from "../../store/slice/posts/postsTypes";
+import { ParamsType } from "../../store/slice/newsfeed/newsfeedTypes";
 import {
   fetchFeedMaxPage,
   fetchFeedPosts,
-} from "../../store/slice/newsfeedSlice/newsfeedThunk";
+} from "../../store/slice/newsfeed/newsfeedThunk";
 import {
   removeFeedItems,
   selectFeedPosts,
   setMaxPage,
-} from "../../store/slice/newsfeedSlice/newsfeedSlice";
+} from "../../store/slice/newsfeed/newsfeedSlice";
 
 import { MainLayout } from "../../layout/MainLayout";
 import { Post } from "../../components/Post/Post";
@@ -30,7 +30,7 @@ import { useTitle } from "../../hooks/useTitle";
 import qs from "qs";
 import { categoryItem } from "../../utils/constants/categoryItem";
 
- const Newsfeed = () => {
+const Newsfeed = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { data, status, maxPage } = useSelector(selectFeedPosts);
@@ -182,4 +182,4 @@ import { categoryItem } from "../../utils/constants/categoryItem";
     </MainLayout>
   );
 };
-export default Newsfeed
+export default Newsfeed;

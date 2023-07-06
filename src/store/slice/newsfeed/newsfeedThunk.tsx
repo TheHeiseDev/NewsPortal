@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { apiService } from "../../../api/apiService";
-import { PostType } from "../postsSlice/postsTypes";
+import { PostType } from "../posts/postsTypes";
 import { ParamsType } from "./newsfeedTypes";
 
 export const fetchFeedPosts = createAsyncThunk(
@@ -18,7 +18,7 @@ export const fetchFeedPosts = createAsyncThunk(
         category: category === "all" ? "" : category,
         search: search,
         sortBy: sortBy,
-        order: order
+        order: order,
       },
     });
 

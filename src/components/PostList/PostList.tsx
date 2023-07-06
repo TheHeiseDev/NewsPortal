@@ -3,9 +3,9 @@ import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import { CircularProgress, Pagination } from "@mui/material";
-import { StatusEnum } from "../../store/slice/postsSlice/postsTypes";
-import { selectPosts } from "../../store/slice/postsSlice/postsSlice";
-import { fetchPosts } from "../../store/slice/postsSlice/postsThunk";
+import { StatusEnum } from "../../store/slice/posts/postsTypes";
+import { selectPosts } from "../../store/slice/posts/postsSlice";
+import { fetchPosts } from "../../store/slice/posts/postsThunk";
 import { useAppDispatch } from "../../store/store";
 import { Post } from "../Post/Post";
 

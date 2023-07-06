@@ -8,12 +8,12 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
 import { useFormatDate } from "../../hooks/useFormatDate";
 import { Link } from "react-router-dom";
-import { PostType } from "../../store/slice/postsSlice/postsTypes";
+import { PostType } from "../../store/slice/posts/postsTypes";
 import { CategoryEnum } from "../../utils/constants/categoryItem";
 import { useIPInfo } from "../../hooks/useIpInfo";
 import { useAppDispatch } from "../../store/store";
-import { fetchDeleteLike, fetchLikedPost } from "../../store/slice/postsSlice/postsThunk";
-import { deleteLikePost, likedPost } from "../../store/slice/postsSlice/postsSlice";
+import { fetchDeleteLike, fetchLikedPost } from "../../store/slice/posts/postsThunk";
+import { deleteLikePost, likedPost } from "../../store/slice/posts/postsSlice";
 import { CircularProgress } from "@mui/material";
 
 interface IPost {

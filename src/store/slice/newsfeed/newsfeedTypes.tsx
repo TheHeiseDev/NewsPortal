@@ -1,4 +1,4 @@
-import { PostType, StatusEnum } from "../postsSlice/postsTypes";
+import { PostType, StatusEnum } from "../posts/postsTypes";
 
 export type NewsfeedSliceType = {
   items: {

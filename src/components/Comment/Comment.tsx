@@ -2,7 +2,7 @@ import styles from "./Comment.module.scss";
 import { FC, useMemo } from "react";
 import PersonPinIcon from "@mui/icons-material/PersonPin";
 import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
-import { CommentsType } from "../../store/slice/postsSlice/postsTypes";
+import { CommentsType } from "../../store/slice/posts/postsTypes";
 
 interface IComment {
   comment: CommentsType;

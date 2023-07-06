@@ -10,7 +10,9 @@
   margin: 0 auto;
   padding: 0 10px;
 }
-
+.authTitle {
+  margin: 0 0 20px 0;
+}
 .form {
   display: flex;
   flex-direction: column;
@@ -43,10 +45,20 @@
 
     & button {
       padding: 14px 30px;
-
+      width: 80.93px;
+      height: 44.48px;
       @media (max-width: 500px) {
         margin: 0;
       }
+      span {
+        color: black;
+        width: 12px !important;
+        height: 12px !important;
+      }
     }
   }
+}
+
+.alertContainer {
+  height: 70.47px;
 }

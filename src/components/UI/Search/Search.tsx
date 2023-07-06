@@ -3,8 +3,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import styles from "./Search.module.scss";
 import { debounce } from "../../../utils/debounce";
 import { useAppDispatch } from "../../../store/store";
-import { fetchFeedPosts } from "../../../store/slice/newsfeedSlice/newsfeedThunk";
-import { removeFeedItems } from "../../../store/slice/newsfeedSlice/newsfeedSlice";
+import { fetchFeedPosts } from "../../../store/slice/newsfeed/newsfeedThunk";
+import { removeFeedItems } from "../../../store/slice/newsfeed/newsfeedSlice";
 
 interface ISearch {
   searchValue: string;

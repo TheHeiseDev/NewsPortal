@@ -10,15 +10,15 @@ import {
   fetchLikedPost,
   fetchPostById,
   fetchUpViewCounts,
-} from "../../store/slice/postsSlice/postsThunk";
-import { PostType, StatusEnum } from "../../store/slice/postsSlice/postsTypes";
+} from "../../store/slice/posts/postsThunk";
+import { PostType, StatusEnum } from "../../store/slice/posts/postsTypes";
 import {
   deleteLikePost,
   likedPost,
   removeItem,
   selectPost,
   selectPostStatus,
-} from "../../store/slice/postsSlice/postsSlice";
+} from "../../store/slice/posts/postsSlice";
 
 import { CircularProgress } from "@mui/material";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
@@ -147,8 +147,6 @@ const PostPage = () => {
     dispatch(fetchAllVisitByDate(date)).then(({ payload }) => {
       if (ipAddress) {
         const сheckingForUserVisits = checkVisitByDate(ipAddress, payload);
-        console.log(сheckingForUserVisits);
-        console.log(ipAddress);
         setToogleFetchVisit(сheckingForUserVisits);
       }
     });

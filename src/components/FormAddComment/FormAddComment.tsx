@@ -1,13 +1,13 @@
-import { useIPInfo } from "../../hooks/useIpInfo";
-import { addComment } from "../../store/slice/postsSlice/postsSlice";
-import { addCommentById } from "../../store/slice/postsSlice/postsThunk";
-import { CommentsType, PostType } from "../../store/slice/postsSlice/postsTypes";
-import { useAppDispatch } from "../../store/store";
-import { getCurrentDateTime } from "../../utils/getCurrentDateTime";
-import { Button } from "../UI/Buttons/Button";
 import styles from "./FormAddComment.module.scss";
 import React, { FC, useState } from "react";
-import {nanoid} from "nanoid";
+import { useAppDispatch } from "../../store/store";
+import { addComment } from "../../store/slice/posts/postsSlice";
+import { addCommentById } from "../../store/slice/posts/postsThunk";
+import { CommentsType, PostType } from "../../store/slice/posts/postsTypes";
+import { getCurrentDateTime } from "../../utils/getCurrentDateTime";
+import { useIPInfo } from "../../hooks/useIpInfo";
+import { Button } from "../UI/Buttons/Button";
+import { nanoid } from "nanoid";
 
 interface IFormAddComment {
   post: PostType;
@@ -20,10 +20,10 @@ export const FormAddComment: FC<IFormAddComment> = ({ post }) => {
   const [userName, setUserName] = useState("");
   const [commentValue, setCommentValue] = useState("");
 
-  const [sendStatus, setSendStatus] = useState(false);  
+  const [sendStatus, setSendStatus] = useState(false);
   const [nameError, setNameError] = useState(false);
   const [textError, setTextError] = useState(false);
-  // @ts-ignore
+
   const uniqueId = nanoid();
 
   const onSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -42,6 +42,7 @@ export const FormAddComment: FC<IFormAddComment> = ({ post }) => {
       ...post,
       comments: [...post.comments, newComment],
     };
+    // Checking Name and Comment Fields
     if (userName.length >= 2) {
       if (commentValue.length > 9) {
         setSendStatus(true);

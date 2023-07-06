@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 
 import { fetchFeedMaxPage, fetchFeedPosts } from "./newsfeedThunk";
-import { StatusEnum } from "../postsSlice/postsTypes";
+import { StatusEnum } from "../posts/postsTypes";
 import { NewsfeedSliceType } from "./newsfeedTypes";
 
 const initialState: NewsfeedSliceType = {
