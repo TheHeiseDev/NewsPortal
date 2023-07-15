@@ -71,15 +71,28 @@ const PostPage = () => {
   const likedPostHandle = async (post: PostType) => {
     setLikedLoadingStatus(true);
     try {
-      const liked = {
+      let liked = {
         ip: ipAddress,
-        country: country || "",
+        country: "",
       };
+      if (country) {
+        liked = {
+          ...liked,
+          country: country,
+        };
+      } else {
+        await new Promise((resolve) => setTimeout(resolve, 2000)); // задержка на 1 секунду
+        liked = {
+          ...liked,
+          country: country,
+        };
+      }
 
       const updatePost = {
         ...post,
         likes: [...post.likes, liked],
       };
+      console.log(liked);
       dispatch(fetchLikedPost({ id: post.id, post: updatePost })).then(
         (response: any) => {
           if (response.meta.requestStatus === "fulfilled") {
