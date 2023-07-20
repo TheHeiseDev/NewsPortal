@@ -102,7 +102,7 @@ const PostPage = () => {
         }
       );
     } catch (error) {
-      console.error("Ошибка", error);
+      console.error("Не удалось поствить лайк", error);
     }
   };
 

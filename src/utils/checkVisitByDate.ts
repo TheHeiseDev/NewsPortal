@@ -8,6 +8,5 @@ export function checkVisitByDate(ip: string, visit: Visit[]) {
       return false;
     }
   }
-
   return true;
 }
