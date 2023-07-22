@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 
 export function useIPInfo() {
-  const [ipAddress, setIPAddress] = useState<string>("0.0.0.0");
-  const [country, setCountry] = useState<string>("Неизвестно");
+  const [ipAddress, setIPAddress] = useState<string>("");
+  const [country, setCountry] = useState<string>("");
 
   async function fetchData() {
     try {
