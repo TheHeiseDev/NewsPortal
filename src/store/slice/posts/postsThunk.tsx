@@ -14,7 +14,6 @@ export const fetchPosts = createAsyncThunk(
   "posts/fecthPosts",
   async (params: ParamsType) => {
     const { page, limit, sortBy, order } = params;
-
     const { data } = await axios<PostType[]>({
       method: "GET",
       url: apiService.baseUrl,
@@ -25,18 +24,21 @@ export const fetchPosts = createAsyncThunk(
         order: order,
       },
     });
-
     return data;
   }
 );
+
+
 export const fetchPostById = createAsyncThunk(
   "posts/fetchPostById",
   async (id: string) => {
-    const { data } = await axios<PostType>({
-      method: "GET",
-      url: `${apiService.baseUrl}/${id}`,
-    });
-    return data;
+
+      const { data } = await axios<PostType>({
+        method: "GET",
+        url: `${apiService.baseUrl}/${id}`,
+      });
+      return data;
+    
   }
 );
 export const fetchUpViewCounts = createAsyncThunk(
@@ -63,23 +65,31 @@ export const fetchUpViewCounts = createAsyncThunk(
 export const addCommentById = createAsyncThunk(
   "posts/addCommentById",
   async ({ id, post }: { id: string; post: PostType }) => {
-    const { data } = await axios<PostType>({
-      method: "PUT",
-      url: `${apiService.baseUrl}/${id}`,
-      data: post,
-    });
-    return data;
+    try {
+      const { data } = await axios<PostType>({
+        method: "PUT",
+        url: `${apiService.baseUrl}/${id}`,
+        data: post,
+      });
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
   }
 );
 export const fetchLikedPost = createAsyncThunk(
   "posts/addCommentById",
   async ({ id, post }: { id: string; post: PostType }) => {
-    const { data } = await axios<PostType>({
-      method: "PUT",
-      url: `${apiService.baseUrl}/${id}`,
-      data: post,
-    });
-    return data;
+    try {
+      const { data } = await axios<PostType>({
+        method: "PUT",
+        url: `${apiService.baseUrl}/${id}`,
+        data: post,
+      });
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
   }
 );
 export const fetchDeleteLike = createAsyncThunk(

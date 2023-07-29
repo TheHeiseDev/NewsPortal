@@ -4,13 +4,13 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../store/store";
 import { fetchAllVisitByDate, fetchVisit } from "../../store/slice/visit/visitThunk";
-import { selectVisit } from "../../store/slice/visit/visitSlice";
 import {
   fetchDeleteLike,
   fetchLikedPost,
   fetchPostById,
   fetchUpViewCounts,
 } from "../../store/slice/posts/postsThunk";
+import { selectDeviceInfo } from "../../store/slice/deviceInfo/deviceInfoSlice";
 import { PostType, StatusEnum } from "../../store/slice/posts/postsTypes";
 import {
   deleteLikePost,
@@ -36,7 +36,6 @@ import { FormAddComment } from "../../components/FormAddComment/FormAddComment";
 
 import { useTitle } from "../../hooks/useTitle";
 import { useFormatDate } from "../../hooks/useFormatDate";
-import { useIPInfo } from "../../hooks/useIpInfo";
 import { useDeviceInfo } from "../../hooks/useDeviceInfo";
 
 import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
@@ -48,12 +47,15 @@ const PostPage = () => {
   const { id } = useParams();
   const post = useSelector(selectPost);
   const status = useSelector(selectPostStatus);
-  const visit = useSelector(selectVisit);
+  const { ipAddress, country } = useSelector(selectDeviceInfo);
 
   const [liked, setLiked] = useState(false);
   const [currentUrl, setCurrentUrl] = useState("");
   const [likedLoadingStatus, setLikedLoadingStatus] = useState(false);
   const [toogleFetchVisit, setToogleFetchVisit] = useState(false);
+
+  const postDate = useFormatDate(post);
+  const deviceInfo = useDeviceInfo();
 
   const postTime = useMemo(() => {
     if (post) {
@@ -62,47 +64,33 @@ const PostPage = () => {
     }
   }, [post]);
 
-  const postData = useFormatDate(post);
-  const deviceInfo = useDeviceInfo();
-  const { ipAddress, country } = useIPInfo();
-
   useTitle(post ? post.title : "Страница");
 
   const likedPostHandle = async (post: PostType) => {
     setLikedLoadingStatus(true);
-    try {
-      let liked = {
-        ip: ipAddress,
-        country: "",
-      };
-      if (country) {
-        liked = {
-          ...liked,
-          country: country,
-        };
-      } else {
-        await new Promise((resolve) => setTimeout(resolve, 2000)); // задержка на 1 секунду
-        liked = {
-          ...liked,
-          country: country,
-        };
-      }
 
-      const updatePost = {
-        ...post,
-        likes: [...post.likes, liked],
-      };
-      console.log(liked);
-      dispatch(fetchLikedPost({ id: post.id, post: updatePost })).then(
-        (response: any) => {
-          if (response.meta.requestStatus === "fulfilled") {
-            dispatch(likedPost(liked));
-            setLikedLoadingStatus(false);
-          }
+    try {
+      if (country && ipAddress) {
+        let liked = {
+          ip: ipAddress,
+          country: country,
+        };
+        const updatePost = {
+          ...post,
+          likes: [...post.likes, liked],
+        };
+
+        const { payload } = await dispatch(
+          fetchLikedPost({ id: post.id, post: updatePost })
+        );
+
+        if (payload) {
+          dispatch(likedPost(liked));
+          setLikedLoadingStatus(false);
         }
-      );
+      }
     } catch (error) {
-      console.error("Не удалось поствить лайк", error);
+      console.log(error);
     }
   };
 
@@ -114,24 +102,18 @@ const PostPage = () => {
         likes: post.likes.filter((like: any) => like.ip !== ipAddress),
       };
 
-      dispatch(fetchDeleteLike({ id: post.id, post: updatePost })).then(
-        (response: any) => {
-          if (response.meta.requestStatus === "fulfilled") {
-            dispatch(deleteLikePost(ipAddress));
-            setLikedLoadingStatus(false);
-          }
-        }
+      const { payload } = await dispatch(
+        fetchDeleteLike({ id: post.id, post: updatePost })
       );
+
+      if (payload) {
+        dispatch(deleteLikePost(ipAddress));
+        setLikedLoadingStatus(false);
+      }
     } catch (error) {
       console.error(error);
     }
   };
-
-  // Get the current url address. We need the facebook and twitter share buttons to work correctly
-  useEffect(() => {
-    const url = window.document.location.href;
-    setCurrentUrl((prev) => (prev = url));
-  }, []);
 
   // Actions when mounting and unmounting a component
   useEffect(() => {
@@ -141,17 +123,22 @@ const PostPage = () => {
     };
   }, []);
 
-  // The logic of counting post views
+  // Get the current url address. It need the facebook and twitter share buttons to work correctly
   useEffect(() => {
-    if (id) {
-      // TODO change name
-      dispatch(fetchUpViewCounts(id));
-    }
-  }, [id]);
+    const url = window.document.location.href;
+    setCurrentUrl((prev) => (prev = url));
+  }, []);
 
   // fetch post by ID
   useEffect(() => {
     dispatch(fetchPostById(String(id)));
+  }, [id]);
+
+  // The logic of counting post views
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchUpViewCounts(id));
+    }
   }, [id]);
 
   // Query the log of visits on the current date
@@ -167,11 +154,11 @@ const PostPage = () => {
 
   // Registering a user visit
   useEffect(() => {
-    if (toogleFetchVisit && country) {
+    if (toogleFetchVisit) {
       const visitInfo = {
         date: getCurrentDate(),
-        country: country,
-        ip: ipAddress,
+        country: country || "Unknown",
+        ip: ipAddress || "Unknown",
         device: deviceInfo.device,
         os: deviceInfo.os,
       };
@@ -190,7 +177,7 @@ const PostPage = () => {
           }
           return false;
         }
-        setLiked((prev) => checkLikesByIp());
+        setLiked(checkLikesByIp());
         setLikedLoadingStatus(false);
       }
     };
@@ -224,7 +211,7 @@ const PostPage = () => {
               <article className={styles.postArticle}>
                 {/* Дата информация */}
                 <time className={styles.postDate}>
-                  <div>Опубликовано: {postData}</div>
+                  <div>Опубликовано: {postDate}</div>
                   <span>{postTime}</span>
                 </time>
                 {/* Заголовок поста */}

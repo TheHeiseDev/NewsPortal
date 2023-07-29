@@ -5,19 +5,20 @@ import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../store/store";
 import { fetchAddSubscriber } from "../../store/slice/email/emailThunk";
 import { EmailWithoutId } from "../../store/slice/email/emailTypes";
-import { selectEmail } from "../../store/slice/email/emailSlice";
 import { StatusEnum } from "../../store/slice/posts/postsTypes";
+import { selectEmail } from "../../store/slice/email/emailSlice";
+import { selectDeviceInfo } from "../../store/slice/deviceInfo/deviceInfoSlice";
 
 import { getCurrentDateTime } from "../../utils/getCurrentDateTime";
-import { useIPInfo } from "../../hooks/useIpInfo";
 import { Alert, CircularProgress } from "@mui/material";
 import { Button } from "../UI/Buttons/Button";
 
 export const Subscribe = memo(() => {
-  const [isAlert, setIsAlert] = useState(false);
-  const { status } = useSelector(selectEmail);
-  const { country } = useIPInfo();
   const dispatch = useAppDispatch();
+  const [isAlert, setIsAlert] = useState(false);
+
+  const { status } = useSelector(selectEmail);
+  const { country } = useSelector(selectDeviceInfo);
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -34,7 +35,7 @@ export const Subscribe = memo(() => {
     const subscriber: EmailWithoutId = {
       email: event.currentTarget.email.value,
       date: getCurrentDateTime(),
-      country: country,
+      country: country || "Unkown",
     };
 
     dispatch(fetchAddSubscriber(subscriber)).then(() => {

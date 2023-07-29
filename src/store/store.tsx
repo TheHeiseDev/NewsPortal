@@ -4,6 +4,7 @@ import postsSlice from "./slice/posts/postsSlice";
 import newsfeedSlice from "./slice/newsfeed/newsfeedSlice";
 import visitSlice from "./slice/visit/visitSlice";
 import emailSlice from "./slice/email/emailSlice";
+import deviceInfoSlice from "./slice/deviceInfo/deviceInfoSlice";
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     newsfeed: newsfeedSlice,
     visit: visitSlice,
     email: emailSlice,
+    deviceInfo: deviceInfoSlice
   },
 });
 

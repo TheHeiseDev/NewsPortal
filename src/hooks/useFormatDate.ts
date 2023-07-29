@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import { PostType } from "../store/slice/posts/postsTypes";
 
 export const useFormatDate = (post: any | undefined | null): string => {
   const formattedDate = useMemo(() => {

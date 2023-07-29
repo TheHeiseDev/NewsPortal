@@ -1,10 +1,12 @@
 import "./scss/app.scss";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { MainLayout } from "./layout/MainLayout";
 import { Intro } from "./components/Intro/Intro";
 import { PostList } from "./components/PostList/PostList";
 import { ChunkLoading } from "./components/ChunkLoading/ChunkLoading";
+import { useAppDispatch } from "./store/store";
+import { fetchDeviceInfo } from "./store/slice/deviceInfo/deviceInfoThunk";
 
 const Newsfeed = lazy(
   () => import(/* webpachChunkName: "Newsfeed" */ "./pages/Newsfeed/Newsfeed")
@@ -17,6 +19,11 @@ const NotFound = lazy(
 );
 
 function App() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchDeviceInfo());
+  }, []);
 
   return (
     <Routes>

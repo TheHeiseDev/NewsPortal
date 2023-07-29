@@ -5,9 +5,10 @@ import { addComment } from "../../store/slice/posts/postsSlice";
 import { addCommentById } from "../../store/slice/posts/postsThunk";
 import { CommentsType, PostType } from "../../store/slice/posts/postsTypes";
 import { getCurrentDateTime } from "../../utils/getCurrentDateTime";
-import { useIPInfo } from "../../hooks/useIpInfo";
 import { Button } from "../UI/Buttons/Button";
 import { nanoid } from "nanoid";
+import { useSelector } from "react-redux";
+import { selectDeviceInfo } from "../../store/slice/deviceInfo/deviceInfoSlice";
 
 interface IFormAddComment {
   post: PostType;
@@ -15,7 +16,7 @@ interface IFormAddComment {
 
 export const FormAddComment: FC<IFormAddComment> = ({ post }) => {
   const dispatch = useAppDispatch();
-  const { country } = useIPInfo();
+  const { country } = useSelector(selectDeviceInfo);
 
   const [userName, setUserName] = useState("");
   const [commentValue, setCommentValue] = useState("");
@@ -36,7 +37,7 @@ export const FormAddComment: FC<IFormAddComment> = ({ post }) => {
       userName: userName,
       text: commentValue,
       date: getCurrentDateTime(),
-      country: country,
+      country: country || "Unknown",
     };
     const updatedPost = {
       ...post,
