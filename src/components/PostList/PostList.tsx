@@ -1,7 +1,6 @@
 import styles from "./PostList.module.scss";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-
 import { CircularProgress, Pagination } from "@mui/material";
 import { StatusEnum } from "../../store/slice/posts/postsTypes";
 import { selectPosts } from "../../store/slice/posts/postsSlice";
@@ -15,13 +14,18 @@ export const PostList = () => {
   const { data, status, pages } = useSelector(selectPosts);
 
   useEffect(() => {
+    if (!pages) {
+      dispatch(fetchNumberOfPages());
+    }
+  }, [pages]);
+
+  useEffect(() => {
     const params = {
       page: page,
       limit: 5,
       sortBy: "date",
       order: "desc",
     };
-    dispatch(fetchNumberOfPages());
     dispatch(fetchPosts(params));
   }, [page]);
 
