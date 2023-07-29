@@ -1,13 +1,13 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-// import { RootState } from "../../store";
 import { CommentsType, PostsSliceType, StatusEnum } from "./postsTypes";
-import { fetchPostById, fetchPosts } from "./postsThunk";
+import { fetchNumberOfPages, fetchPostById, fetchPosts } from "./postsThunk";
 import { RootState } from "../../store";
 
 const initialState: PostsSliceType = {
   items: {
     data: null,
     status: StatusEnum.loading,
+    pages: null,
   },
   item: {
     data: null,
@@ -36,7 +36,6 @@ export const postsSlice = createSlice({
     },
     addComment(state, action: PayloadAction<CommentsType>) {
       if (state.item.data) {
-        //@ts-ignore
         state.item.data.comments.push(action.payload);
       }
     },
@@ -68,6 +67,9 @@ export const postsSlice = createSlice({
       .addCase(fetchPostById.rejected, (state) => {
         state.item.status = StatusEnum.error;
         state.item.data = null;
+      })
+      .addCase(fetchNumberOfPages.fulfilled, (state, action) => {
+        state.items.pages = action.payload;
       });
   },
 });

@@ -28,17 +28,25 @@ export const fetchPosts = createAsyncThunk(
   }
 );
 
+export const fetchNumberOfPages = createAsyncThunk(
+  "posts/fetchNumberOfPages",
+  async () => {
+    const { data } = await axios({
+      method: "GET",
+      url: apiService.baseUrl,
+    });
+    return Math.ceil(data.length / 5);
+  }
+);
 
 export const fetchPostById = createAsyncThunk(
   "posts/fetchPostById",
   async (id: string) => {
-
-      const { data } = await axios<PostType>({
-        method: "GET",
-        url: `${apiService.baseUrl}/${id}`,
-      });
-      return data;
-    
+    const { data } = await axios<PostType>({
+      method: "GET",
+      url: `${apiService.baseUrl}/${id}`,
+    });
+    return data;
   }
 );
 export const fetchUpViewCounts = createAsyncThunk(

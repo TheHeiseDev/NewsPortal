@@ -13,6 +13,7 @@ export type PostsSliceType = {
   items: {
     data: PostType[] | null;
     status: StatusEnum;
+    pages: number | null
   };
   item: {
     data: PostType | null;
