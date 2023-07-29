@@ -1,7 +1,6 @@
 import styles from "./Subscribe.module.scss";
 import { useCallback, useRef, useState, memo } from "react";
 import { useSelector } from "react-redux";
-
 import { useAppDispatch } from "../../store/store";
 import { fetchAddSubscriber } from "../../store/slice/email/emailThunk";
 import { EmailWithoutId } from "../../store/slice/email/emailTypes";

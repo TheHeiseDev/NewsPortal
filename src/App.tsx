@@ -7,6 +7,7 @@ import { PostList } from "./components/PostList/PostList";
 import { ChunkLoading } from "./components/ChunkLoading/ChunkLoading";
 import { useAppDispatch } from "./store/store";
 import { fetchDeviceInfo } from "./store/slice/deviceInfo/deviceInfoThunk";
+import { Test } from "./components/Test";
 
 const Newsfeed = lazy(
   () => import(/* webpachChunkName: "Newsfeed" */ "./pages/Newsfeed/Newsfeed")
@@ -40,6 +41,14 @@ function App() {
         element={
           <Suspense fallback={<ChunkLoading />}>
             <PostPage />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/test"
+        element={
+          <Suspense fallback={<ChunkLoading />}>
+            <Test />
           </Suspense>
         }
       />

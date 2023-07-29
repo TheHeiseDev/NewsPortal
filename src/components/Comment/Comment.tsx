@@ -1,5 +1,5 @@
 import styles from "./Comment.module.scss";
-import { FC, useMemo } from "react";
+import { FC, useMemo, memo } from "react";
 import PersonPinIcon from "@mui/icons-material/PersonPin";
 import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
 import { CommentsType } from "../../store/slice/posts/postsTypes";
@@ -8,7 +8,7 @@ interface IComment {
   comment: CommentsType;
 }
 
-export const Comment: FC<IComment> = ({ comment }) => {
+export const Comment: FC<IComment> = memo(({ comment }) => {
   const { id, date, text, userName } = comment;
 
   const commentTime = useMemo(() => {
@@ -36,4 +36,4 @@ export const Comment: FC<IComment> = ({ comment }) => {
       </section>
     </article>
   );
-};
+});

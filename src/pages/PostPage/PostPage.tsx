@@ -45,6 +45,7 @@ import { checkVisitByDate } from "../../utils/checkVisitByDate";
 const PostPage = () => {
   const dispatch = useAppDispatch();
   const { id } = useParams();
+
   const post = useSelector(selectPost);
   const status = useSelector(selectPostStatus);
   const { ipAddress, country } = useSelector(selectDeviceInfo);
@@ -94,7 +95,7 @@ const PostPage = () => {
     }
   };
 
-  const deleteLikeHandle = async (post: any) => {
+  const unLikedPostHandle = async (post: any) => {
     setLikedLoadingStatus(true);
     try {
       const updatePost = {
@@ -115,45 +116,42 @@ const PostPage = () => {
     }
   };
 
-  // Actions when mounting and unmounting a component
+  // Get the current url address, and it need the facebook and twitter share buttons to work correctly
   useEffect(() => {
     window.scrollTo(0, 0);
-    return () => {
-      dispatch(removeItem());
-    };
-  }, []);
-
-  // Get the current url address. It need the facebook and twitter share buttons to work correctly
-  useEffect(() => {
     const url = window.document.location.href;
-    setCurrentUrl((prev) => (prev = url));
+    setCurrentUrl(url);
   }, []);
 
-  // fetch post by ID
-  useEffect(() => {
-    dispatch(fetchPostById(String(id)));
-  }, [id]);
-
-  // The logic of counting post views
+  // Fetch post by ID and The logic of counting post views
   useEffect(() => {
     if (id) {
       dispatch(fetchUpViewCounts(id));
+      dispatch(fetchPostById(String(id)));
     }
+
+    return () => {
+      dispatch(removeItem());
+    };
   }, [id]);
 
   // Query the log of visits on the current date
   useEffect(() => {
-    const date = getCurrentDate();
-    dispatch(fetchAllVisitByDate(date)).then(({ payload }) => {
+    const fetchVisitsData = async () => {
+      const date = getCurrentDate();
+      const { payload } = await dispatch(fetchAllVisitByDate(date));
+
       if (ipAddress) {
-        const сheckingForUserVisits = checkVisitByDate(ipAddress, payload);
-        setToogleFetchVisit(сheckingForUserVisits);
+        const checkingForUserVisits = checkVisitByDate(ipAddress, payload); // return true or false
+        setToogleFetchVisit(checkingForUserVisits);
       }
-    });
+    };
+    fetchVisitsData();
   }, [ipAddress]);
 
   // Registering a user visit
   useEffect(() => {
+    // toogleFetchVisit - This toggle switch is used to prevent re-registration of visits
     if (toogleFetchVisit) {
       const visitInfo = {
         date: getCurrentDate(),
@@ -166,17 +164,18 @@ const PostPage = () => {
     }
   }, [toogleFetchVisit, country]);
 
+  // The logic behind setting the likes
   useEffect(() => {
     setLikedLoadingStatus(true);
 
     const checkLiked = async () => {
       if (ipAddress) {
-        function checkLikesByIp() {
+        const checkLikesByIp = () => {
           if (post && post.likes.some((like: any) => like.ip === ipAddress)) {
             return true;
           }
           return false;
-        }
+        };
         setLiked(checkLikesByIp());
         setLikedLoadingStatus(false);
       }
@@ -252,7 +251,7 @@ const PostPage = () => {
                     {likedLoadingStatus ? (
                       <CircularProgress />
                     ) : liked ? (
-                      <FavoriteIcon onClick={() => deleteLikeHandle(post)} />
+                      <FavoriteIcon onClick={() => unLikedPostHandle(post)} />
                     ) : (
                       <FavoriteBorderIcon onClick={() => likedPostHandle(post)} />
                     )}

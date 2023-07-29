@@ -7,13 +7,13 @@ export function calculateTimeElapsed(postDate: Date, currentDate = new Date()) {
     const days = Math.floor(hours / 24);
 
     if (days > 0) {
-      return `${days} дней`;
+      return `${days} дней назад`;
     } else if (hours > 0) {
-      return `${hours} час`;
+      return `${hours} час назад`;
     } else if (minutes > 0) {
-      return `${minutes} мин.`;
+      return `${minutes} мин. назад`;
     } else {
-      return `${seconds} сек.`;
+      return `${seconds} сек. назад`;
     }
   }
   return "";
