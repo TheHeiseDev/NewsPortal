@@ -51,7 +51,7 @@ const PostPage = () => {
   const { ipAddress, country } = useSelector(selectDeviceInfo);
 
   const [liked, setLiked] = useState(false);
-  const [currentUrl, setCurrentUrl] = useState("");
+  const [currentPageUrl, setCurrentPageUrl] = useState("");
   const [likedLoadingStatus, setLikedLoadingStatus] = useState(false);
   const [toogleFetchVisit, setToogleFetchVisit] = useState(false);
 
@@ -120,7 +120,7 @@ const PostPage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     const url = window.document.location.href;
-    setCurrentUrl(url);
+    setCurrentPageUrl(url);
   }, []);
 
   // Fetch post by ID and The logic of counting post views
@@ -129,7 +129,6 @@ const PostPage = () => {
       dispatch(fetchUpViewCounts(id));
       dispatch(fetchPostById(String(id)));
     }
-
     return () => {
       dispatch(removeItem());
     };
@@ -168,20 +167,15 @@ const PostPage = () => {
   useEffect(() => {
     setLikedLoadingStatus(true);
 
-    const checkLiked = async () => {
-      if (ipAddress) {
-        const checkLikesByIp = () => {
-          if (post && post.likes.some((like: any) => like.ip === ipAddress)) {
-            return true;
-          }
-          return false;
-        };
-        setLiked(checkLikesByIp());
-        setLikedLoadingStatus(false);
+    const checkLiked = () => {
+      if (post) {
+        const isLiked = post.likes.some((like: any) => like.ip === ipAddress);
+        setLiked(isLiked);
       }
+      setLikedLoadingStatus(false);
     };
     checkLiked();
-  }, [ipAddress, post, liked]);
+  }, [post]);
 
   if (!post) {
     return (
@@ -243,8 +237,8 @@ const PostPage = () => {
                 <div className={styles.sharedContainer}>
                   <div className={styles.postShared}>
                     <span>Поделиться: </span>
-                    <ShareFacebook currentUrl={currentUrl} />
-                    <ShareTwitter currentUrl={currentUrl} />
+                    <ShareFacebook currentUrl={currentPageUrl} />
+                    <ShareTwitter currentUrl={currentPageUrl} />
                   </div>
                   <div className={styles.postActions}>
                     <div className={styles.likedCount}>{post.likes.length}</div>
