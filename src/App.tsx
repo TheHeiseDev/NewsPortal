@@ -1,13 +1,13 @@
 import "./scss/app.scss";
 import { Suspense, lazy, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useAppDispatch } from "./store/store";
+import { fetchDeviceInfo } from "./store/slice/deviceInfo/deviceInfoThunk";
 import { MainLayout } from "./layout/MainLayout";
 import { Intro } from "./components/Intro/Intro";
 import { PostList } from "./components/PostList/PostList";
 import { ChunkLoading } from "./components/ChunkLoading/ChunkLoading";
-import { useAppDispatch } from "./store/store";
-import { fetchDeviceInfo } from "./store/slice/deviceInfo/deviceInfoThunk";
-import { Test } from "./components/Test";
+
 
 const Newsfeed = lazy(
   () => import(/* webpachChunkName: "Newsfeed" */ "./pages/Newsfeed/Newsfeed")
@@ -45,14 +45,6 @@ function App() {
         }
       />
       <Route
-        path="/test"
-        element={
-          <Suspense fallback={<ChunkLoading />}>
-            <Test />
-          </Suspense>
-        }
-      />
-      <Route
         path="/"
         element={
           <MainLayout>
@@ -61,7 +53,6 @@ function App() {
           </MainLayout>
         }
       />
-      <Route path="/test" element={<ChunkLoading />} />
       <Route path="*" element={<Navigate to="/404" replace={true} />} />
       <Route
         path="/404"

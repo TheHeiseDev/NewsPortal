@@ -43,6 +43,7 @@ import { getCurrentDate } from "../../utils/getCurrentDateTime";
 import { checkVisitByDate } from "../../utils/checkVisitByDate";
 
 const PostPage = () => {
+  
   const dispatch = useAppDispatch();
   const { id } = useParams();
 
@@ -55,7 +56,7 @@ const PostPage = () => {
   const [likedLoadingStatus, setLikedLoadingStatus] = useState(false);
   const [toogleFetchVisit, setToogleFetchVisit] = useState(false);
 
-  const postDate = useFormatDate(post);
+  const normalizePostDate = useFormatDate(post);
   const deviceInfo = useDeviceInfo();
 
   const postTime = useMemo(() => {
@@ -116,14 +117,21 @@ const PostPage = () => {
     }
   };
 
-  // Get the current url address, and it need the facebook and twitter share buttons to work correctly
+  const checkLiked = () => {
+    if (post) {
+      const isLiked = post.likes.some((like: any) => like.ip === ipAddress);
+      setLiked(isLiked);
+    }
+    setLikedLoadingStatus(false);
+  };
+
+  // Get the current url address,  it need the facebook and twitter share buttons to work correctly
   useEffect(() => {
     window.scrollTo(0, 0);
     const url = window.document.location.href;
     setCurrentPageUrl(url);
   }, []);
-
-  // Fetch post by ID and The logic of counting post views
+  // Getting post by ID and logic of post view counting
   useEffect(() => {
     if (id) {
       dispatch(fetchUpViewCounts(id));
@@ -133,8 +141,7 @@ const PostPage = () => {
       dispatch(removeItem());
     };
   }, [id]);
-
-  // Query the log of visits on the current date
+  //Request the current post's visit log for the current date
   useEffect(() => {
     const fetchVisitsData = async () => {
       const date = getCurrentDate();
@@ -147,7 +154,6 @@ const PostPage = () => {
     };
     fetchVisitsData();
   }, [ipAddress]);
-
   // Registering a user visit
   useEffect(() => {
     // toogleFetchVisit - This toggle switch is used to prevent re-registration of visits
@@ -162,18 +168,10 @@ const PostPage = () => {
       dispatch(fetchVisit(visitInfo));
     }
   }, [toogleFetchVisit, country]);
-
   // The logic behind setting the likes
   useEffect(() => {
     setLikedLoadingStatus(true);
 
-    const checkLiked = () => {
-      if (post) {
-        const isLiked = post.likes.some((like: any) => like.ip === ipAddress);
-        setLiked(isLiked);
-      }
-      setLikedLoadingStatus(false);
-    };
     checkLiked();
   }, [post]);
 
@@ -204,7 +202,7 @@ const PostPage = () => {
               <article className={styles.postArticle}>
                 {/* Дата информация */}
                 <time className={styles.postDate}>
-                  <div>Опубликовано: {postDate}</div>
+                  <div>Опубликовано: {normalizePostDate}</div>
                   <span>{postTime}</span>
                 </time>
                 {/* Заголовок поста */}

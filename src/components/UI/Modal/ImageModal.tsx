@@ -1,5 +1,5 @@
 import styles from "./ImageModal.module.scss";
-import React, { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 
 interface IImageModal {
   imageUrl: string;
@@ -40,7 +40,7 @@ export const ImageModal: FC<IImageModal> = ({ imageUrl }) => {
 
     return () => {
       window.removeEventListener("click", modalViewCloseHandle);
-      window.addEventListener("keydown", modalViewCloseHandle);
+      window.removeEventListener("keydown", modalViewCloseHandle);
     };
   }, []);
 

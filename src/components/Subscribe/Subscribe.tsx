@@ -1,5 +1,5 @@
 import styles from "./Subscribe.module.scss";
-import { useCallback, useRef, useState, memo } from "react";
+import { useRef, useState, memo, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../store/store";
 import { fetchAddSubscriber } from "../../store/slice/email/emailThunk";
@@ -34,7 +34,7 @@ export const Subscribe = memo(() => {
     const subscriber: EmailWithoutId = {
       email: event.currentTarget.email.value,
       date: getCurrentDateTime(),
-      country: country || "Unkown",
+      country: country || "Unknown",
     };
 
     dispatch(fetchAddSubscriber(subscriber)).then(() => {
@@ -44,6 +44,7 @@ export const Subscribe = memo(() => {
       }
     });
   };
+
   return (
     <div className={styles.subscribe}>
       <div className={styles.containerMini}>

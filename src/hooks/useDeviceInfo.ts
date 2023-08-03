@@ -35,7 +35,7 @@ export function useDeviceInfo() {
       os = navigator.platform;
     }
 
-    setDeviceInfo({ device: deviceType, os });
+    setDeviceInfo({ device: deviceType, os: os });
   }, []);
 
   return deviceInfo;
