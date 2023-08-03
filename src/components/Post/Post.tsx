@@ -1,15 +1,15 @@
 import styles from "./Post.module.scss";
 import { FC, useMemo } from "react";
+import { Link } from "react-router-dom";
+import { PostType } from "../../store/slice/posts/postsTypes";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import ClassIcon from "@mui/icons-material/Class";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
-import { useFormatDate } from "../../hooks/useFormatDate";
-import { Link } from "react-router-dom";
-import { PostType } from "../../store/slice/posts/postsTypes";
-import { CategoryEnum } from "../../utils/constants/categoryItem";
 
+import { useFormatDate } from "../../hooks/useFormatDate";
+import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
+import { CategoryEnum } from "../../utils/constants/categoryItem";
 
 interface IPost {
   post: PostType;
@@ -31,6 +31,8 @@ export const Post: FC<IPost> = ({ post }) => {
     }
     if (categoryValue === CategoryEnum.useful_services) {
       return "Полезные ресуры";
+    } else {
+      return "Прочие";
     }
   };
 
@@ -39,7 +41,7 @@ export const Post: FC<IPost> = ({ post }) => {
       <div className={styles.postWrapper}>
         <div className={styles.postImage}>
           <Link to={`/posts/${post.id}`}>
-            <img src={post.imageUrl} alt={post.title} />
+            <img src={post.imageUrl} alt="post" />
           </Link>
         </div>
 
@@ -64,7 +66,7 @@ export const Post: FC<IPost> = ({ post }) => {
               </div>
               <div className={styles.commnets}>
                 <ChatBubbleOutlineIcon />
-                {post.comments.length}
+                {post.comments?.length}
               </div>
               <div className={styles.category}>
                 <ClassIcon />

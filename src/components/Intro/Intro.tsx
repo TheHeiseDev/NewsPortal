@@ -2,7 +2,6 @@ import styles from "./Intro.module.scss";
 import { Link } from "react-router-dom";
 import { useTitle } from "../../hooks/useTitle";
 import { CategoryEnum } from "../../utils/constants/categoryItem";
-import loading from "../../assets/loadingChunk.gif";
 
 export const Intro = () => {
   useTitle("Главная");

@@ -27,36 +27,57 @@ export const FormAddComment: FC<IFormAddComment> = ({ post }) => {
 
   const uniqueId = nanoid();
 
+  const validateUserName = (name: string): boolean => {
+    const isValid = name.length >= 2;
+    if (!isValid) {
+      setNameError(true);
+    }
+    return isValid;
+  };
+
+  const validateComment = (comment: string): boolean => {
+    const isValid = comment.length > 9;
+    if (!isValid) {
+      setTextError(true);
+    }
+    return isValid;
+  };
+
   const onSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setNameError(false);
     setTextError(false);
 
-    const newComment: CommentsType = {
-      id: uniqueId,
-      userName: userName,
-      text: commentValue,
-      date: getCurrentDateTime(),
-      country: country || "Unknown",
-    };
-    const updatedPost = {
-      ...post,
-      comments: [...post.comments, newComment],
-    };
-    // Checking Name and Comment Fields
-    if (userName.length >= 2) {
-      if (commentValue.length > 9) {
-        setSendStatus(true);
-        await dispatch(addCommentById({ id: post.id, post: updatedPost }))
-          .then(() => dispatch(addComment(newComment)))
-          .finally(() => setSendStatus(false));
+    const isValidName = validateUserName(userName);
+    const isValidComment = validateComment(commentValue);
+
+    if (isValidName && isValidComment) {
+      setSendStatus(true);
+      try {
+        const newComment: CommentsType = {
+          id: uniqueId,
+          userName: userName,
+          text: commentValue,
+          date: getCurrentDateTime(),
+          country: country || "Unknown",
+        };
+
+        const updatedPost = {
+          ...post,
+          comments: [...post.comments, newComment],
+        };
+
+        await dispatch(addCommentById({ id: post.id, post: updatedPost }));
+        dispatch(addComment(newComment));
+
         setUserName("");
         setCommentValue("");
-      } else {
-        setTextError(true);
+      } catch (error) {
+        console.log(error);
+        // Обработка ошибок при отправке комментария
+      } finally {
+        setSendStatus(false);
       }
-    } else {
-      setNameError(true);
     }
   };
 

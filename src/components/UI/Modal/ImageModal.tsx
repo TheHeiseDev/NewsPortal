@@ -10,28 +10,27 @@ export const ImageModal: FC<IImageModal> = ({ imageUrl }) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const toggleFullScreen = () => {
-    setIsFullScreen(!isFullScreen);
+    setIsFullScreen((prev) => !prev);
   };
 
   const modalViewCloseHandle = (event: MouseEvent | KeyboardEvent) => {
     if (event.target === ref.current) {
       setIsFullScreen(false);
     }
-    if (isKeyboardEvent(event) && event.key === "Escape") {
+    if (event.type === "keydown" && (event as KeyboardEvent).key === "Escape") {
       setIsFullScreen(false);
     }
   };
-  // Extension key is MouseEvent
-  const isKeyboardEvent = (event: MouseEvent | KeyboardEvent): event is KeyboardEvent => {
-    return "key" in event;
-  };
 
   useEffect(() => {
-    if (isFullScreen) {
-      window.document.body.style.overflow = "hidden";
-    } else {
-      window.document.body.style.overflow = "";
-    }
+    const handleOverflow = () => {
+      document.body.style.overflow = isFullScreen ? "hidden" : "";
+    };
+    handleOverflow();
+
+    return () => {
+      handleOverflow();
+    };
   }, [isFullScreen]);
 
   useEffect(() => {
