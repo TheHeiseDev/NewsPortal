@@ -43,62 +43,68 @@ const Newsfeed = () => {
       dispatch(removeFeedItems());
     };
   }, []);
+
   useEffect(() => {
     if (isMount) {
       navigate(`/newsfeed?category=${categoryValue}`);
     }
     setIsMount(true);
   }, [categoryValue]);
+
   useEffect(() => {
     dispatch(removeFeedItems());
     setPage(1);
   }, [categoryValue]);
+
   useEffect(() => {
     dispatch(fetchFeedMaxPage(categoryValue));
   }, [categoryValue]);
-    // Fetch data
+
+  // Fetch data
   useEffect(() => {
-      const searchParams = qs.parse(window.location.search, { ignoreQueryPrefix: true });
-  
-      let paramsUrl: ParamsType = {
+    const searchParams = qs.parse(window.location.search, { ignoreQueryPrefix: true });
+
+    let paramsUrl: ParamsType = {
+      page: page,
+      limit: 5,
+      search: searchValue,
+      sortBy: "date",
+      order: "desc",
+    };
+
+    if (searchParams.category) {
+      setCategoryValue(String(searchParams.category));
+
+      paramsUrl = {
+        page: page,
+        limit: 5,
+        category: categoryValue,
+        sortBy: "date",
+        order: "desc",
+      };
+    }
+    if (searchParams.search) {
+      setSearchValue(String(searchParams.search));
+      // fixes the bug, best not to touch it, otherwise we stumble on repeated requests
+      dispatch(setMaxPage(1));
+      paramsUrl = {
         page: page,
         limit: 5,
         search: searchValue,
         sortBy: "date",
         order: "desc",
       };
-  
-      if (searchParams.category) {
-        setCategoryValue(String(searchParams.category));
-  
-        paramsUrl = {
-          page: page,
-          limit: 5,
-          category: categoryValue,
-          sortBy: "date",
-          order: "desc",
-        };
-      }
-      if (searchParams.search) {
-        setSearchValue(String(searchParams.search));
-        // fixes the bug, best not to touch it, otherwise we stumble on repeated requests
-        dispatch(setMaxPage(1));
-        paramsUrl = {
-          page: page,
-          limit: 5,
-          search: searchValue,
-          sortBy: "date",
-          order: "desc",
-        };
-      }
-      dispatch(fetchFeedPosts(paramsUrl));
-    }, [categoryValue, page]);
+    }
+    dispatch(fetchFeedPosts(paramsUrl));
+  }, [categoryValue, page]);
+
   useEffect(() => {
     if (isMount) {
       navigate(`/newsfeed?search=${searchValue}`);
     }
     setIsMount(true);
   }, [searchValue]);
+
   // Implementation of the functionality by which the page switching occurs,
   // after which there is a request to the server and we get the following 5 posts
   useEffect(() => {

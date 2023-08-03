@@ -8,7 +8,6 @@ import { Intro } from "./components/Intro/Intro";
 import { PostList } from "./components/PostList/PostList";
 import { ChunkLoading } from "./components/ChunkLoading/ChunkLoading";
 
-
 const Newsfeed = lazy(
   () => import(/* webpachChunkName: "Newsfeed" */ "./pages/Newsfeed/Newsfeed")
 );

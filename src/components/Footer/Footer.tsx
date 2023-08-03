@@ -1,8 +1,8 @@
-import React from "react";
+import { memo } from "react";
 import styles from "./Footer.module.scss";
 import { Subscribe } from "../Subscribe/Subscribe";
 
-export const Footer = React.memo(() => {
+export const Footer = memo(() => {
   return (
     <footer>
       <div className={styles.containerMini}>
@@ -13,4 +13,4 @@ export const Footer = React.memo(() => {
       </div>
     </footer>
   );
-})
+});

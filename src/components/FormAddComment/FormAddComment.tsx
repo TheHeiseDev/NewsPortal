@@ -1,14 +1,14 @@
 import styles from "./FormAddComment.module.scss";
 import React, { FC, useState } from "react";
+import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../store/store";
 import { addComment } from "../../store/slice/posts/postsSlice";
 import { addCommentById } from "../../store/slice/posts/postsThunk";
 import { CommentsType, PostType } from "../../store/slice/posts/postsTypes";
+import { selectDeviceInfo } from "../../store/slice/deviceInfo/deviceInfoSlice";
 import { getCurrentDateTime } from "../../utils/getCurrentDateTime";
 import { Button } from "../UI/Buttons/Button";
 import { nanoid } from "nanoid";
-import { useSelector } from "react-redux";
-import { selectDeviceInfo } from "../../store/slice/deviceInfo/deviceInfoSlice";
 
 interface IFormAddComment {
   post: PostType;
