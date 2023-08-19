@@ -31,22 +31,32 @@ export const fetchPosts = createAsyncThunk(
 export const fetchNumberOfPages = createAsyncThunk(
   "posts/fetchNumberOfPages",
   async () => {
-    const { data } = await axios({
-      method: "GET",
-      url: apiService.baseUrl,
-    });
-    return Math.ceil(data.length / 5);
+    try {
+      const { data } = await axios({
+        method: "GET",
+        url: `${apiService.baseUrl}?page=1&limit=5`,
+      });
+      return data.meta.total_pages;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Failed to fetch number of pages.");
+    }
   }
 );
 
 export const fetchPostById = createAsyncThunk(
   "posts/fetchPostById",
   async (id: string) => {
-    const { data } = await axios<PostType>({
-      method: "GET",
-      url: `${apiService.baseUrl}/${id}`,
-    });
-    return data;
+    try {
+      const { data } = await axios<PostType>({
+        method: "GET",
+        url: `${apiService.baseUrl}/${id}`,
+      });
+      return data;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Failed to retrieve post by id.");
+    }
   }
 );
 export const fetchUpViewCounts = createAsyncThunk(
@@ -66,6 +76,7 @@ export const fetchUpViewCounts = createAsyncThunk(
       );
     } catch (error) {
       console.error(error);
+      throw new Error("Failed to credit the viewing.");
     }
   }
 );
@@ -82,6 +93,7 @@ export const addCommentById = createAsyncThunk(
       return data;
     } catch (error) {
       console.log(error);
+      throw new Error("Failed to add a comment");
     }
   }
 );
@@ -97,6 +109,7 @@ export const fetchLikedPost = createAsyncThunk(
       return data;
     } catch (error) {
       console.log(error);
+      throw new Error("Failed to like");
     }
   }
 );
