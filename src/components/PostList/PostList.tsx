@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { CircularProgress, Pagination } from "@mui/material";
 import { StatusEnum } from "../../store/slice/posts/postsTypes";
 import { selectPosts } from "../../store/slice/posts/postsSlice";
-import { fetchNumberOfPages, fetchPosts } from "../../store/slice/posts/postsThunk";
+import { fetchPages, fetchPosts } from "../../store/slice/posts/postsThunk";
 import { useAppDispatch } from "../../store/store";
 import { Post } from "../Post/Post";
 
@@ -15,7 +15,7 @@ export const PostList = () => {
 
   useEffect(() => {
     if (!pages) {
-      dispatch(fetchNumberOfPages());
+      dispatch(fetchPages());
     }
   }, [pages]);
 
@@ -23,8 +23,7 @@ export const PostList = () => {
     const params = {
       page: page,
       limit: 5,
-      sortBy: "date",
-      order: "desc",
+      sortBy: "-date",
     };
     dispatch(fetchPosts(params));
   }, [page]);

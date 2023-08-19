@@ -7,46 +7,42 @@ type ParamsType = {
   page?: number;
   limit?: number;
   sortBy?: string;
-  order?: string;
 };
 
 export const fetchPosts = createAsyncThunk(
   "posts/fecthPosts",
   async (params: ParamsType) => {
-    const { page, limit, sortBy, order } = params;
-    const { data } = await axios<PostType[]>({
+    const { page, limit, sortBy } = params;
+    const { data } = await axios({
       method: "GET",
       url: apiService.baseUrl,
       params: {
         page: page,
         limit: limit,
         sortBy: sortBy,
-        order: order,
       },
     });
-    return data;
+
+    return data.items as PostType[];
   }
 );
 
-export const fetchNumberOfPages = createAsyncThunk(
-  "posts/fetchNumberOfPages",
-  async () => {
-    try {
-      const { data } = await axios({
-        method: "GET",
-        url: `${apiService.baseUrl}?page=1&limit=5`,
-      });
-      return data.meta.total_pages;
-    } catch (error) {
-      console.log(error);
-      throw new Error("Failed to fetch number of pages.");
-    }
+export const fetchPages = createAsyncThunk("posts/fetchPages", async () => {
+  try {
+    const { data } = await axios({
+      method: "GET",
+      url: `${apiService.baseUrl}?page=1&limit=5`,
+    });
+    return data.meta.total_pages;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to fetch number of pages.");
   }
-);
+});
 
 export const fetchPostById = createAsyncThunk(
   "posts/fetchPostById",
-  async (id: string) => {
+  async (id: number) => {
     try {
       const { data } = await axios<PostType>({
         method: "GET",
@@ -61,7 +57,7 @@ export const fetchPostById = createAsyncThunk(
 );
 export const fetchUpViewCounts = createAsyncThunk(
   "posts/fetchUpViewCounts",
-  async (id: string) => {
+  async (id: number) => {
     try {
       const { data } = await axios.get(
         `https://6440faa3792fe886a89abbd7.mockapi.io/posts/${id}`
@@ -83,7 +79,7 @@ export const fetchUpViewCounts = createAsyncThunk(
 
 export const addCommentById = createAsyncThunk(
   "posts/addCommentById",
-  async ({ id, post }: { id: string; post: PostType }) => {
+  async ({ id, post }: { id: number; post: PostType }) => {
     try {
       const { data } = await axios<PostType>({
         method: "PUT",
@@ -99,28 +95,33 @@ export const addCommentById = createAsyncThunk(
 );
 export const fetchLikedPost = createAsyncThunk(
   "posts/addCommentById",
-  async ({ id, post }: { id: string; post: PostType }) => {
+  async ({ id, post }: { id: number; post: PostType }) => {
     try {
       const { data } = await axios<PostType>({
-        method: "PUT",
+        method: "PATCH",
         url: `${apiService.baseUrl}/${id}`,
         data: post,
       });
       return data;
     } catch (error) {
       console.log(error);
-      throw new Error("Failed to like");
+      throw new Error("Failed to liked post");
     }
   }
 );
 export const fetchDeleteLike = createAsyncThunk(
   "posts/fetchDeleteLike",
-  async ({ id, post }: { id: string; post: PostType }) => {
-    const { data } = await axios<PostType>({
-      method: "PUT",
-      url: `${apiService.baseUrl}/${id}`,
-      data: post,
-    });
-    return data;
+  async ({ id, post }: { id: number; post: PostType }) => {
+    try {
+      const { data } = await axios<PostType>({
+        method: "PATCH",
+        url: `${apiService.baseUrl}/${id}`,
+        data: post,
+      });
+      return data;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Failed to delete like");
+    }
   }
 );

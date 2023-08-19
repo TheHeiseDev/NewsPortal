@@ -11,7 +11,7 @@ import {
   fetchUpViewCounts,
 } from "../../store/slice/posts/postsThunk";
 import { selectDeviceInfo } from "../../store/slice/deviceInfo/deviceInfoSlice";
-import { PostType, StatusEnum } from "../../store/slice/posts/postsTypes";
+import { LikesType, PostType, StatusEnum } from "../../store/slice/posts/postsTypes";
 import {
   deleteLikePost,
   likedPost,
@@ -43,7 +43,7 @@ import { getCurrentDate } from "../../utils/getCurrentDateTime";
 import { checkVisitByDate } from "../../utils/checkVisitByDate";
 
 const PostPage = () => {
-  
+  const PAGE_NAME = "Страница";
   const dispatch = useAppDispatch();
   const { id } = useParams();
 
@@ -53,11 +53,13 @@ const PostPage = () => {
 
   const [liked, setLiked] = useState(false);
   const [currentPageUrl, setCurrentPageUrl] = useState("");
-  const [likedLoadingStatus, setLikedLoadingStatus] = useState(false);
+  const [likedLoading, setLikedLoading] = useState(false);
   const [toogleFetchVisit, setToogleFetchVisit] = useState(false);
 
   const normalizePostDate = useFormatDate(post);
   const deviceInfo = useDeviceInfo();
+
+  useTitle(post ? post.title : PAGE_NAME);
 
   const postTime = useMemo(() => {
     if (post) {
@@ -66,63 +68,74 @@ const PostPage = () => {
     }
   }, [post]);
 
-  useTitle(post ? post.title : "Страница");
-
-  const likedPostHandle = async (post: PostType) => {
-    setLikedLoadingStatus(true);
-
+  const addLike = async (
+    post: PostType,
+    ipAddress: string | null,
+    country: string | null
+  ) => {
+    setLikedLoading(true);
     try {
-      if (country && ipAddress) {
-        let liked = {
-          ip: ipAddress,
-          country: country,
-        };
-        const updatePost = {
-          ...post,
-          likes: [...post.likes, liked],
-        };
-
-        const { payload } = await dispatch(
-          fetchLikedPost({ id: post.id, post: updatePost })
-        );
-
-        if (payload) {
-          dispatch(likedPost(liked));
-          setLikedLoadingStatus(false);
-        }
+      if (!ipAddress) {
+        throw new Error("IP адрес не найден");
       }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const unLikedPostHandle = async (post: any) => {
-    setLikedLoadingStatus(true);
-    try {
-      const updatePost = {
-        ...post,
-        likes: post.likes.filter((like: any) => like.ip !== ipAddress),
+      if (!country) {
+        throw new Error("Страна не найдена");
+      }
+      const liked = {
+        ip: ipAddress,
+        country: country,
       };
-
-      const { payload } = await dispatch(
-        fetchDeleteLike({ id: post.id, post: updatePost })
-      );
+      const updatedLikesList: LikesType[] = [...post.likes, liked];
+      const updatedPost: PostType = { ...post, likes: updatedLikesList };
+      const data = { id: post.id, post: updatedPost };
+      const { payload } = await dispatch(fetchLikedPost(data));
 
       if (payload) {
-        dispatch(deleteLikePost(ipAddress));
-        setLikedLoadingStatus(false);
+        dispatch(likedPost(liked));
+        setLikedLoading(false);
       }
     } catch (error) {
       console.error(error);
+      setLikedLoading(false);
+    } finally {
+      setLikedLoading(false);
     }
   };
+  const likedHandle = async (post: PostType) => {
+    await addLike(post, ipAddress, country);
+  };
+  const deleteLike = async (post: PostType, ipAddress: string) => {
+    setLikedLoading(true);
+    try {
+      const updatedLikesList: LikesType[] = post.likes.filter(
+        (like: LikesType) => like.ip !== ipAddress
+      );
+      const updatedPost: PostType = { ...post, likes: updatedLikesList };
+      const data = { id: post.id, post: updatedPost };
+      const { payload } = await dispatch(fetchDeleteLike(data));
 
-  const checkLiked = () => {
-    if (post) {
-      const isLiked = post.likes.some((like: any) => like.ip === ipAddress);
-      setLiked(isLiked);
+      if (payload) {
+        dispatch(deleteLikePost(ipAddress));
+        setLikedLoading(false);
+      }
+    } catch (error) {
+      console.error(error);
+      setLikedLoading(false);
+    } finally {
+      setLikedLoading(false);
     }
-    setLikedLoadingStatus(false);
+  };
+  const unLikedHandle = async (post: PostType) => {
+    await deleteLike(post, ipAddress!);
+  };
+
+  const checkTheLikes = (post: PostType, ip: string) => {
+    if (post && ip) {
+      const isLiked = post.likes.some((like: LikesType) => like.ip === ip);
+
+      setLiked(isLiked);
+      setLikedLoading(false);
+    }
   };
 
   // Get the current url address,  it need the facebook and twitter share buttons to work correctly
@@ -131,49 +144,62 @@ const PostPage = () => {
     const url = window.document.location.href;
     setCurrentPageUrl(url);
   }, []);
+
+  useEffect(() => {
+    setLikedLoading(true);
+
+    if (post && ipAddress) {
+      checkTheLikes(post, ipAddress);
+    }
+  }, [post, ipAddress]);
+
   // Getting post by ID and logic of post view counting
   useEffect(() => {
     if (id) {
-      dispatch(fetchUpViewCounts(id));
-      dispatch(fetchPostById(String(id)));
+      dispatch(fetchUpViewCounts(+id));
+      dispatch(fetchPostById(+id));
     }
     return () => {
       dispatch(removeItem());
     };
-  }, [id]);
+  }, [id, dispatch]);
+
   //Request the current post's visit log for the current date
   useEffect(() => {
-    const fetchVisitsData = async () => {
+    const getTheVisitLog = async () => {
       const date = getCurrentDate();
       const { payload } = await dispatch(fetchAllVisitByDate(date));
 
-      if (ipAddress) {
-        const checkingForUserVisits = checkVisitByDate(ipAddress, payload); // return true or false
-        setToogleFetchVisit(checkingForUserVisits);
+      if (!ipAddress) {
+        throw new Error("Failed to remove calculate user ip.");
       }
+      const checkingForUserVisits = checkVisitByDate(ipAddress, payload); // return true or false
+      setToogleFetchVisit(checkingForUserVisits);
     };
-    fetchVisitsData();
-  }, [ipAddress]);
+    getTheVisitLog();
+  }, [ipAddress, dispatch]);
+
   // Registering a user visit
   useEffect(() => {
     // toogleFetchVisit - This toggle switch is used to prevent re-registration of visits
+    if (!country) {
+      throw new Error("Failed to delete the user's country.");
+    }
+    if (!ipAddress) {
+      throw new Error("Failed to remove calculate user ip.");
+    }
+
     if (toogleFetchVisit) {
       const visitInfo = {
         date: getCurrentDate(),
-        country: country || "Unknown",
-        ip: ipAddress || "Unknown",
+        country: country,
+        ip: ipAddress,
         device: deviceInfo.device,
         os: deviceInfo.os,
       };
       dispatch(fetchVisit(visitInfo));
     }
-  }, [toogleFetchVisit, country]);
-  // The logic behind setting the likes
-  useEffect(() => {
-    setLikedLoadingStatus(true);
-
-    checkLiked();
-  }, [post]);
+  }, [toogleFetchVisit, country, dispatch]);
 
   if (!post) {
     return (
@@ -240,12 +266,12 @@ const PostPage = () => {
                   </div>
                   <div className={styles.postActions}>
                     <div className={styles.likedCount}>{post.likes.length}</div>
-                    {likedLoadingStatus ? (
+                    {likedLoading ? (
                       <CircularProgress />
                     ) : liked ? (
-                      <FavoriteIcon onClick={() => unLikedPostHandle(post)} />
+                      <FavoriteIcon onClick={() => unLikedHandle(post)} />
                     ) : (
-                      <FavoriteBorderIcon onClick={() => likedPostHandle(post)} />
+                      <FavoriteBorderIcon onClick={() => likedHandle(post)} />
                     )}
                   </div>
                 </div>
