@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { CommentsType, LikesType, PostsSliceType, StatusEnum } from "./postsTypes";
-import { fetchPages, fetchPostById, fetchPosts } from "./postsThunk";
+import { CommentsType, PostsSliceType, StatusEnum } from "./postsTypes";
+import { fetchPostById, fetchPosts } from "./postsThunk";
 import { RootState } from "../../store";
 
 const initialState: PostsSliceType = {
@@ -26,7 +26,7 @@ export const postsSlice = createSlice({
     deleteLikePost(state, action) {
       if (state.item.data) {
         state.item.data.likes = state.item.data.likes.filter(
-          (like: LikesType) => like.ip !== action.payload
+          (like) => like.ip !== action.payload
         );
       }
     },
@@ -57,8 +57,8 @@ export const postsSlice = createSlice({
       })
 
       .addCase(fetchPostById.pending, (state) => {
-        state.items.status = StatusEnum.loading;
-        state.items.data = null;
+        state.item.status = StatusEnum.loading;
+        state.item.data = null;
       })
       .addCase(fetchPostById.fulfilled, (state, action) => {
         state.item.status = StatusEnum.success;
@@ -67,9 +67,6 @@ export const postsSlice = createSlice({
       .addCase(fetchPostById.rejected, (state) => {
         state.item.status = StatusEnum.error;
         state.item.data = null;
-      })
-      .addCase(fetchPages.fulfilled, (state, action) => {
-        state.items.pages = action.payload;
       });
   },
 });

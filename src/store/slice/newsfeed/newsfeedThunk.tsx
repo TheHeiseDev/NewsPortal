@@ -1,41 +1,40 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import { apiService } from "../../../api/apiService";
 import { PostType } from "../posts/postsTypes";
 import { ParamsType } from "./newsfeedTypes";
+import { HTTPMethod } from "../posts/postsThunk";
 
 export const fetchFeedPosts = createAsyncThunk(
   "newsfeed/fetchFeedPosts",
-  async (params: ParamsType) => {
-    const { page, limit, category, search, sortBy, order } = params;
+  async (params: ParamsType): Promise<PostType[]> => {
+    const { page, limit, category, search, sortBy } = params;
 
-    const { data } = await axios<PostType[]>({
-      method: "GET",
-      url: apiService.baseUrl,
+    const { data } = await axios({
+      method: HTTPMethod.GET,
+      url: apiService.posts,
       params: {
-        limit: limit,
         page: page,
+        limit: limit,
         category: category === "all" ? "" : category,
-        search: search,
         sortBy: sortBy,
-        order: order,
+        description: search,
       },
     });
-
-    return data;
+    return data.items;
   }
 );
 export const fetchFeedMaxPage = createAsyncThunk(
   "newsfeed/fetchFeedMaxPage",
-  async (category: string) => {
+  async (category: string): Promise<number> => {
     const { data } = await axios({
-      method: "GET",
-      url: apiService.baseUrl,
+      method: HTTPMethod.GET,
+      url: apiService.posts,
       params: {
         category: category === "all" ? "" : category,
       },
     });
 
-    return data.length;
+    return data.items.length;
   }
 );

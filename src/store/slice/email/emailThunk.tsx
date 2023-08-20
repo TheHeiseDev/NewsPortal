@@ -8,7 +8,7 @@ export const fetchAddSubscriber = createAsyncThunk(
   async (subscriber: EmailWithoutId) => {
     const { data } = await axios<Email>({
       method: "POST",
-      url: apiService.emailUrl,
+      url: apiService.subscribers,
       data: subscriber,
     });
 

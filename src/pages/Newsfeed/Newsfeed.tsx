@@ -28,14 +28,14 @@ const Newsfeed = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  useTitle("Лента новостей");
+
   const { data, status, maxPage } = useSelector(selectFeedPosts);
   const [categoryValue, setCategoryValue] = useState("");
   const [page, setPage] = useState(0);
   const [isMount, setIsMount] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const observer = useRef<IntersectionObserver | null>(null);
-
-  useTitle("Лента новостей");
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -67,9 +67,8 @@ const Newsfeed = () => {
     let paramsUrl: ParamsType = {
       page: page,
       limit: 5,
-      search: searchValue,
-      sortBy: "date",
-      order: "desc",
+      search: `*${searchValue}*`,
+      sortBy: "-date",
     };
 
     if (searchParams.category) {
@@ -79,8 +78,7 @@ const Newsfeed = () => {
         page: page,
         limit: 5,
         category: categoryValue,
-        sortBy: "date",
-        order: "desc",
+        sortBy: "-date",
       };
     }
     if (searchParams.search) {
@@ -90,13 +88,12 @@ const Newsfeed = () => {
       paramsUrl = {
         page: page,
         limit: 5,
-        search: searchValue,
-        sortBy: "date",
-        order: "desc",
+        search: `*${searchValue}*`,
+        sortBy: "-date",
       };
     }
     dispatch(fetchFeedPosts(paramsUrl));
-  }, [categoryValue, page]);
+  }, [categoryValue, page, dispatch]);
 
   useEffect(() => {
     if (isMount) {
@@ -104,7 +101,6 @@ const Newsfeed = () => {
     }
     setIsMount(true);
   }, [searchValue]);
-
   // Implementation of the functionality by which the page switching occurs,
   // after which there is a request to the server and we get the following 5 posts
   useEffect(() => {

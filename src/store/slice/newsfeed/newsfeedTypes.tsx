@@ -14,5 +14,4 @@ export type ParamsType = {
   category?: string;
   search?: string;
   sortBy?: string;
-  order?: string;
 };

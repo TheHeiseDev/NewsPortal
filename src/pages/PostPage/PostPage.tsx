@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../store/store";
+
 import { fetchAllVisitByDate, fetchVisit } from "../../store/slice/visit/visitThunk";
 import {
   fetchDeleteLike,
@@ -20,7 +21,7 @@ import {
   selectPostStatus,
 } from "../../store/slice/posts/postsSlice";
 
-import { CircularProgress } from "@mui/material";
+import { CircularProgress as Loader } from "@mui/material";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -79,8 +80,9 @@ const PostPage = () => {
         throw new Error("IP адрес не найден");
       }
       if (!country) {
-        throw new Error("Страна не найдена");
+        throw new Error("Страна не определена");
       }
+
       const liked = {
         ip: ipAddress,
         country: country,
@@ -128,7 +130,6 @@ const PostPage = () => {
   const unLikedHandle = async (post: PostType) => {
     await deleteLike(post, ipAddress!);
   };
-
   const checkTheLikes = (post: PostType, ip: string) => {
     if (post && ip) {
       const isLiked = post.likes.some((like: LikesType) => like.ip === ip);
@@ -144,6 +145,20 @@ const PostPage = () => {
     const url = window.document.location.href;
     setCurrentPageUrl(url);
   }, []);
+
+  //Request the current post's visit log for the current date
+  useEffect(() => {
+    const getTheVisitLog = async (ip: string) => {
+      const date = getCurrentDate();
+      const { payload } = await dispatch(fetchAllVisitByDate(date));
+
+      const checkingForUserVisits = checkVisitByDate(ip, payload); // return true or false
+      setToogleFetchVisit(checkingForUserVisits);
+    };
+    if (ipAddress) {
+      getTheVisitLog(ipAddress);
+    }
+  }, [ipAddress, dispatch]);
 
   useEffect(() => {
     setLikedLoading(true);
@@ -164,48 +179,26 @@ const PostPage = () => {
     };
   }, [id, dispatch]);
 
-  //Request the current post's visit log for the current date
-  useEffect(() => {
-    const getTheVisitLog = async () => {
-      const date = getCurrentDate();
-      const { payload } = await dispatch(fetchAllVisitByDate(date));
-
-      if (!ipAddress) {
-        throw new Error("Failed to remove calculate user ip.");
-      }
-      const checkingForUserVisits = checkVisitByDate(ipAddress, payload); // return true or false
-      setToogleFetchVisit(checkingForUserVisits);
-    };
-    getTheVisitLog();
-  }, [ipAddress, dispatch]);
-
   // Registering a user visit
   useEffect(() => {
     // toogleFetchVisit - This toggle switch is used to prevent re-registration of visits
-    if (!country) {
-      throw new Error("Failed to delete the user's country.");
-    }
-    if (!ipAddress) {
-      throw new Error("Failed to remove calculate user ip.");
-    }
-
     if (toogleFetchVisit) {
       const visitInfo = {
         date: getCurrentDate(),
-        country: country,
-        ip: ipAddress,
+        country: country || "unknown",
+        ip: ipAddress || "unknown",
         device: deviceInfo.device,
         os: deviceInfo.os,
       };
       dispatch(fetchVisit(visitInfo));
     }
-  }, [toogleFetchVisit, country, dispatch]);
+  }, [toogleFetchVisit, dispatch]);
 
   if (!post) {
     return (
       <MainLayout>
         <div className={styles.postLoadingContainer}>
-          <CircularProgress />
+          <Loader />
         </div>
       </MainLayout>
     );
@@ -215,7 +208,7 @@ const PostPage = () => {
     <MainLayout>
       {status === StatusEnum.loading ? (
         <div className={styles.postLoadingContainer}>
-          <CircularProgress />
+          <Loader />
         </div>
       ) : status === StatusEnum.error ? (
         <div className={styles.postLoadingContainer}>
@@ -267,7 +260,7 @@ const PostPage = () => {
                   <div className={styles.postActions}>
                     <div className={styles.likedCount}>{post.likes.length}</div>
                     {likedLoading ? (
-                      <CircularProgress />
+                      <Loader />
                     ) : liked ? (
                       <FavoriteIcon onClick={() => unLikedHandle(post)} />
                     ) : (

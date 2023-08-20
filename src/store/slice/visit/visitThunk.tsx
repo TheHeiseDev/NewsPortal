@@ -1,8 +1,9 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import { apiService } from "../../../api/apiService";
+import { HTTPMethod } from "../posts/postsThunk";
 
-type ParamsType = {
+type VisitParams = {
   date: string;
   ip: string;
   country: string;
@@ -12,12 +13,11 @@ type ParamsType = {
 
 export const fetchVisit = createAsyncThunk(
   "visit/fetchVisit",
-  async (params: ParamsType) => {
-    const { date, country, device, os,ip } = params;
-
+  
+  async (params: VisitParams) => {
     const { data } = await axios({
-      method: "POST",
-      url: apiService.visitUrl,
+      method: HTTPMethod.POST,
+      url: apiService.visits,
       params: {},
       data: params,
     });
@@ -27,16 +27,15 @@ export const fetchVisit = createAsyncThunk(
 );
 export const fetchAllVisitByDate = createAsyncThunk(
   "visit/fetchAllVisitByDate",
-  async (date: string) => {
 
+  async (date: string) => {
     const { data } = await axios({
-      method: "GET",
-      url: apiService.visitUrl,
+      method: HTTPMethod.GET,
+      url: apiService.visits,
       params: {
-        date: date
+        date: date,
       },
     });
-
     return data;
   }
 );

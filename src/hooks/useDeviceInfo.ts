@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 
 export function useDeviceInfo() {
   const [deviceInfo, setDeviceInfo] = useState({ device: "", os: "" });
 
-  useEffect(() => {
+  useMemo(() => {
     const userAgent = navigator.userAgent.toLowerCase();
 
     let deviceType = "";

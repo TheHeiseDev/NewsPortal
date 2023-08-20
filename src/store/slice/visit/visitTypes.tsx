@@ -1,5 +1,5 @@
 export type Visit = {
-  id: string;
+  id: number;
   date: string;
   ip: string;
   country: string;
