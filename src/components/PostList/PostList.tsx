@@ -19,16 +19,18 @@ export const PostList = () => {
   useEffect(() => {
     const searchParams = qs.parse(window.location.search, { ignoreQueryPrefix: true });
 
-    navigate(
-      `?page=${searchParams.page}&limit=${searchParams.limit}&sortBy=${searchParams.sortBy}`
-    );
-
     const params = {
       page: Number(searchParams.page) ? Number(searchParams.page) : page,
       limit: Number(searchParams.limit) ? Number(searchParams.limit) : 5,
       sortBy: String(searchParams.sortBy) ? String(searchParams.sortBy) : "-date",
     };
-    dispatch(fetchPosts(params));
+    dispatch(fetchPosts(params)).then(() => {
+      navigate(
+        `?page=${searchParams.page ? searchParams.page : page}&limit=${
+          searchParams.limit ? searchParams.limit : 5
+        }&sortBy=${searchParams.sortBy ? searchParams.sortBy : "-data"}`
+      );
+    });
   }, [page]);
 
   const setPageHandle = (number: number) => {

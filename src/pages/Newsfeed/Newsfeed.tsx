@@ -1,5 +1,5 @@
 import styles from "./Newsfeed.module.scss";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import qs from "qs";
@@ -18,6 +18,7 @@ import { CircularProgress } from "@mui/material";
 import loadinGif from "../../assets/loading3.gif";
 import { useTitle } from "../../hooks/useTitle";
 import { categoryItem } from "../../utils/constants/categoryItem";
+import { useIntersectionObserver } from "../../hooks/useIntersectionObserver";
 
 const Newsfeed = () => {
   const dispatch = useAppDispatch();
@@ -27,10 +28,9 @@ const Newsfeed = () => {
 
   const { data, status, totalPages } = useSelector(selectFeedPosts);
   const [categoryValue, setCategoryValue] = useState("");
-  const [page, setPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [isMount, setIsMount] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-  const observer = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -44,7 +44,7 @@ const Newsfeed = () => {
     if (isMount) {
       navigate(`/newsfeed?category=${categoryValue}&sortBy=-data`);
     }
-    setPage(1);
+    setCurrentPage(1);
     setIsMount(true);
   }, [categoryValue]);
 
@@ -52,56 +52,34 @@ const Newsfeed = () => {
     if (isMount) {
       navigate(`/newsfeed?search=${searchValue}`);
     }
-    setPage(1);
+    setCurrentPage(1);
     setIsMount(true);
   }, [searchValue]);
 
-  // Fetch d
-  useEffect(() => {
-    const searchParams = qs.parse(window.location.search, { ignoreQueryPrefix: true });
-    const { category, search } = searchParams;
-    console.log(categoryValue);
-    const paramsUrl = {
-      page: page,
-      limit: 5,
-      sortBy: "-date",
-      ...(category && { category: String(category) }),
-      ...(categoryValue && { category: categoryValue }),
-      ...(search && {
-        description: `*${search}*`,
-        page: page,
-        limit: 5,
-        sortBy: "-date",
-      }),
-    };
+  // Fetch data
+  // useEffect(() => {
+  //   const searchParams = qs.parse(window.location.search, { ignoreQueryPrefix: true });
+  //   const { category, search } = searchParams;
+  //   const paramsUrl = {
+  //     page: currentPage,
+  //     limit: 5,
+  //     sortBy: "-date",
+  //     ...(category && { category: String(category) }),
+  //     ...(categoryValue && { category: categoryValue }),
+  //     ...(search && {
+  //       description: `*${search}*`,
+  //       page: currentPage,
+  //       limit: 5,
+  //       sortBy: "-date",
+  //     }),
+  //   };
 
-    dispatch(fetchFeedPosts(paramsUrl));
-  }, [categoryValue, page]);
+  //   dispatch(fetchFeedPosts(paramsUrl));
+  // }, [categoryValue, currentPage]);
 
   // Implementation of the functionality by which the page switching occurs,
   // after which there is a request to the server and we get the following 5 posts
-  useEffect(() => {
-    observer.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && page < totalPages) {
-        setPage((prevPage) => prevPage + 1);
-      }
-    });
-    // ! WARNING: If we delete this code, there will be problems with the intersection observer.
-    // Requests to the server will be sent even if we finish loading all elements of the array
-    return () => {
-      observer.current?.disconnect();
-    };
-  }, [page, data]);
-  // Observer logic
-  useEffect(() => {
-    if (observer.current) {
-      observer.current.disconnect();
-    }
-    const postNodes = document.querySelectorAll(".post");
-    if (postNodes.length > 0) {
-      observer.current && observer.current.observe(postNodes[postNodes.length - 1]);
-    }
-  }, [data]);
+  useIntersectionObserver(currentPage, totalPages, data, "post", setCurrentPage);
 
   return (
     <MainLayout>
