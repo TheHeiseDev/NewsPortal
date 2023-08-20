@@ -18,7 +18,6 @@ export const PostList = () => {
 
   useEffect(() => {
     const searchParams = qs.parse(window.location.search, { ignoreQueryPrefix: true });
-    console.log(searchParams);
 
     navigate(
       `?page=${searchParams.page}&limit=${searchParams.limit}&sortBy=${searchParams.sortBy}`

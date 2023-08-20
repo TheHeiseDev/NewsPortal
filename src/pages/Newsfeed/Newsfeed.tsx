@@ -42,8 +42,7 @@ const Newsfeed = () => {
   useEffect(() => {
     dispatch(removeFeedItems());
     if (isMount) {
-      const value = categoryValue === "" ? "" : categoryValue;
-      navigate(`/newsfeed?category=${value}&sortBy=-data`);
+      navigate(`/newsfeed?category=${categoryValue}&sortBy=-data`);
     }
     setPage(1);
     setIsMount(true);
@@ -51,21 +50,23 @@ const Newsfeed = () => {
 
   useEffect(() => {
     if (isMount) {
-      navigate(`/newsfeed?search=${searchValue}&sortBy=-data`);
+      navigate(`/newsfeed?search=${searchValue}`);
     }
+    setPage(1);
     setIsMount(true);
   }, [searchValue]);
 
-  // Fetch data
+  // Fetch d
   useEffect(() => {
     const searchParams = qs.parse(window.location.search, { ignoreQueryPrefix: true });
     const { category, search } = searchParams;
-
+    console.log(categoryValue);
     const paramsUrl = {
       page: page,
       limit: 5,
       sortBy: "-date",
-      ...(category && { category: categoryValue === "all" ? "" : categoryValue }),
+      ...(category && { category: String(category) }),
+      ...(categoryValue && { category: categoryValue }),
       ...(search && {
         description: `*${search}*`,
         page: page,
@@ -75,7 +76,7 @@ const Newsfeed = () => {
     };
 
     dispatch(fetchFeedPosts(paramsUrl));
-  }, [categoryValue, page, dispatch]);
+  }, [categoryValue, page]);
 
   // Implementation of the functionality by which the page switching occurs,
   // after which there is a request to the server and we get the following 5 posts
@@ -90,7 +91,7 @@ const Newsfeed = () => {
     return () => {
       observer.current?.disconnect();
     };
-  }, [page]);
+  }, [page, data]);
   // Observer logic
   useEffect(() => {
     if (observer.current) {
