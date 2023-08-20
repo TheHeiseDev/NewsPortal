@@ -1,7 +1,7 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 
-import { fetchFeedMaxPage, fetchFeedPosts } from "./newsfeedThunk";
+import { fetchFeedPosts } from "./newsfeedThunk";
 import { StatusEnum } from "../posts/postsTypes";
 import { NewsfeedSliceType } from "./newsfeedTypes";
 
@@ -9,45 +9,49 @@ const initialState: NewsfeedSliceType = {
   items: {
     data: null,
     status: StatusEnum.loading,
-    maxPage: 1,
+    totalPages: 1,
+    currentPage: 1,
   },
 };
 export const newsfeedSlice = createSlice({
-  name: "fetchFeedPosts",
+  name: "newsfeedSlice",
   initialState,
   reducers: {
-    setMaxPage(state, action: PayloadAction<number>) {
-      state.items.maxPage = action.payload;
-    },
     removeFeedItems(state) {
       state.items.data = null;
-      state.items.maxPage = 1;
     },
   },
 
   extraReducers: (builder) => {
     builder
-      .addCase(fetchFeedMaxPage.pending, (state, action) => {})
-      .addCase(fetchFeedMaxPage.fulfilled, (state, action) => {
-        state.items.maxPage = Math.ceil(action.payload / 5) as number;
-      })
-      .addCase(fetchFeedMaxPage.rejected, (state) => {
-        state.items.maxPage = 1;
-      })
       .addCase(fetchFeedPosts.pending, (state) => {
         state.items.status = StatusEnum.loading;
       })
       .addCase(fetchFeedPosts.fulfilled, (state, action) => {
+        const current_page = action.payload?.meta?.current_page;
+        const total_pages = action.payload?.meta?.total_pages;
+
         state.items.status = StatusEnum.success;
+        state.items.totalPages = total_pages ? total_pages : state.items.totalPages;
+        state.items.currentPage = current_page ? current_page : state.items.currentPage;
 
         if (state.items.data !== null) {
           state.items.data = [
             ...new Map(
-              [...state.items.data, ...action.payload].map((item) => [item.id, item])
+              [...state.items.data, ...action.payload.items].map((item) => [
+                item.id,
+                item,
+              ])
             ).values(),
           ];
         } else {
-          state.items.data = action.payload;
+          if(action.payload.items) {
+            state.items.data = action.payload.items;
+          }else {
+            state.items.data = action.payload;
+          }
+         
+
         }
       })
       .addCase(fetchFeedPosts.rejected, (state) => {
@@ -56,6 +60,6 @@ export const newsfeedSlice = createSlice({
       });
   },
 });
-export const { removeFeedItems, setMaxPage } = newsfeedSlice.actions;
+export const { removeFeedItems } = newsfeedSlice.actions;
 export const selectFeedPosts = (state: RootState) => state.newsfeed.items;
 export default newsfeedSlice.reducer;

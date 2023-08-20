@@ -5,6 +5,7 @@ import { debounce } from "../../../utils/debounce";
 import { useAppDispatch } from "../../../store/store";
 import { fetchFeedPosts } from "../../../store/slice/newsfeed/newsfeedThunk";
 import { removeFeedItems } from "../../../store/slice/newsfeed/newsfeedSlice";
+import { useNavigate } from "react-router-dom";
 
 interface ISearch {
   searchValue: string;
@@ -12,17 +13,31 @@ interface ISearch {
 }
 
 export const Search = React.memo(({ searchValue, setSearchValue }: ISearch) => {
-  // const [searchValue, setSearchValue] = useState("");
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const searchRef = useRef<HTMLInputElement>(null);
 
   // Loading delay when searching, search is performed (1000 ms) after input is paused
   const updateSearchValue = useCallback(
     debounce((str) => {
-      if (str !== " " && str !== "  ") {
-        const params = { search: str, sortBy: "date", order: "desc" };
+      if (str !== " " && str !== "  " && str !== "") {
+        const params = {
+          description: `*${str}*`,
+          sortBy: "date",
+        };
         dispatch(removeFeedItems());
         dispatch(fetchFeedPosts(params));
+      } else {
+        const paramsUrl = {
+          page: 1,
+          limit: 5,
+          sortBy: "-date",
+        };
+     
+        dispatch(removeFeedItems());
+        navigate(`/newsfeed?page=1&limit=5&category=all&sortBy=-date`);
+        dispatch(fetchFeedPosts(paramsUrl));
+   
       }
     }, 1000),
     []

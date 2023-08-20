@@ -5,15 +5,10 @@ import { useNavigate } from "react-router-dom";
 import qs from "qs";
 import { useAppDispatch } from "../../store/store";
 import { StatusEnum } from "../../store/slice/posts/postsTypes";
-import { ParamsType } from "../../store/slice/newsfeed/newsfeedTypes";
-import {
-  fetchFeedMaxPage,
-  fetchFeedPosts,
-} from "../../store/slice/newsfeed/newsfeedThunk";
+import { fetchFeedPosts } from "../../store/slice/newsfeed/newsfeedThunk";
 import {
   removeFeedItems,
   selectFeedPosts,
-  setMaxPage,
 } from "../../store/slice/newsfeed/newsfeedSlice";
 import { MainLayout } from "../../layout/MainLayout";
 import { Post } from "../../components/Post/Post";
@@ -30,9 +25,9 @@ const Newsfeed = () => {
 
   useTitle("Лента новостей");
 
-  const { data, status, maxPage } = useSelector(selectFeedPosts);
+  const { data, status, totalPages } = useSelector(selectFeedPosts);
   const [categoryValue, setCategoryValue] = useState("");
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [isMount, setIsMount] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const observer = useRef<IntersectionObserver | null>(null);
@@ -45,67 +40,48 @@ const Newsfeed = () => {
   }, []);
 
   useEffect(() => {
+    dispatch(removeFeedItems());
     if (isMount) {
-      navigate(`/newsfeed?category=${categoryValue}`);
+      const value = categoryValue === "" ? "" : categoryValue;
+      navigate(`/newsfeed?category=${value}&sortBy=-data`);
     }
+    setPage(1);
     setIsMount(true);
   }, [categoryValue]);
 
   useEffect(() => {
-    dispatch(removeFeedItems());
-    setPage(1);
-  }, [categoryValue]);
-
-  useEffect(() => {
-    dispatch(fetchFeedMaxPage(categoryValue));
-  }, [categoryValue]);
+    if (isMount) {
+      navigate(`/newsfeed?search=${searchValue}&sortBy=-data`);
+    }
+    setIsMount(true);
+  }, [searchValue]);
 
   // Fetch data
   useEffect(() => {
     const searchParams = qs.parse(window.location.search, { ignoreQueryPrefix: true });
+    const { category, search } = searchParams;
 
-    let paramsUrl: ParamsType = {
+    const paramsUrl = {
       page: page,
       limit: 5,
-      search: `*${searchValue}*`,
       sortBy: "-date",
+      ...(category && { category: categoryValue === "all" ? "" : categoryValue }),
+      ...(search && {
+        description: `*${search}*`,
+        page: page,
+        limit: 5,
+        sortBy: "-date",
+      }),
     };
 
-    if (searchParams.category) {
-      setCategoryValue(String(searchParams.category));
-
-      paramsUrl = {
-        page: page,
-        limit: 5,
-        category: categoryValue,
-        sortBy: "-date",
-      };
-    }
-    if (searchParams.search) {
-      setSearchValue(String(searchParams.search));
-      // fixes the bug, best not to touch it, otherwise we stumble on repeated requests
-      dispatch(setMaxPage(1));
-      paramsUrl = {
-        page: page,
-        limit: 5,
-        search: `*${searchValue}*`,
-        sortBy: "-date",
-      };
-    }
     dispatch(fetchFeedPosts(paramsUrl));
   }, [categoryValue, page, dispatch]);
 
-  useEffect(() => {
-    if (isMount) {
-      navigate(`/newsfeed?search=${searchValue}`);
-    }
-    setIsMount(true);
-  }, [searchValue]);
   // Implementation of the functionality by which the page switching occurs,
   // after which there is a request to the server and we get the following 5 posts
   useEffect(() => {
     observer.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && page <= maxPage) {
+      if (entries[0].isIntersecting && page < totalPages) {
         setPage((prevPage) => prevPage + 1);
       }
     });
@@ -114,7 +90,7 @@ const Newsfeed = () => {
     return () => {
       observer.current?.disconnect();
     };
-  }, [page, maxPage]);
+  }, [page]);
   // Observer logic
   useEffect(() => {
     if (observer.current) {

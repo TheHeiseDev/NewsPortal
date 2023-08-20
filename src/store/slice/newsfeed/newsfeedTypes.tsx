@@ -4,7 +4,9 @@ export type NewsfeedSliceType = {
   items: {
     data: PostType[] | null;
     status: StatusEnum;
-    maxPage: number;
+    totalPages: number;
+    currentPage: number
+
   };
 };
 

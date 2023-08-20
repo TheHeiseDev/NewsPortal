@@ -1,6 +1,5 @@
-import React from "react";
 import styles from "./CategoryButton.module.scss";
-import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
+
 
 export const CategoryButton = ({ title, Image, bgColor, callback }) => {
   return (
