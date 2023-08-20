@@ -1,18 +1,20 @@
-import React, { ChangeEvent, useCallback, useRef, useState } from "react";
-import SearchIcon from "@mui/icons-material/Search";
 import styles from "./Search.module.scss";
-import { debounce } from "../../../utils/debounce";
+import { ChangeEvent, useCallback, useRef, memo } from "react";
+import { useNavigate } from "react-router-dom";
+import { batch } from "react-redux";
 import { useAppDispatch } from "../../../store/store";
 import { fetchFeedPosts } from "../../../store/slice/newsfeed/newsfeedThunk";
 import { removeFeedItems } from "../../../store/slice/newsfeed/newsfeedSlice";
-import { useNavigate } from "react-router-dom";
+
+import SearchIcon from "@mui/icons-material/Search";
+import { debounce } from "../../../utils/debounce";
 
 interface ISearch {
   searchValue: string;
   setSearchValue: (value: string) => void;
 }
 
-export const Search = React.memo(({ searchValue, setSearchValue }: ISearch) => {
+export const Search = memo(({ searchValue, setSearchValue }: ISearch) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const searchRef = useRef<HTMLInputElement>(null);
@@ -23,21 +25,25 @@ export const Search = React.memo(({ searchValue, setSearchValue }: ISearch) => {
       if (str !== " " && str !== "  " && str !== "") {
         const params = {
           description: `*${str}*`,
-          sortBy: "date",
+          sortBy: "-date",
         };
-        dispatch(removeFeedItems());
-        dispatch(fetchFeedPosts(params));
+        batch(() => {
+          dispatch(removeFeedItems());
+          dispatch(fetchFeedPosts(params));
+        });
       } else {
-        const paramsUrl = {
+        const params = {
           page: 1,
           limit: 5,
           sortBy: "-date",
         };
-     
-        dispatch(removeFeedItems());
-        navigate(`/newsfeed?page=1&limit=5&category=all&sortBy=-date`);
-        dispatch(fetchFeedPosts(paramsUrl));
-   
+        batch(() => {
+          dispatch(removeFeedItems());
+          dispatch(fetchFeedPosts(params));
+        });
+        navigate(
+          `/newsfeed?page=${params.page}1&limit=${params.limit}&sortBy=${params.sortBy}`
+        );
       }
     }, 1000),
     []
@@ -56,6 +62,7 @@ export const Search = React.memo(({ searchValue, setSearchValue }: ISearch) => {
     }
     setSearchValue("");
     updateSearchValue("");
+    navigate(`/newsfeed?page=1&limit=5&category=all&sortBy=-date`);
   };
   return (
     <div className={styles.search}>

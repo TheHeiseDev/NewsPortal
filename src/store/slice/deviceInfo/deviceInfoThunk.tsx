@@ -1,6 +1,4 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import { apiService } from "../../../api/apiService";
 
 export const fetchDeviceInfo = createAsyncThunk(
   "deviceInfo/fetchDeviceInfo",

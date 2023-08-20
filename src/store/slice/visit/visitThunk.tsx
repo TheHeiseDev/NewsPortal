@@ -13,12 +13,11 @@ type VisitParams = {
 
 export const fetchVisit = createAsyncThunk(
   "visit/fetchVisit",
-  
+
   async (params: VisitParams) => {
     const { data } = await axios({
       method: HTTPMethod.POST,
       url: apiService.visits,
-      params: {},
       data: params,
     });
 

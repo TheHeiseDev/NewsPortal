@@ -57,25 +57,27 @@ const Newsfeed = () => {
   }, [searchValue]);
 
   // Fetch data
-  // useEffect(() => {
-  //   const searchParams = qs.parse(window.location.search, { ignoreQueryPrefix: true });
-  //   const { category, search } = searchParams;
-  //   const paramsUrl = {
-  //     page: currentPage,
-  //     limit: 5,
-  //     sortBy: "-date",
-  //     ...(category && { category: String(category) }),
-  //     ...(categoryValue && { category: categoryValue }),
-  //     ...(search && {
-  //       description: `*${search}*`,
-  //       page: currentPage,
-  //       limit: 5,
-  //       sortBy: "-date",
-  //     }),
-  //   };
+  useEffect(() => {
+    const searchParams = qs.parse(window.location.search, { ignoreQueryPrefix: true });
 
-  //   dispatch(fetchFeedPosts(paramsUrl));
-  // }, [categoryValue, currentPage]);
+    const { category, search } = searchParams;
+    console.log(currentPage)
+    const paramsUrl = {
+      page: currentPage,
+      limit: 5,
+      sortBy: "-date",
+      ...(category && { category: String(category) }),
+      ...(categoryValue && { category: categoryValue }),
+      ...(search && {
+        description: `*${search}*`,
+        page: currentPage,
+        limit: 5,
+        sortBy: "-date",
+      }),
+    };
+
+    dispatch(fetchFeedPosts(paramsUrl));
+  }, [categoryValue, currentPage]);
 
   // Implementation of the functionality by which the page switching occurs,
   // after which there is a request to the server and we get the following 5 posts

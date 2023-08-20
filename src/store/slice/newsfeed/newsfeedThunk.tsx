@@ -7,7 +7,6 @@ import { HTTPMethod } from "../posts/postsThunk";
 export const fetchFeedPosts = createAsyncThunk(
   "newsfeed/fetchFeedPosts",
   async (params: ParamsType) => {
-    const { page, limit, category, search, sortBy } = params;
 
     const { data } = await axios({
       method: HTTPMethod.GET,

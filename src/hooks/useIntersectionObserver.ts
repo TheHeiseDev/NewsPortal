@@ -14,6 +14,7 @@ export const useIntersectionObserver = (
     observerRef.current = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && page < totalPages) {
         setPage((prevPage: number) => prevPage + 1);
+        console.log(page);
       }
     });
 
@@ -28,7 +29,7 @@ export const useIntersectionObserver = (
     }
 
     const postNodes = document.querySelectorAll(`.${className}`);
-    if (postNodes.length > 0) {
+    if (postNodes.length > 4) {
       observerRef.current && observerRef.current.observe(postNodes[postNodes.length - 1]);
     }
   }, [data]);
