@@ -1,29 +1,33 @@
 import styles from "./PostList.module.scss";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { CircularProgress, Pagination } from "@mui/material";
 import { StatusEnum } from "../../store/slice/posts/postsTypes";
 import { selectPosts } from "../../store/slice/posts/postsSlice";
-import { fetchPages, fetchPosts } from "../../store/slice/posts/postsThunk";
+import { fetchPosts } from "../../store/slice/posts/postsThunk";
 import { useAppDispatch } from "../../store/store";
 import { Post } from "../Post/Post";
+import { CircularProgress, Pagination } from "@mui/material";
+import qs from "qs";
 
 export const PostList = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [page, setPage] = useState(1);
-  const { data, status, pages } = useSelector(selectPosts);
+  const { data, status, totalPages } = useSelector(selectPosts);
 
   useEffect(() => {
-    if (!pages) {
-      dispatch(fetchPages());
-    }
-  }, [pages]);
+    const searchParams = qs.parse(window.location.search, { ignoreQueryPrefix: true });
+    console.log(searchParams);
 
-  useEffect(() => {
+    navigate(
+      `?page=${searchParams.page}&limit=${searchParams.limit}&sortBy=${searchParams.sortBy}`
+    );
+
     const params = {
-      page: page,
-      limit: 5,
-      sortBy: "-date",
+      page: Number(searchParams.page) ? Number(searchParams.page) : page,
+      limit: Number(searchParams.limit) ? Number(searchParams.limit) : 5,
+      sortBy: String(searchParams.sortBy) ? String(searchParams.sortBy) : "-date",
     };
     dispatch(fetchPosts(params));
   }, [page]);
@@ -54,7 +58,7 @@ export const PostList = () => {
               color="secondary"
               variant="outlined"
               page={page}
-              count={pages ? pages : 1}
+              count={totalPages}
               className={styles.catalogPagination}
               onChange={(_, num) => setPageHandle(num)}
             />

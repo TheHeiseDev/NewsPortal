@@ -38,7 +38,7 @@ export const fetchPosts = createAsyncThunk(
         params,
       });
 
-      return data.items;
+      return data;
     } catch (error) {
       errorHandler("Failed to fetch posts.", error);
     }

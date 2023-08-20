@@ -7,7 +7,7 @@ const initialState: PostsSliceType = {
   items: {
     data: null,
     status: StatusEnum.loading,
-    pages: null,
+    totalPages: 1,
   },
   item: {
     data: null,
@@ -49,7 +49,8 @@ export const postsSlice = createSlice({
       })
       .addCase(fetchPosts.fulfilled, (state, action) => {
         state.items.status = StatusEnum.success;
-        state.items.data = action.payload;
+        state.items.data = action.payload.items;
+        state.items.totalPages = action.payload.meta.total_pages;
       })
       .addCase(fetchPosts.rejected, (state) => {
         state.items.status = StatusEnum.error;
