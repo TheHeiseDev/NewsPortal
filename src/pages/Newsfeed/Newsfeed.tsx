@@ -42,7 +42,7 @@ const Newsfeed = () => {
   useEffect(() => {
     dispatch(removeFeedItems());
     if (isMount) {
-      navigate(`/newsfeed?category=${categoryValue}&sortBy=-data`);
+      navigate(`/newsfeed?category=${categoryValue}&sortBy=-date`);
     }
     setCurrentPage(1);
     setIsMount(true);

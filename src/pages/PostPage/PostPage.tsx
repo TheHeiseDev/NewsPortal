@@ -1,7 +1,7 @@
 import styles from "./PostPage.module.scss";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { batch, useSelector } from "react-redux";
 import { useAppDispatch } from "../../store/store";
 
 import { fetchAllVisitByDate, fetchVisit } from "../../store/slice/visit/visitThunk";
@@ -42,6 +42,9 @@ import { useDeviceInfo } from "../../hooks/useDeviceInfo";
 import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
 import { getCurrentDate } from "../../utils/getCurrentDateTime";
 import { checkVisitByDate } from "../../utils/checkVisitByDate";
+import { OtherNews } from "./components/OtherNews";
+import { selectOtherPosts } from "../../store/slice/otherPosts/otherPostsSlice";
+import { fetchOtherPosts } from "../../store/slice/otherPosts/otherPostsThunk";
 
 const PostPage = () => {
   const PAGE_NAME = "Страница";
@@ -49,7 +52,8 @@ const PostPage = () => {
   const { id } = useParams();
 
   const post = useSelector(selectPost);
-  const status = useSelector(selectPostStatus);
+  const postLoading = useSelector(selectPostStatus);
+  const { data, status } = useSelector(selectOtherPosts);
   const { ipAddress, country } = useSelector(selectDeviceInfo);
 
   const [liked, setLiked] = useState(false);
@@ -172,7 +176,14 @@ const PostPage = () => {
   useEffect(() => {
     if (id) {
       dispatch(fetchUpViewCounts(+id));
-      dispatch(fetchPostById(+id));
+      dispatch(fetchPostById(+id))
+        .then((res) => res.payload)
+        .then((payload: any) => payload.category)
+        .then((category) => {
+          if (category) {
+            dispatch(fetchOtherPosts(category));
+          }
+        });
     }
     return () => {
       dispatch(removeItem());
@@ -206,11 +217,11 @@ const PostPage = () => {
 
   return (
     <MainLayout>
-      {status === StatusEnum.loading ? (
+      {postLoading === StatusEnum.loading ? (
         <div className={styles.postLoadingContainer}>
           <Loader />
         </div>
-      ) : status === StatusEnum.error ? (
+      ) : postLoading === StatusEnum.error ? (
         <div className={styles.postLoadingContainer}>
           <span>Ошибка загрузки данных, попробуйте обновить страницу</span>
         </div>
@@ -282,6 +293,20 @@ const PostPage = () => {
                   <span>Нет комментариев</span>
                 )}
               </section>
+
+              <div className={styles.otherNews}>
+                <h3>Читайте также</h3>
+
+                <section className={styles.newsContainer}>
+                  {status === StatusEnum.loading ? (
+                    <div className={styles.orherPostLoading}>
+                      <Loader />
+                    </div>
+                  ) : (
+                    data?.map((post) => <OtherNews key={post.id} post={post} />)
+                  )}
+                </section>
+              </div>
             </div>
           </div>
         </div>

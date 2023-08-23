@@ -10,6 +10,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useFormatDate } from "../../hooks/useFormatDate";
 import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
 import { CategoryEnum } from "../../utils/constants/categoryItem";
+import { setCategoryName } from "../../utils/setCategoryName";
 
 interface IPost {
   post: PostType;
@@ -21,20 +22,6 @@ export const Post: FC<IPost> = ({ post }) => {
   const postTime = useMemo(() => {
     return calculateTimeElapsed(new Date(post.date));
   }, []);
-
-  const setCategoryName = (categoryValue: string) => {
-    if (categoryValue === CategoryEnum.it_news) {
-      return "Новости ИТ";
-    }
-    if (categoryValue === CategoryEnum.ai) {
-      return "AI";
-    }
-    if (categoryValue === CategoryEnum.useful_services) {
-      return "Полезные ресуры";
-    } else {
-      return "Прочие";
-    }
-  };
 
   return (
     <div className={styles.post}>

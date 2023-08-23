@@ -23,7 +23,7 @@ type FetchParams = {
 
 const URLPath = (id: number) => `${apiService.posts}/${id}`;
 
-const errorHandler = (message: string, error: unknown) => {
+export const errorHandler = (message: string, error: unknown) => {
   console.log(error);
   throw new Error(message);
 };

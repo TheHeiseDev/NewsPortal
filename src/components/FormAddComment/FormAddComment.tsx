@@ -1,5 +1,5 @@
 import styles from "./FormAddComment.module.scss";
-import React, { FC, useState } from "react";
+import React, { FC, useState, memo } from "react";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../store/store";
 import { addComment } from "../../store/slice/posts/postsSlice";
@@ -14,7 +14,7 @@ interface IFormAddComment {
   post: PostType;
 }
 
-export const FormAddComment: FC<IFormAddComment> = ({ post }) => {
+export const FormAddComment: FC<IFormAddComment> = memo(({ post }) => {
   const dispatch = useAppDispatch();
   const { country } = useSelector(selectDeviceInfo);
 
@@ -45,6 +45,7 @@ export const FormAddComment: FC<IFormAddComment> = ({ post }) => {
 
   const onSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     setNameError(false);
     setTextError(false);
 
@@ -62,7 +63,7 @@ export const FormAddComment: FC<IFormAddComment> = ({ post }) => {
           country: country || "Unknown",
         };
 
-        const updatedPost = {
+        const updatedPost: PostType = {
           ...post,
           comments: [...post.comments, newComment],
         };
@@ -74,7 +75,6 @@ export const FormAddComment: FC<IFormAddComment> = ({ post }) => {
         setCommentValue("");
       } catch (error) {
         console.log(error);
-        // Обработка ошибок при отправке комментария
       } finally {
         setSendStatus(false);
       }
@@ -110,4 +110,4 @@ export const FormAddComment: FC<IFormAddComment> = ({ post }) => {
       </div>
     </div>
   );
-};
+});

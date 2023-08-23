@@ -1,18 +1,16 @@
 import styles from "./PostList.module.scss";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { StatusEnum } from "../../store/slice/posts/postsTypes";
 import { selectPosts } from "../../store/slice/posts/postsSlice";
 import { fetchPosts } from "../../store/slice/posts/postsThunk";
 import { useAppDispatch } from "../../store/store";
 import { Post } from "../Post/Post";
-import { CircularProgress, Pagination } from "@mui/material";
+import { CircularProgress as Loader, Pagination } from "@mui/material";
 import qs from "qs";
 
 export const PostList = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const { data, status, totalPages } = useSelector(selectPosts);
 
@@ -21,17 +19,12 @@ export const PostList = () => {
 
     const params = {
       page: Number(searchParams.page) ? Number(searchParams.page) : page,
-      limit: Number(searchParams.limit) ? Number(searchParams.limit) : 5,
-      sortBy: String(searchParams.sortBy) ? String(searchParams.sortBy) : "-date",
+      limit: 5,
+      sortBy: "-date",
     };
-    dispatch(fetchPosts(params)).then(() => {
-      navigate(
-        `?page=${searchParams.page ? searchParams.page : page}&limit=${
-          searchParams.limit ? searchParams.limit : 5
-        }&sortBy=${searchParams.sortBy ? searchParams.sortBy : "-data"}`
-      );
-    });
+    dispatch(fetchPosts(params));
   }, [page]);
+  console.log(page);
 
   const setPageHandle = (number: number) => {
     window.scrollTo(0, 700);
@@ -46,7 +39,7 @@ export const PostList = () => {
         <div className={styles.postsWrapper}>
           {status === StatusEnum.loading ? (
             <div className={styles.loadingContainer}>
-              <CircularProgress />
+              <Loader />
             </div>
           ) : status === StatusEnum.error ? (
             <h2>Произошла ошибка при получении данных из сервера</h2>
