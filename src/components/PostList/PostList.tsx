@@ -24,7 +24,6 @@ export const PostList = () => {
     };
     dispatch(fetchPosts(params));
   }, [page]);
-  console.log(page);
 
   const setPageHandle = (number: number) => {
     window.scrollTo(0, 700);

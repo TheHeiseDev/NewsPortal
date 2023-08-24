@@ -3,8 +3,8 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { apiService } from "../../../api/apiService";
 import { HTTPMethod, errorHandler } from "../posts/postsThunk";
 
-export const fetchOtherPosts = createAsyncThunk(
-  "posts/fetchOtherPosts",
+export const fetchNewsSelection = createAsyncThunk(
+  "posts/fetchNewsSelection",
   async (category: string) => {
     try {
       const { data } = await axios({
@@ -13,7 +13,7 @@ export const fetchOtherPosts = createAsyncThunk(
         params: {
           category: category,
           limit: 5,
-          sortBy: "-likes"
+          sortBy: "-likes",
         },
       });
       return data.items;

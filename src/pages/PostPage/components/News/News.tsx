@@ -1,14 +1,15 @@
-import styles from "./OtherNews.module.scss";
+import styles from "./News.module.scss";
+import { memo } from "react";
+import { Link } from "react-router-dom";
 import { PostType } from "../../../../store/slice/posts/postsTypes";
 import { useFormatDate } from "../../../../hooks/useFormatDate";
 import { setCategoryName } from "../../../../utils/setCategoryName";
-import { Link } from "react-router-dom";
-import { memo } from "react";
+
 
 interface IOtherNews {
   post: PostType;
 }
-export const OtherNews = memo(({ post }: IOtherNews) => {
+export const News = memo(({ post }: IOtherNews) => {
   const normalizeDate = useFormatDate(post);
 
   return (

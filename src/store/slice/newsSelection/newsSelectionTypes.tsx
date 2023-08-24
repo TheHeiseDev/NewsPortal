@@ -6,7 +6,7 @@ export enum StatusEnum {
   error = "error",
 }
 
-export type OtherPostsSlice = {
+export type NewsSelectionSliceType = {
   data: PostType[] | null;
   status: StatusEnum;
 };

@@ -1,9 +1,8 @@
 import styles from "./PostPage.module.scss";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { batch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../store/store";
-
 import { fetchAllVisitByDate, fetchVisit } from "../../store/slice/visit/visitThunk";
 import {
   fetchDeleteLike,
@@ -20,6 +19,11 @@ import {
   selectPost,
   selectPostStatus,
 } from "../../store/slice/posts/postsSlice";
+import {
+  selectNewsSelectionData,
+  selectNewsSelectionStatus,
+} from "../../store/slice/newsSelection/newsSelectionSlice";
+import { fetchNewsSelection } from "../../store/slice/newsSelection/newsSelectionThunk";
 
 import { CircularProgress as Loader } from "@mui/material";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
@@ -32,8 +36,8 @@ import { MainLayout } from "../../layout/MainLayout";
 import { ImageModal } from "../../components/UI/Modal/ImageModal";
 import { ShareFacebook } from "../../components/UI/Buttons/ShareFacebook";
 import { ShareTwitter } from "../../components/UI/Buttons/ShareTwitter";
-import { Comment } from "../../components/Comment/Comment";
-import { FormAddComment } from "../../components/FormAddComment/FormAddComment";
+import { Comments } from "./components/Comments/Comments";
+import { NewsSelection } from "./components/NewsSelection/NewsSelection";
 
 import { useTitle } from "../../hooks/useTitle";
 import { useFormatDate } from "../../hooks/useFormatDate";
@@ -42,9 +46,6 @@ import { useDeviceInfo } from "../../hooks/useDeviceInfo";
 import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
 import { getCurrentDate } from "../../utils/getCurrentDateTime";
 import { checkVisitByDate } from "../../utils/checkVisitByDate";
-import { OtherNews } from "./components/OtherNews/OtherNews";
-import { selectOtherPosts } from "../../store/slice/otherPosts/otherPostsSlice";
-import { fetchOtherPosts } from "../../store/slice/otherPosts/otherPostsThunk";
 
 const PAGE_NAME = "Страница";
 
@@ -54,7 +55,8 @@ const PostPage = () => {
 
   const post = useSelector(selectPost);
   const postLoading = useSelector(selectPostStatus);
-  const { data, status } = useSelector(selectOtherPosts);
+  const newsSelectionData = useSelector(selectNewsSelectionData);
+  const newsSelectionStatus = useSelector(selectNewsSelectionStatus);
   const { ipAddress, country } = useSelector(selectDeviceInfo);
 
   const [liked, setLiked] = useState(false);
@@ -164,17 +166,17 @@ const PostPage = () => {
 
   // Getting post by ID and logic of post view counting
   useEffect(() => {
-    if (id) {
-      dispatch(fetchUpViewCounts(+id));
-      dispatch(fetchPostById(+id))
-        .then((res) => res.payload)
-        .then((payload: any) => payload.category)
+      dispatch(fetchPostById(Number(id)))
+        .then(({ payload }) => payload as PostType)
+        .then((post) => post.category)
         .then((category) => {
           if (category) {
-            dispatch(fetchOtherPosts(category));
+            dispatch(fetchNewsSelection(category));
           }
-        });
-    }
+        })
+        .catch((error) => console.log(error));
+        dispatch(fetchUpViewCounts(Number(id)));
+    
     return () => {
       dispatch(removeItem());
     };
@@ -271,33 +273,8 @@ const PostPage = () => {
                 </div>
               </article>
 
-              <section className={styles.commentsContainer}>
-                <h2>Добавить комментарий</h2>
-                <FormAddComment post={post} />
-
-                <h2>Комментарии: ({post.comments.length})</h2>
-                {post.comments.length > 0 ? (
-                  post.comments.map((comment) => (
-                    <Comment key={comment.id} comment={comment} />
-                  ))
-                ) : (
-                  <span>Нет комментариев</span>
-                )}
-              </section>
-
-              <div className={styles.otherNews}>
-                <h3>Читайте также</h3>
-
-                <section className={styles.newsContainer}>
-                  {status === StatusEnum.loading ? (
-                    <div className={styles.orherPostLoading}>
-                      <Loader />
-                    </div>
-                  ) : (
-                    data?.map((post) => <OtherNews key={post.id} post={post} />)
-                  )}
-                </section>
-              </div>
+              <Comments post={post} />
+              <NewsSelection posts={newsSelectionData} status={newsSelectionStatus} />
             </div>
           </div>
         </div>
