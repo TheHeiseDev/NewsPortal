@@ -1,5 +1,5 @@
 import styles from "./PostPage.module.scss";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../store/store";
@@ -76,64 +76,79 @@ const PostPage = () => {
     }
   }, [post]);
 
-  const addLike = async (post: PostType, ip: string, country: string) => {
-    setLikedLoading(true);
-    try {
-      const liked = {
-        ip,
-        country,
-      };
-      const updatedPost: PostType = { ...post, likes: [...post.likes, liked] };
-      const data = { id: post.id, post: updatedPost };
-      const { payload } = await dispatch(fetchLikedPost(data));
+  const addLike = useCallback(
+    async (post: PostType, ip: string, country: string) => {
+      setLikedLoading(true);
+      try {
+        const liked = {
+          ip,
+          country,
+        };
+        const updatedPost: PostType = { ...post, likes: [...post.likes, liked] };
+        const data = { id: post.id, post: updatedPost };
+        const { payload } = await dispatch(fetchLikedPost(data));
 
-      if (payload) {
-        dispatch(likedPost(liked));
+        if (payload) {
+          dispatch(likedPost(liked));
+          setLikedLoading(false);
+        }
+      } catch (error) {
+        console.error(error);
         setLikedLoading(false);
       }
-    } catch (error) {
-      console.error(error);
-      setLikedLoading(false);
-    }
-  };
-  const likedHandle = async (post: PostType) => {
-    if (ipAddress && country) {
-      await addLike(post, ipAddress, country);
-    }
-  };
+    },
+    [dispatch, setLikedLoading]
+  );
 
-  const deleteLike = async (post: PostType, ip: string) => {
-    setLikedLoading(true);
-    try {
-      const updatedLikesList: LikesType[] = post.likes.filter(
-        (like: LikesType) => like.ip !== ip
-      );
-      const updatedPost: PostType = { ...post, likes: updatedLikesList };
-      const data = { id: post.id, post: updatedPost };
-      const { payload } = await dispatch(fetchDeleteLike(data));
+  const likedHandle = useCallback(
+    async (post: PostType) => {
+      if (ipAddress && country) {
+        await addLike(post, ipAddress, country);
+      }
+    },
+    [ipAddress, country]
+  );
 
-      if (payload) {
-        dispatch(deleteLikePost(ip));
+  const deleteLike = useCallback(
+    async (post: PostType, ip: string) => {
+      setLikedLoading(true);
+      try {
+        const updatedLikesList: LikesType[] = post.likes.filter(
+          (like: LikesType) => like.ip !== ip
+        );
+        const updatedPost: PostType = { ...post, likes: updatedLikesList };
+        const data = { id: post.id, post: updatedPost };
+        const { payload } = await dispatch(fetchDeleteLike(data));
+
+        if (payload) {
+          dispatch(deleteLikePost(ip));
+          setLikedLoading(false);
+        }
+      } catch (error) {
+        console.error(error);
         setLikedLoading(false);
       }
-    } catch (error) {
-      console.error(error);
-      setLikedLoading(false);
-    }
-  };
-  const unLikedHandle = async (post: PostType) => {
-    if (ipAddress) {
-      await deleteLike(post, ipAddress);
-    }
-  };
-  const checkTheLikes = (post: PostType, ip: string) => {
+    },
+    [dispatch, deleteLikePost, setLikedLoading]
+  );
+
+  const unLikedHandle = useCallback(
+    async (post: PostType) => {
+      if (ipAddress) {
+        await deleteLike(post, ipAddress);
+      }
+    },
+    [ipAddress]
+  );
+
+  const checkTheLikes = useCallback((post: PostType, ip: string) => {
     if (post && ip) {
       const isLiked = post.likes.some((like: LikesType) => like.ip === ip);
 
       setLiked(isLiked);
       setLikedLoading(false);
     }
-  };
+  }, []);
 
   // Get the current url address,  it need the facebook and twitter share buttons to work correctly
   useEffect(() => {
@@ -251,11 +266,11 @@ const PostPage = () => {
                     {post.views}
                   </div>
                 </div>
-
                 {/* Описание поста */}
                 <div className={styles.descriptionContainer}>
                   <p className={styles.postDescription}>{post.description}</p>
                 </div>
+                {/* Кнопки поделиться */}
                 <div className={styles.sharedContainer}>
                   <div className={styles.postShared}>
                     <span>Поделиться: </span>
