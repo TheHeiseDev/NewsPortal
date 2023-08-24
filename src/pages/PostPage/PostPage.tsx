@@ -166,17 +166,17 @@ const PostPage = () => {
 
   // Getting post by ID and logic of post view counting
   useEffect(() => {
-      dispatch(fetchPostById(Number(id)))
-        .then(({ payload }) => payload as PostType)
-        .then((post) => post.category)
-        .then((category) => {
-          if (category) {
-            dispatch(fetchNewsSelection(category));
-          }
-        })
-        .catch((error) => console.log(error));
-        dispatch(fetchUpViewCounts(Number(id)));
-    
+    dispatch(fetchPostById(Number(id)))
+      .then(({ payload }) => payload as PostType)
+      .then((post) => post.category)
+      .then((category) => {
+        if (category) {
+          dispatch(fetchNewsSelection(category));
+        }
+      })
+      .catch((error) => console.log(error));
+    dispatch(fetchUpViewCounts(Number(id)));
+
     return () => {
       dispatch(removeItem());
     };
@@ -209,15 +209,17 @@ const PostPage = () => {
 
   return (
     <MainLayout>
-      {postLoading === StatusEnum.loading ? (
+      {postLoading === StatusEnum.loading && (
         <div className={styles.postLoadingContainer}>
           <Loader />
         </div>
-      ) : postLoading === StatusEnum.error ? (
+      )}
+      {postLoading === StatusEnum.error && (
         <div className={styles.postLoadingContainer}>
           <span>Ошибка загрузки данных, попробуйте обновить страницу</span>
         </div>
-      ) : (
+      )}
+      {postLoading === StatusEnum.success && (
         <div className={styles.postPage}>
           <div className={styles.container}>
             <div className={styles.postPageWrapper}>
