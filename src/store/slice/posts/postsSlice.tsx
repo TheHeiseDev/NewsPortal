@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { CommentsType, PostsSliceType, StatusEnum } from "./postsTypes";
+import { CommentsType, LikeDataType, PostsSliceType, StatusEnum } from "./postsTypes";
 import { fetchPostById, fetchPosts } from "./postsThunk";
 import { RootState } from "../../store";
 
@@ -18,12 +18,12 @@ export const postsSlice = createSlice({
   name: "posts",
   initialState,
   reducers: {
-    likedPost(state, action) {
+    likedPost(state, action: PayloadAction<LikeDataType>) {
       if (state.item.data) {
         state.item.data.likes.push(action.payload);
       }
     },
-    deleteLikePost(state, action) {
+    deleteLikePost(state, action: PayloadAction<string>) {
       if (state.item.data) {
         state.item.data.likes = state.item.data.likes.filter(
           (like) => like.ip !== action.payload

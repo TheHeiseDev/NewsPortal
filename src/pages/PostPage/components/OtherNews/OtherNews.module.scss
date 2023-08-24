@@ -1,4 +1,4 @@
-@import "../../../scss/libs/variables";
+@import "../../../../scss/libs/variables";
 .news {
   border: 1px solid rgb(53, 53, 53);
 }
@@ -10,11 +10,11 @@
   & header {
     padding: 20px;
     cursor: pointer;
-  transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
 
-  &:hover {
-    color: $mainColor;
-  }
+    &:hover {
+      color: $mainColor;
+    }
   }
 }
 .title {

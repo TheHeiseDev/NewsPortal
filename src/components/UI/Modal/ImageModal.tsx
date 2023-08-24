@@ -1,11 +1,11 @@
 import styles from "./ImageModal.module.scss";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState, memo } from "react";
 
 interface IImageModal {
   imageUrl: string;
 }
 
-export const ImageModal: FC<IImageModal> = ({ imageUrl }) => {
+export const ImageModal: FC<IImageModal> = memo(({ imageUrl }) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -60,4 +60,4 @@ export const ImageModal: FC<IImageModal> = ({ imageUrl }) => {
       )}
     </div>
   );
-};
+});

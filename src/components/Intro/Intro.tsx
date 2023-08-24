@@ -4,7 +4,7 @@ import { useTitle } from "../../hooks/useTitle";
 import { CategoryEnum } from "../../utils/constants/categoryItem";
 
 export const Intro = () => {
-  useTitle("Новостной портал");
+  useTitle("AI Chronicles");
 
   return (
     <div className={styles.intro}>

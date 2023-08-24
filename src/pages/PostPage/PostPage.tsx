@@ -42,12 +42,13 @@ import { useDeviceInfo } from "../../hooks/useDeviceInfo";
 import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
 import { getCurrentDate } from "../../utils/getCurrentDateTime";
 import { checkVisitByDate } from "../../utils/checkVisitByDate";
-import { OtherNews } from "./components/OtherNews";
+import { OtherNews } from "./components/OtherNews/OtherNews";
 import { selectOtherPosts } from "../../store/slice/otherPosts/otherPostsSlice";
 import { fetchOtherPosts } from "../../store/slice/otherPosts/otherPostsThunk";
 
+const PAGE_NAME = "Страница";
+
 const PostPage = () => {
-  const PAGE_NAME = "Страница";
   const dispatch = useAppDispatch();
   const { id } = useParams();
 
@@ -73,26 +74,14 @@ const PostPage = () => {
     }
   }, [post]);
 
-  const addLike = async (
-    post: PostType,
-    ipAddress: string | null,
-    country: string | null
-  ) => {
+  const addLike = async (post: PostType, ip: string, country: string) => {
     setLikedLoading(true);
     try {
-      if (!ipAddress) {
-        throw new Error("IP адрес не найден");
-      }
-      if (!country) {
-        throw new Error("Страна не определена");
-      }
-
       const liked = {
-        ip: ipAddress,
-        country: country,
+        ip,
+        country,
       };
-      const updatedLikesList: LikesType[] = [...post.likes, liked];
-      const updatedPost: PostType = { ...post, likes: updatedLikesList };
+      const updatedPost: PostType = { ...post, likes: [...post.likes, liked] };
       const data = { id: post.id, post: updatedPost };
       const { payload } = await dispatch(fetchLikedPost(data));
 
@@ -103,36 +92,37 @@ const PostPage = () => {
     } catch (error) {
       console.error(error);
       setLikedLoading(false);
-    } finally {
-      setLikedLoading(false);
     }
   };
   const likedHandle = async (post: PostType) => {
-    await addLike(post, ipAddress, country);
+    if (ipAddress && country) {
+      await addLike(post, ipAddress, country);
+    }
   };
-  const deleteLike = async (post: PostType, ipAddress: string) => {
+
+  const deleteLike = async (post: PostType, ip: string) => {
     setLikedLoading(true);
     try {
       const updatedLikesList: LikesType[] = post.likes.filter(
-        (like: LikesType) => like.ip !== ipAddress
+        (like: LikesType) => like.ip !== ip
       );
       const updatedPost: PostType = { ...post, likes: updatedLikesList };
       const data = { id: post.id, post: updatedPost };
       const { payload } = await dispatch(fetchDeleteLike(data));
 
       if (payload) {
-        dispatch(deleteLikePost(ipAddress));
+        dispatch(deleteLikePost(ip));
         setLikedLoading(false);
       }
     } catch (error) {
       console.error(error);
       setLikedLoading(false);
-    } finally {
-      setLikedLoading(false);
     }
   };
   const unLikedHandle = async (post: PostType) => {
-    await deleteLike(post, ipAddress!);
+    if (ipAddress) {
+      await deleteLike(post, ipAddress);
+    }
   };
   const checkTheLikes = (post: PostType, ip: string) => {
     if (post && ip) {
@@ -280,6 +270,7 @@ const PostPage = () => {
                   </div>
                 </div>
               </article>
+
               <section className={styles.commentsContainer}>
                 <h2>Добавить комментарий</h2>
                 <FormAddComment post={post} />

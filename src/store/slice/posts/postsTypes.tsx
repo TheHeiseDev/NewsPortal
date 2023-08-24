@@ -40,3 +40,8 @@ export type CommentsType = {
   date: string;
   country?: string;
 };
+
+export type LikeDataType = {
+  ip: string;
+  country: string;
+}
