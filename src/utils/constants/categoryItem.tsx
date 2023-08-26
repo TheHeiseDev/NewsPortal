@@ -22,7 +22,7 @@ export const categoryItem: ICategoryItem[] = [
       </svg>
     ),
     bgColor: "rgb(73 184 220 / 95%)",
-    category: "all",
+    category: "",
   },
   {
     title: "Новости ИТ",

@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 import { VisitType } from "./visitTypes";
 import { fetchAllVisitByDate, fetchVisit } from "./visitThunk";
@@ -14,7 +14,9 @@ export const visitSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      .addCase(fetchVisit.pending, (state) => {})
+      .addCase(fetchVisit.pending, (state) => {
+        state.visitItem = null;
+      })
 
       .addCase(fetchVisit.fulfilled, (state, action) => {
         state.visitItem = action.payload;
@@ -22,7 +24,9 @@ export const visitSlice = createSlice({
       .addCase(fetchVisit.rejected, (state) => {
         state.visitItem = null;
       })
-      .addCase(fetchAllVisitByDate.pending, (state) => {})
+      .addCase(fetchAllVisitByDate.pending, (state) => {
+        state.visitByDate = null;
+      })
 
       .addCase(fetchAllVisitByDate.fulfilled, (state, action) => {
         state.visitByDate = action.payload;
@@ -32,7 +36,7 @@ export const visitSlice = createSlice({
       });
   },
 });
-export const {} = visitSlice.actions;
+// export const {} = visitSlice.actions;
 export const selectVisit = (state: RootState) => state.visit.visitByDate;
 
 export default visitSlice.reducer;

@@ -4,7 +4,9 @@ export type NewsfeedSliceType = {
   items: {
     data: PostType[] | null;
     status: StatusEnum;
-    maxPage: number;
+    totalPages: number;
+    currentPage: number
+
   };
 };
 
@@ -14,5 +16,4 @@ export type ParamsType = {
   category?: string;
   search?: string;
   sortBy?: string;
-  order?: string;
 };

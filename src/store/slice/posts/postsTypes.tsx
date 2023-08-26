@@ -13,7 +13,7 @@ export type PostsSliceType = {
   items: {
     data: PostType[] | null;
     status: StatusEnum;
-    pages: number | null
+    totalPages: number;
   };
   item: {
     data: PostType | null;
@@ -21,7 +21,7 @@ export type PostsSliceType = {
   };
 };
 export type PostType = {
-  id: string;
+  id: number;
   title: string;
   description: string;
   imageUrl: string;
@@ -40,3 +40,8 @@ export type CommentsType = {
   date: string;
   country?: string;
 };
+
+export type LikeDataType = {
+  ip: string;
+  country: string;
+}

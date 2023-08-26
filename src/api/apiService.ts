@@ -1,5 +1,10 @@
-export class apiService {
-  static baseUrl = "https://6440faa3792fe886a89abbd7.mockapi.io/posts";
-  static emailUrl = "https://64a664ce096b3f0fcc7fac65.mockapi.io/subscribers";
-  static visitUrl = "https://6440faa3792fe886a89abbd7.mockapi.io/visit";
+ export class apiService {
+  static baseURL: string = "https://8a69888fd168acec.mokky.dev";
+
+  static posts: string = `${this.baseURL}/posts`;
+  static subscribers: string = `${this.baseURL}/subscribers`;
+  static visits: string = `${this.baseURL}/visits`;
 }
+
+
+

@@ -1,5 +1,5 @@
 import styles from "./PostPage.module.scss";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../store/store";
@@ -11,7 +11,7 @@ import {
   fetchUpViewCounts,
 } from "../../store/slice/posts/postsThunk";
 import { selectDeviceInfo } from "../../store/slice/deviceInfo/deviceInfoSlice";
-import { PostType, StatusEnum } from "../../store/slice/posts/postsTypes";
+import { LikesType, PostType, StatusEnum } from "../../store/slice/posts/postsTypes";
 import {
   deleteLikePost,
   likedPost,
@@ -19,20 +19,25 @@ import {
   selectPost,
   selectPostStatus,
 } from "../../store/slice/posts/postsSlice";
+import {
+  selectNewsSelectionData,
+  selectNewsSelectionStatus,
+} from "../../store/slice/newsSelection/newsSelectionSlice";
+import { fetchNewsSelection } from "../../store/slice/newsSelection/newsSelectionThunk";
 
-import { CircularProgress } from "@mui/material";
+import { CircularProgress as Loader } from "@mui/material";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
+import LikeIcon from "@mui/icons-material/FavoriteBorder";
+import UnLikeIcon from "@mui/icons-material/Favorite";
 import LinkIcon from "@mui/icons-material/Link";
 
 import { MainLayout } from "../../layout/MainLayout";
 import { ImageModal } from "../../components/UI/Modal/ImageModal";
 import { ShareFacebook } from "../../components/UI/Buttons/ShareFacebook";
 import { ShareTwitter } from "../../components/UI/Buttons/ShareTwitter";
-import { Comment } from "../../components/Comment/Comment";
-import { FormAddComment } from "../../components/FormAddComment/FormAddComment";
+import { Comments } from "./components/Comments/Comments";
+import { NewsSelection } from "./components/NewsSelection/NewsSelection";
 
 import { useTitle } from "../../hooks/useTitle";
 import { useFormatDate } from "../../hooks/useFormatDate";
@@ -42,22 +47,27 @@ import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
 import { getCurrentDate } from "../../utils/getCurrentDateTime";
 import { checkVisitByDate } from "../../utils/checkVisitByDate";
 
+const PAGE_NAME = "Страница";
+
 const PostPage = () => {
-  
   const dispatch = useAppDispatch();
   const { id } = useParams();
 
   const post = useSelector(selectPost);
-  const status = useSelector(selectPostStatus);
+  const postLoading = useSelector(selectPostStatus);
+  const newsSelectionData = useSelector(selectNewsSelectionData);
+  const newsSelectionStatus = useSelector(selectNewsSelectionStatus);
   const { ipAddress, country } = useSelector(selectDeviceInfo);
 
   const [liked, setLiked] = useState(false);
   const [currentPageUrl, setCurrentPageUrl] = useState("");
-  const [likedLoadingStatus, setLikedLoadingStatus] = useState(false);
+  const [likedLoading, setLikedLoading] = useState(false);
   const [toogleFetchVisit, setToogleFetchVisit] = useState(false);
 
   const normalizePostDate = useFormatDate(post);
   const deviceInfo = useDeviceInfo();
+
+  useTitle(post ? post.title : PAGE_NAME);
 
   const postTime = useMemo(() => {
     if (post) {
@@ -66,64 +76,79 @@ const PostPage = () => {
     }
   }, [post]);
 
-  useTitle(post ? post.title : "Страница");
-
-  const likedPostHandle = async (post: PostType) => {
-    setLikedLoadingStatus(true);
-
-    try {
-      if (country && ipAddress) {
-        let liked = {
-          ip: ipAddress,
-          country: country,
+  const addLike = useCallback(
+    async (post: PostType, ip: string, country: string) => {
+      setLikedLoading(true);
+      try {
+        const liked = {
+          ip,
+          country,
         };
-        const updatePost = {
-          ...post,
-          likes: [...post.likes, liked],
-        };
-
-        const { payload } = await dispatch(
-          fetchLikedPost({ id: post.id, post: updatePost })
-        );
+        const updatedPost: PostType = { ...post, likes: [...post.likes, liked] };
+        const data = { id: post.id, post: updatedPost };
+        const { payload } = await dispatch(fetchLikedPost(data));
 
         if (payload) {
           dispatch(likedPost(liked));
-          setLikedLoadingStatus(false);
+          setLikedLoading(false);
         }
+      } catch (error) {
+        console.error(error);
+        setLikedLoading(false);
       }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    },
+    [dispatch, setLikedLoading]
+  );
 
-  const unLikedPostHandle = async (post: any) => {
-    setLikedLoadingStatus(true);
-    try {
-      const updatePost = {
-        ...post,
-        likes: post.likes.filter((like: any) => like.ip !== ipAddress),
-      };
-
-      const { payload } = await dispatch(
-        fetchDeleteLike({ id: post.id, post: updatePost })
-      );
-
-      if (payload) {
-        dispatch(deleteLikePost(ipAddress));
-        setLikedLoadingStatus(false);
+  const likedHandle = useCallback(
+    async (post: PostType) => {
+      if (ipAddress && country) {
+        await addLike(post, ipAddress, country);
       }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    },
+    [ipAddress, country]
+  );
 
-  const checkLiked = () => {
-    if (post) {
-      const isLiked = post.likes.some((like: any) => like.ip === ipAddress);
+  const deleteLike = useCallback(
+    async (post: PostType, ip: string) => {
+      setLikedLoading(true);
+      try {
+        const updatedLikesList: LikesType[] = post.likes.filter(
+          (like: LikesType) => like.ip !== ip
+        );
+        const updatedPost: PostType = { ...post, likes: updatedLikesList };
+        const data = { id: post.id, post: updatedPost };
+        const { payload } = await dispatch(fetchDeleteLike(data));
+
+        if (payload) {
+          dispatch(deleteLikePost(ip));
+          setLikedLoading(false);
+        }
+      } catch (error) {
+        console.error(error);
+        setLikedLoading(false);
+      }
+    },
+    [dispatch, deleteLikePost, setLikedLoading]
+  );
+
+  const unLikedHandle = useCallback(
+    async (post: PostType) => {
+      if (ipAddress) {
+        await deleteLike(post, ipAddress);
+      }
+    },
+    [ipAddress]
+  );
+
+  const checkTheLikes = useCallback((post: PostType, ip: string) => {
+    if (post && ip) {
+      const isLiked = post.likes.some((like: LikesType) => like.ip === ip);
+
       setLiked(isLiked);
+      setLikedLoading(false);
     }
-    setLikedLoadingStatus(false);
-  };
+  }, []);
 
   // Get the current url address,  it need the facebook and twitter share buttons to work correctly
   useEffect(() => {
@@ -131,55 +156,67 @@ const PostPage = () => {
     const url = window.document.location.href;
     setCurrentPageUrl(url);
   }, []);
-  // Getting post by ID and logic of post view counting
-  useEffect(() => {
-    if (id) {
-      dispatch(fetchUpViewCounts(id));
-      dispatch(fetchPostById(String(id)));
-    }
-    return () => {
-      dispatch(removeItem());
-    };
-  }, [id]);
+
   //Request the current post's visit log for the current date
   useEffect(() => {
-    const fetchVisitsData = async () => {
+    const getTheVisitLog = async (ip: string) => {
       const date = getCurrentDate();
       const { payload } = await dispatch(fetchAllVisitByDate(date));
 
-      if (ipAddress) {
-        const checkingForUserVisits = checkVisitByDate(ipAddress, payload); // return true or false
-        setToogleFetchVisit(checkingForUserVisits);
-      }
+      const checkingForUserVisits = checkVisitByDate(ip, payload); // return true or false
+      setToogleFetchVisit(checkingForUserVisits);
     };
-    fetchVisitsData();
-  }, [ipAddress]);
+    if (ipAddress) {
+      getTheVisitLog(ipAddress);
+    }
+  }, [ipAddress, dispatch]);
+
+  useEffect(() => {
+    setLikedLoading(true);
+
+    if (post && ipAddress) {
+      checkTheLikes(post, ipAddress);
+    }
+  }, [post, ipAddress]);
+
+  // Getting post by ID and logic of post view counting
+  useEffect(() => {
+    dispatch(fetchPostById(Number(id)))
+      .then(({ payload }) => payload as PostType)
+      .then((post) => post.category)
+      .then((category) => {
+        if (category) {
+          dispatch(fetchNewsSelection(category));
+        }
+      })
+      .catch((error) => console.log(error));
+    dispatch(fetchUpViewCounts(Number(id)));
+
+    return () => {
+      dispatch(removeItem());
+    };
+  }, [id, dispatch]);
+
   // Registering a user visit
   useEffect(() => {
     // toogleFetchVisit - This toggle switch is used to prevent re-registration of visits
     if (toogleFetchVisit) {
       const visitInfo = {
         date: getCurrentDate(),
-        country: country || "Unknown",
-        ip: ipAddress || "Unknown",
+        country: country || "unknown",
+        ip: ipAddress || "unknown",
         device: deviceInfo.device,
         os: deviceInfo.os,
       };
       dispatch(fetchVisit(visitInfo));
     }
-  }, [toogleFetchVisit, country]);
-  // The logic behind setting the likes
-  useEffect(() => {
-    setLikedLoadingStatus(true);
-
-    checkLiked();
-  }, [post]);
+  }, [toogleFetchVisit, dispatch]);
 
   if (!post) {
     return (
       <MainLayout>
-        <div className={styles.postLoadingContainer}>
-          <CircularProgress />
+        <div className={styles.loadingContainer}>
+          <Loader />
         </div>
       </MainLayout>
     );
@@ -187,35 +224,37 @@ const PostPage = () => {
 
   return (
     <MainLayout>
-      {status === StatusEnum.loading ? (
-        <div className={styles.postLoadingContainer}>
-          <CircularProgress />
+      {postLoading === StatusEnum.loading && (
+        <div className={styles.loadingContainer}>
+          <Loader />
         </div>
-      ) : status === StatusEnum.error ? (
-        <div className={styles.postLoadingContainer}>
+      )}
+      {postLoading === StatusEnum.error && (
+        <div className={styles.loadingContainer}>
           <span>Ошибка загрузки данных, попробуйте обновить страницу</span>
         </div>
-      ) : (
+      )}
+      {postLoading === StatusEnum.success && (
         <div className={styles.postPage}>
           <div className={styles.container}>
-            <div className={styles.postPageWrapper}>
-              <article className={styles.postArticle}>
+            <div className={styles.wrapper}>
+              <article className={styles.article}>
                 {/* Дата информация */}
-                <time className={styles.postDate}>
+                <time className={styles.date}>
                   <div>Опубликовано: {normalizePostDate}</div>
                   <span>{postTime}</span>
                 </time>
                 {/* Заголовок поста */}
-                <h1 className={styles.postTitle}>{post.title}</h1>
+                <h1 className={styles.title}>{post.title}</h1>
                 {/* Картинка поста */}
-                <div className={styles.postImage}>
+                <div className={styles.image}>
                   <span className={styles.zoomIcon}>
                     <ZoomInIcon />
                   </span>
                   <ImageModal imageUrl={post.imageUrl} />
                 </div>
                 {/* Ссылка на ресурс */}
-                <div className={styles.postLink}>
+                <div className={styles.link}>
                   <div className={styles.linkContainer}>
                     <LinkIcon />
                     <a target="_blank" href={post.link}>
@@ -227,11 +266,11 @@ const PostPage = () => {
                     {post.views}
                   </div>
                 </div>
-
                 {/* Описание поста */}
                 <div className={styles.descriptionContainer}>
-                  <p className={styles.postDescription}>{post.description}</p>
+                  <p className={styles.description}>{post.description}</p>
                 </div>
+                {/* Кнопки поделиться */}
                 <div className={styles.sharedContainer}>
                   <div className={styles.postShared}>
                     <span>Поделиться: </span>
@@ -240,29 +279,19 @@ const PostPage = () => {
                   </div>
                   <div className={styles.postActions}>
                     <div className={styles.likedCount}>{post.likes.length}</div>
-                    {likedLoadingStatus ? (
-                      <CircularProgress />
+                    {likedLoading ? (
+                      <Loader />
                     ) : liked ? (
-                      <FavoriteIcon onClick={() => unLikedPostHandle(post)} />
+                      <UnLikeIcon onClick={() => unLikedHandle(post)} />
                     ) : (
-                      <FavoriteBorderIcon onClick={() => likedPostHandle(post)} />
+                      <LikeIcon onClick={() => likedHandle(post)} />
                     )}
                   </div>
                 </div>
               </article>
-              <section className={styles.commentsContainer}>
-                <h2>Добавить комментарий</h2>
-                <FormAddComment post={post} />
 
-                <h2>Комментарии</h2>
-                {post.comments.length > 0 ? (
-                  post.comments.map((comment) => (
-                    <Comment key={comment.id} comment={comment} />
-                  ))
-                ) : (
-                  <span>Нет комментариев</span>
-                )}
-              </section>
+              <Comments post={post} />
+              <NewsSelection posts={newsSelectionData} status={newsSelectionStatus} />
             </div>
           </div>
         </div>

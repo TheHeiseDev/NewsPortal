@@ -1,30 +1,26 @@
 import styles from "./PostList.module.scss";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { CircularProgress, Pagination } from "@mui/material";
 import { StatusEnum } from "../../store/slice/posts/postsTypes";
 import { selectPosts } from "../../store/slice/posts/postsSlice";
-import { fetchNumberOfPages, fetchPosts } from "../../store/slice/posts/postsThunk";
+import { fetchPosts } from "../../store/slice/posts/postsThunk";
 import { useAppDispatch } from "../../store/store";
 import { Post } from "../Post/Post";
+import { CircularProgress as Loader, Pagination } from "@mui/material";
+import qs from "qs";
 
 export const PostList = () => {
   const dispatch = useAppDispatch();
   const [page, setPage] = useState(1);
-  const { data, status, pages } = useSelector(selectPosts);
+  const { data, status, totalPages } = useSelector(selectPosts);
 
   useEffect(() => {
-    if (!pages) {
-      dispatch(fetchNumberOfPages());
-    }
-  }, [pages]);
+    const searchParams = qs.parse(window.location.search, { ignoreQueryPrefix: true });
 
-  useEffect(() => {
     const params = {
-      page: page,
+      page: Number(searchParams.page) ? Number(searchParams.page) : page,
       limit: 5,
-      sortBy: "date",
-      order: "desc",
+      sortBy: "-date",
     };
     dispatch(fetchPosts(params));
   }, [page]);
@@ -42,7 +38,7 @@ export const PostList = () => {
         <div className={styles.postsWrapper}>
           {status === StatusEnum.loading ? (
             <div className={styles.loadingContainer}>
-              <CircularProgress />
+              <Loader />
             </div>
           ) : status === StatusEnum.error ? (
             <h2>Произошла ошибка при получении данных из сервера</h2>
@@ -55,7 +51,7 @@ export const PostList = () => {
               color="secondary"
               variant="outlined"
               page={page}
-              count={pages ? pages : 1}
+              count={totalPages}
               className={styles.catalogPagination}
               onChange={(_, num) => setPageHandle(num)}
             />

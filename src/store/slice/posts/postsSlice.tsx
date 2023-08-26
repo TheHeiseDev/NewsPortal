@@ -1,13 +1,13 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { CommentsType, PostsSliceType, StatusEnum } from "./postsTypes";
-import { fetchNumberOfPages, fetchPostById, fetchPosts } from "./postsThunk";
+import { CommentsType, LikeDataType, PostsSliceType, StatusEnum } from "./postsTypes";
+import { fetchPostById, fetchPosts } from "./postsThunk";
 import { RootState } from "../../store";
 
 const initialState: PostsSliceType = {
   items: {
     data: null,
     status: StatusEnum.loading,
-    pages: null,
+    totalPages: 1,
   },
   item: {
     data: null,
@@ -18,12 +18,12 @@ export const postsSlice = createSlice({
   name: "posts",
   initialState,
   reducers: {
-    likedPost(state, action) {
+    likedPost(state, action: PayloadAction<LikeDataType>) {
       if (state.item.data) {
         state.item.data.likes.push(action.payload);
       }
     },
-    deleteLikePost(state, action) {
+    deleteLikePost(state, action: PayloadAction<string>) {
       if (state.item.data) {
         state.item.data.likes = state.item.data.likes.filter(
           (like) => like.ip !== action.payload
@@ -49,7 +49,8 @@ export const postsSlice = createSlice({
       })
       .addCase(fetchPosts.fulfilled, (state, action) => {
         state.items.status = StatusEnum.success;
-        state.items.data = action.payload;
+        state.items.data = action.payload.items;
+        state.items.totalPages = action.payload.meta.total_pages;
       })
       .addCase(fetchPosts.rejected, (state) => {
         state.items.status = StatusEnum.error;
@@ -57,8 +58,8 @@ export const postsSlice = createSlice({
       })
 
       .addCase(fetchPostById.pending, (state) => {
-        state.items.status = StatusEnum.loading;
-        state.items.data = null;
+        state.item.status = StatusEnum.loading;
+        state.item.data = null;
       })
       .addCase(fetchPostById.fulfilled, (state, action) => {
         state.item.status = StatusEnum.success;
@@ -67,9 +68,6 @@ export const postsSlice = createSlice({
       .addCase(fetchPostById.rejected, (state) => {
         state.item.status = StatusEnum.error;
         state.item.data = null;
-      })
-      .addCase(fetchNumberOfPages.fulfilled, (state, action) => {
-        state.items.pages = action.payload;
       });
   },
 });

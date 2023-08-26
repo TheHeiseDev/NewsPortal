@@ -26,6 +26,8 @@ export const deviceInfoSlice = createSlice({
       })
       .addCase(fetchDeviceInfo.rejected, (state) => {
         state.status = StatusEnum.error;
+        state.ipAddress = null;
+        state.country = null
       });
   },
 });

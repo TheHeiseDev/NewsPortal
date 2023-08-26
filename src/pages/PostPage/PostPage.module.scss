@@ -12,13 +12,13 @@
   padding: 0 10px;
   margin: 0 auto;
 }
-.postPageWrapper {
+.wrapper {
   padding-bottom: 20px;
 }
-.postArticle {
+.article {
   margin-bottom: 35px;
 }
-.postDate {
+.date {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -26,11 +26,11 @@
   font-size: 12px;
   margin-bottom: 20px;
 }
-.postTitle {
+.title {
   font-size: 28px;
   margin-bottom: 50px;
 }
-.postImage {
+.image {
   position: relative;
   margin-bottom: 10px;
   min-height: 400px;
@@ -78,7 +78,7 @@
   }
 }
 
-.postLink {
+.link {
   display: flex;
   justify-content: space-between;
 
@@ -118,7 +118,7 @@
   border-left: 4px solid $mainColor;
   padding-left: 20px;
 }
-.postDescription {
+.description {
   font-size: 18px;
   line-height: 1.5;
   margin-bottom: 50px;
@@ -187,25 +187,11 @@
   }
 }
 
-.commentsContainer {
-  & h2 {
-    border-bottom: 1px solid rgb(53, 53, 53);
-    padding-bottom: 20px;
-  }
-  padding: 20px 0px;
-
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-}
-
-.postLoadingContainer {
-
+.loadingContainer {
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  
 
   & svg {
     color: $mainColor !important;

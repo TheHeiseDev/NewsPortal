@@ -1,11 +1,11 @@
 @import "../../scss/libs/variables";
 
-.commentWrapper {
+.wrapper {
 }
-.commentDate {
+.date {
 }
 
-.commentUser {
+.user {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -13,7 +13,7 @@
 
   & svg {
     font-size: 46px;
-    fill: $mainColor;
+    fill: $mainColor !important;
   }
 
   & div {
@@ -28,7 +28,7 @@
   }
 }
 
-.commenText {
+.text {
   padding-left: 55px;
   line-height: 1.5;
   font-weight: 300;
