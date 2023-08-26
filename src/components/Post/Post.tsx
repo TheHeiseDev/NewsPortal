@@ -1,27 +1,27 @@
 import styles from "./Post.module.scss";
-import { FC, useMemo } from "react";
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { PostType } from "../../store/slice/posts/postsTypes";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import ClassIcon from "@mui/icons-material/Class";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-
 import { useFormatDate } from "../../hooks/useFormatDate";
+
+import CommentIcon from "@mui/icons-material/ChatBubbleOutline";
+import ViewIcon from "@mui/icons-material/RemoveRedEye";
+import CategoryIcon from "@mui/icons-material/Class";
+import LikeIcon from "@mui/icons-material/Favorite";
+
 import { calculateTimeElapsed } from "../../utils/calculateTimeElapsed";
-import { CategoryEnum } from "../../utils/constants/categoryItem";
 import { setCategoryName } from "../../utils/setCategoryName";
 
 interface IPost {
   post: PostType;
 }
 
-export const Post: FC<IPost> = ({ post }) => {
+export const Post = ({ post }: IPost) => {
   const postData = useFormatDate(post);
 
   const postTime = useMemo(() => {
     return calculateTimeElapsed(new Date(post.date));
-  }, []);
+  }, [post]);
 
   return (
     <div className={styles.post}>
@@ -48,22 +48,22 @@ export const Post: FC<IPost> = ({ post }) => {
           <div className={styles.postDataContainer}>
             <div className={styles.postData}>
               <div className={styles.views}>
-                <RemoveRedEyeIcon />
+                <ViewIcon />
                 {post.views}
               </div>
               <div className={styles.commnets}>
-                <ChatBubbleOutlineIcon />
+                <CommentIcon />
                 {post.comments?.length}
               </div>
               <div className={styles.category}>
-                <ClassIcon />
+                <CategoryIcon />
                 {setCategoryName(post.category)}
               </div>
             </div>
 
             <div className={styles.dataActions}>
               <div className={styles.likedCount}>{post.likes.length}</div>
-              <FavoriteIcon />
+              <LikeIcon />
             </div>
           </div>
         </article>

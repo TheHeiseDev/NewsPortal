@@ -75,7 +75,6 @@ export const FormAddComment: FC<IFormAddComment> = memo(({ post }) => {
         setCommentValue("");
       } catch (error) {
         console.log(error);
-      } finally {
         setSendStatus(false);
       }
     }

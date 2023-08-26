@@ -1,6 +1,5 @@
 import styles from "./CategoryButton.module.scss";
 
-
 export const CategoryButton = ({ title, Image, bgColor, callback }) => {
   return (
     <button

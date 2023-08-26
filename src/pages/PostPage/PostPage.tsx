@@ -28,8 +28,8 @@ import { fetchNewsSelection } from "../../store/slice/newsSelection/newsSelectio
 import { CircularProgress as Loader } from "@mui/material";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
+import LikeIcon from "@mui/icons-material/FavoriteBorder";
+import UnLikeIcon from "@mui/icons-material/Favorite";
 import LinkIcon from "@mui/icons-material/Link";
 
 import { MainLayout } from "../../layout/MainLayout";
@@ -215,7 +215,7 @@ const PostPage = () => {
   if (!post) {
     return (
       <MainLayout>
-        <div className={styles.postLoadingContainer}>
+        <div className={styles.loadingContainer}>
           <Loader />
         </div>
       </MainLayout>
@@ -225,36 +225,36 @@ const PostPage = () => {
   return (
     <MainLayout>
       {postLoading === StatusEnum.loading && (
-        <div className={styles.postLoadingContainer}>
+        <div className={styles.loadingContainer}>
           <Loader />
         </div>
       )}
       {postLoading === StatusEnum.error && (
-        <div className={styles.postLoadingContainer}>
+        <div className={styles.loadingContainer}>
           <span>Ошибка загрузки данных, попробуйте обновить страницу</span>
         </div>
       )}
       {postLoading === StatusEnum.success && (
         <div className={styles.postPage}>
           <div className={styles.container}>
-            <div className={styles.postPageWrapper}>
-              <article className={styles.postArticle}>
+            <div className={styles.wrapper}>
+              <article className={styles.article}>
                 {/* Дата информация */}
-                <time className={styles.postDate}>
+                <time className={styles.date}>
                   <div>Опубликовано: {normalizePostDate}</div>
                   <span>{postTime}</span>
                 </time>
                 {/* Заголовок поста */}
-                <h1 className={styles.postTitle}>{post.title}</h1>
+                <h1 className={styles.title}>{post.title}</h1>
                 {/* Картинка поста */}
-                <div className={styles.postImage}>
+                <div className={styles.image}>
                   <span className={styles.zoomIcon}>
                     <ZoomInIcon />
                   </span>
                   <ImageModal imageUrl={post.imageUrl} />
                 </div>
                 {/* Ссылка на ресурс */}
-                <div className={styles.postLink}>
+                <div className={styles.link}>
                   <div className={styles.linkContainer}>
                     <LinkIcon />
                     <a target="_blank" href={post.link}>
@@ -268,7 +268,7 @@ const PostPage = () => {
                 </div>
                 {/* Описание поста */}
                 <div className={styles.descriptionContainer}>
-                  <p className={styles.postDescription}>{post.description}</p>
+                  <p className={styles.description}>{post.description}</p>
                 </div>
                 {/* Кнопки поделиться */}
                 <div className={styles.sharedContainer}>
@@ -282,9 +282,9 @@ const PostPage = () => {
                     {likedLoading ? (
                       <Loader />
                     ) : liked ? (
-                      <FavoriteIcon onClick={() => unLikedHandle(post)} />
+                      <UnLikeIcon onClick={() => unLikedHandle(post)} />
                     ) : (
-                      <FavoriteBorderIcon onClick={() => likedHandle(post)} />
+                      <LikeIcon onClick={() => likedHandle(post)} />
                     )}
                   </div>
                 </div>

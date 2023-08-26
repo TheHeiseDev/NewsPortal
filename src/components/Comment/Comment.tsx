@@ -15,15 +15,15 @@ export const Comment = memo(({ comment }: IComment) => {
     return calculateTimeElapsed(new Date(date));
   }, []);
   return (
-    <article className={styles.commentWrapper}>
+    <article className={styles.wrapper}>
       <header>
-        <div className={styles.commentUser}>
+        <div className={styles.user}>
           <PersonPinIcon />
           <div>
             <h3 aria-label="Автор комментария">{userName}</h3>
             <time
               aria-label="Время комментария"
-              className={styles.commentDate}
+              className={styles.date}
               dateTime={commentTime}
             >
               {commentTime} назад
@@ -31,7 +31,7 @@ export const Comment = memo(({ comment }: IComment) => {
           </div>
         </div>
       </header>
-      <section className={styles.commenText} aria-label="Текст комментария">
+      <section className={styles.text} aria-label="Текст комментария">
         {text}
       </section>
     </article>

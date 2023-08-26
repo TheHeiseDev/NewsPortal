@@ -61,7 +61,7 @@ const Newsfeed = () => {
     const searchParams = qs.parse(window.location.search, { ignoreQueryPrefix: true });
 
     const { category, search } = searchParams;
-    console.log(currentPage)
+    console.log(currentPage);
     const paramsUrl = {
       page: currentPage,
       limit: 5,
